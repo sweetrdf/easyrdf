@@ -1,6 +1,5 @@
 /doap.rdf
 /docs/api
-/doctumcache
 /reports
 *.tar.gz
 /vendor
