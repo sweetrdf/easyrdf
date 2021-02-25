@@ -31,7 +31,7 @@ It will start the server in the background. Wait a few seconds and then run PHPU
 
 Our test related files are located in `test` folder. Tests are written using PHPUnit.
 
-Make sure you ran `composer update`, if you want to execute the test suite ([Getting Started](http://www.easyrdf.org/docs/getting-started)).
+Make sure you ran `composer update`, if you want to execute the test suite.
 
 To run all tests, open your terminal and run:
 
