@@ -15,7 +15,7 @@ Create a composer.json file in your project root:
 ```json
 {
     "require": {
-        "easyrdf/easyrdf": "*"
+        "sweetrdf/easyrdf": "*"
     }
 }
 ```
