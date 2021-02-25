@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Parser;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf\Parser;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -39,18 +39,17 @@ namespace EasyRdf\Parser;
 /**
  * Class to parse RDF using the ARC2 library.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class Arc extends RdfPhp
 {
-    private static $supportedTypes = array(
+    private static $supportedTypes = [
         'rdfxml' => 'RDFXML',
         'turtle' => 'Turtle',
         'ntriples' => 'Turtle',
         'rdfa' => 'SemHTML',
-    );
+    ];
 
     /**
      * Constructor
@@ -71,29 +70,27 @@ class Arc extends RdfPhp
      * @param string $baseUri the base URI of the data being parsed
      *
      * @throws \EasyRdf\Exception
-     * @return integer             The number of triples added to the graph
+     *
+     * @return int The number of triples added to the graph
      */
     public function parse($graph, $data, $format, $baseUri)
     {
         parent::checkParseParams($graph, $data, $format, $baseUri);
 
-        if (array_key_exists($format, self::$supportedTypes)) {
+        if (\array_key_exists($format, self::$supportedTypes)) {
             $className = self::$supportedTypes[$format];
         } else {
-            throw new \EasyRdf\Exception(
-                "EasyRdf\\Parser\\Arc does not support: {$format}"
-            );
+            throw new \EasyRdf\Exception("EasyRdf\\Parser\\Arc does not support: {$format}");
         }
 
         $parser = \ARC2::getParser($className);
         if ($parser) {
             $parser->parse($baseUri, $data);
             $rdfphp = $parser->getSimpleIndex(false);
+
             return parent::parse($graph, $rdfphp, 'php', $baseUri);
         } else {
-            throw new \EasyRdf\Exception(
-                "ARC2 failed to get a $className parser."
-            );
+            throw new \EasyRdf\Exception("ARC2 failed to get a $className parser.");
         }
     }
 }

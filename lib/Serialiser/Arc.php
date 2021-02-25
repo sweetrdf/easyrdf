@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -42,18 +43,17 @@ use EasyRdf\Graph;
 /**
  * Class to serialise RDF using the ARC2 library.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2016 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class Arc extends RdfPhp
 {
-    private static $supportedTypes = array(
+    private static $supportedTypes = [
         'rdfxml' => 'RDFXML',
         'turtle' => 'Turtle',
         'ntriples' => 'NTriples',
-        'posh' => 'POSHRDF'
-    );
+        'posh' => 'POSHRDF',
+    ];
 
     /**
      * Constructor
@@ -65,27 +65,24 @@ class Arc extends RdfPhp
         }
     }
 
-
     /**
      * Serialise an EasyRdf\Graph into RDF format of choice.
      *
-     * @param Graph  $graph  An EasyRdf\Graph object.
-     * @param string $format The name of the format to convert to.
-     * @param array  $options
+     * @param Graph  $graph  an EasyRdf\Graph object
+     * @param string $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
+     *
      * @throws Exception
      */
-    public function serialise(Graph $graph, $format, array $options = array())
+    public function serialise(Graph $graph, $format, array $options = [])
     {
         parent::checkSerialiseParams($format);
 
-        if (array_key_exists($format, self::$supportedTypes)) {
+        if (\array_key_exists($format, self::$supportedTypes)) {
             $className = self::$supportedTypes[$format];
         } else {
-            throw new Exception(
-                "EasyRdf\\Serialiser\\Arc does not support: {$format}"
-            );
+            throw new Exception("EasyRdf\\Serialiser\\Arc does not support: {$format}");
         }
 
         /** @var \ARC2_RDFSerializer $serialiser */
@@ -95,9 +92,7 @@ class Arc extends RdfPhp
                 parent::serialise($graph, 'php')
             );
         } else {
-            throw new Exception(
-                "ARC2 failed to get a $className serialiser."
-            );
+            throw new Exception("ARC2 failed to get a $className serialiser.");
         }
     }
 }

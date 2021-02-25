@@ -5,12 +5,10 @@
      * This example create a simple FOAF graph in memory and then
      * serialises it to the page in the format of choice.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
-
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
 
     $graph = new \EasyRdf\Graph();
     $me = $graph->resource('http://www.example.com/joe#me', 'foaf:Person');
@@ -43,10 +41,10 @@
     foreach (\EasyRdf\Format::getFormats() as $f) {
         if ($f->getSerialiserClass()) {
             if ($f->getName() == $format) {
-                print "<li><b>".$f->getLabel()."</b></li>\n";
+                echo '<li><b>'.$f->getLabel()."</b></li>\n";
             } else {
-                print "<li><a href='?format=$f'>";
-                print $f->getLabel()."</a></li>\n";
+                echo "<li><a href='?format=$f'>";
+                echo $f->getLabel()."</a></li>\n";
             }
         }
     }
@@ -59,7 +57,7 @@
     if (!is_scalar($data)) {
         $data = var_export($data, true);
     }
-    print htmlspecialchars($data);
+    echo htmlspecialchars($data);
 ?>
 </pre>
 

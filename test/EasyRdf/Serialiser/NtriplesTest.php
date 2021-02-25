@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -42,8 +43,8 @@ use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(dirname(__FILE__))).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class NtriplesTest extends TestCase
 {
@@ -52,13 +53,13 @@ class NtriplesTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->serialiser = new Ntriples();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
         RdfNamespace::resetNamespaces();
@@ -68,9 +69,9 @@ class NtriplesTest extends TestCase
     public function testSerialiseValueUriResource()
     {
         $this->assertSame(
-            "<http://example.com/>",
+            '<http://example.com/>',
             $this->serialiser->serialiseValue(
-                new Resource("http://example.com/")
+                new Resource('http://example.com/')
             )
         );
     }
@@ -78,9 +79,9 @@ class NtriplesTest extends TestCase
     public function testSerialiseValueUriArray()
     {
         $this->assertSame(
-            "<http://example.com/>",
+            '<http://example.com/>',
             $this->serialiser->serialiseValue(
-                array('type' => 'uri', 'value' => 'http://example.com/')
+                ['type' => 'uri', 'value' => 'http://example.com/']
             )
         );
     }
@@ -88,9 +89,9 @@ class NtriplesTest extends TestCase
     public function testSerialiseValueBnodeArray()
     {
         $this->assertSame(
-            "_:one",
+            '_:one',
             $this->serialiser->serialiseValue(
-                array('type' => 'bnode', 'value' => '_:one')
+                ['type' => 'bnode', 'value' => '_:one']
             )
         );
     }
@@ -98,9 +99,9 @@ class NtriplesTest extends TestCase
     public function testSerialiseValueBnodeResource()
     {
         $this->assertSame(
-            "_:two",
+            '_:two',
             $this->serialiser->serialiseValue(
-                new Resource("_:two")
+                new Resource('_:two')
             )
         );
     }
@@ -110,7 +111,7 @@ class NtriplesTest extends TestCase
         $this->assertSame(
             '"foo"',
             $this->serialiser->serialiseValue(
-                array('type' => 'literal', 'value' => 'foo')
+                ['type' => 'literal', 'value' => 'foo']
             )
         );
     }
@@ -120,7 +121,7 @@ class NtriplesTest extends TestCase
         $this->assertSame(
             '"Hello"',
             $this->serialiser->serialiseValue(
-                new Literal("Hello")
+                new Literal('Hello')
             )
         );
     }
@@ -152,7 +153,7 @@ class NtriplesTest extends TestCase
             "Unable to serialise object of type 'chipmonk' to ntriples"
         );
         $this->serialiser->serialiseValue(
-            array('type' => 'chipmonk', 'value' => 'yes?')
+            ['type' => 'chipmonk', 'value' => 'yes?']
         );
     }
 
@@ -168,14 +169,14 @@ class NtriplesTest extends TestCase
             $this->graph->resource('http://www.example.com/joe/')
         );
         $this->assertSame(
-            "<http://www.example.com/joe#me> ".
-            "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ".
+            '<http://www.example.com/joe#me> '.
+            '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> '.
             "<http://xmlns.com/foaf/0.1/Person> .\n".
-            "<http://www.example.com/joe#me> ".
-            "<http://xmlns.com/foaf/0.1/name> ".
+            '<http://www.example.com/joe#me> '.
+            '<http://xmlns.com/foaf/0.1/name> '.
             "\"Joe Bloggs\" .\n".
-            "<http://www.example.com/joe#me> ".
-            "<http://xmlns.com/foaf/0.1/homepage> ".
+            '<http://www.example.com/joe#me> '.
+            '<http://xmlns.com/foaf/0.1/homepage> '.
             "<http://www.example.com/joe/> .\n",
             $this->serialiser->serialise($this->graph, 'ntriples')
         );
@@ -186,8 +187,8 @@ class NtriplesTest extends TestCase
         $joe = $this->graph->resource('http://www.example.com/joe#me');
         $joe->set('foaf:nick', '"Joey"');
         $this->assertSame(
-            "<http://www.example.com/joe#me> ".
-            "<http://xmlns.com/foaf/0.1/nick> ".
+            '<http://www.example.com/joe#me> '.
+            '<http://xmlns.com/foaf/0.1/nick> '.
             '"\"Joey\"" .'."\n",
             $this->serialiser->serialise($this->graph, 'ntriples')
         );
@@ -198,8 +199,8 @@ class NtriplesTest extends TestCase
         $joe = $this->graph->resource('http://www.example.com/joe#me');
         $joe->set('foaf:nick', '\\backslash');
         $this->assertSame(
-            "<http://www.example.com/joe#me> ".
-            "<http://xmlns.com/foaf/0.1/nick> ".
+            '<http://www.example.com/joe#me> '.
+            '<http://xmlns.com/foaf/0.1/nick> '.
             '"\\\\backslash" .'."\n",
             $this->serialiser->serialise($this->graph, 'ntriples')
         );
@@ -214,11 +215,12 @@ class NtriplesTest extends TestCase
 
         $this->assertSame(
             "_:genid1 <http://xmlns.com/foaf/0.1/name> \"Project Name\" .\n".
-            "<http://www.example.com/joe#me> ".
+            '<http://www.example.com/joe#me> '.
             "<http://xmlns.com/foaf/0.1/project> _:genid1 .\n",
             $this->serialiser->serialise($this->graph, 'ntriples')
         );
     }
+
     public function testSerialiseLang()
     {
         $joe = $this->graph->resource('http://example.com/joe#me');
@@ -226,8 +228,8 @@ class NtriplesTest extends TestCase
 
         $turtle = $this->serialiser->serialise($this->graph, 'ntriples');
         $this->assertStringEquals(
-            "<http://example.com/joe#me> ".
-            "<http://xmlns.com/foaf/0.1/name> ".
+            '<http://example.com/joe#me> '.
+            '<http://xmlns.com/foaf/0.1/name> '.
             "\"Joe\"@en .\n",
             $turtle
         );
@@ -240,8 +242,8 @@ class NtriplesTest extends TestCase
 
         $ntriples = $this->serialiser->serialise($this->graph, 'ntriples');
         $this->assertStringEquals(
-            "<http://example.com/joe#me> ".
-            "<http://xmlns.com/foaf/0.1/foo> ".
+            '<http://example.com/joe#me> '.
+            '<http://xmlns.com/foaf/0.1/foo> '.
             "\"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n",
             $ntriples
         );
@@ -264,7 +266,7 @@ class NtriplesTest extends TestCase
         $ntriples = $this->serialiser->serialise($this->graph, 'ntriples');
 
         $this->assertSame(
-            "<http://foo/bar/me> <http://xmlns.com/foaf/0.1/name> \"Joe Bloggs\" .\n" .
+            "<http://foo/bar/me> <http://xmlns.com/foaf/0.1/name> \"Joe Bloggs\" .\n".
             "<http://foo/bar/me> <http://xmlns.com/foaf/0.1/homepage> <http://example.com/joe/> .\n",
             $ntriples
         );
@@ -288,10 +290,10 @@ class NtriplesTest extends TestCase
      */
     public function testIssue219Unicode()
     {
-        $pairs = array(
+        $pairs = [
             '位' => '"\u4F4D"',
-            "Дуглас Адамс" => '"\u0414\u0443\u0433\u043B\u0430\u0441 \u0410\u0434\u0430\u043C\u0441"',
-        );
+            'Дуглас Адамс' => '"\u0414\u0443\u0433\u043B\u0430\u0441 \u0410\u0434\u0430\u043C\u0441"',
+        ];
 
         $serializer = new Ntriples();
 

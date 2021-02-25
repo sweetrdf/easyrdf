@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,13 +39,11 @@ namespace EasyRdf\Serialiser;
 use EasyRdf\Exception;
 use EasyRdf\Graph;
 use EasyRdf\Serialiser;
-
 use ML\JsonLD as LD;
 
 /**
  * Class to serialise an EasyRdf\Graph to JSON-LD
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013 Alexey Zakhlestin
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -57,31 +56,29 @@ class JsonLd extends Serialiser
         }
     }
 
-
     /**
      * Serialise an EasyRdf\Graph into a JSON-LD document.
      *
-     * @param Graph  $graph  An EasyRdf\Graph object.
-     * @param string $format The name of the format to convert to.
-     * @param array  $options
+     * @param Graph  $graph  an EasyRdf\Graph object
+     * @param string $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
+     *
      * @throws Exception
      */
-    public function serialise(Graph $graph, $format, array $options = array())
+    public function serialise(Graph $graph, $format, array $options = [])
     {
         parent::checkSerialiseParams($format);
 
-        if ($format != 'jsonld') {
+        if ('jsonld' != $format) {
             throw new Exception(__CLASS__.' does not support: '.$format);
         }
 
-
         $ld_graph = new LD\Graph();
-        $nodes = array(); // cache for id-to-node association
+        $nodes = []; // cache for id-to-node association
 
         foreach ($graph->toRdfPhp() as $resource => $properties) {
-            if (array_key_exists($resource, $nodes)) {
+            if (\array_key_exists($resource, $nodes)) {
                 $node = $nodes[$resource];
             } else {
                 $node = $ld_graph->createNode($resource);
@@ -90,14 +87,14 @@ class JsonLd extends Serialiser
 
             foreach ($properties as $property => $values) {
                 foreach ($values as $value) {
-                    if ($value['type'] == 'bnode' or $value['type'] == 'uri') {
-                        if (array_key_exists($value['value'], $nodes)) {
+                    if ('bnode' == $value['type'] || 'uri' == $value['type']) {
+                        if (\array_key_exists($value['value'], $nodes)) {
                             $_value = $nodes[$value['value']];
                         } else {
                             $_value = $ld_graph->createNode($value['value']);
                             $nodes[$value['value']] = $_value;
                         }
-                    } elseif ($value['type'] == 'literal') {
+                    } elseif ('literal' == $value['type']) {
                         if (isset($value['lang'])) {
                             $_value = new LD\LanguageTaggedString($value['value'], $value['lang']);
                         } elseif (isset($value['datatype'])) {
@@ -106,12 +103,10 @@ class JsonLd extends Serialiser
                             $_value = $value['value'];
                         }
                     } else {
-                        throw new Exception(
-                            "Unable to serialise object to JSON-LD: ".$value['type']
-                        );
+                        throw new Exception('Unable to serialise object to JSON-LD: '.$value['type']);
                     }
 
-                    if ($property == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+                    if ('http://www.w3.org/1999/02/22-rdf-syntax-ns#type' == $property) {
                         $node->addType($_value);
                     } else {
                         $node->addPropertyValue($property, $_value);
@@ -121,9 +116,9 @@ class JsonLd extends Serialiser
         }
 
         // OPTIONS
-        $use_native_types = !(isset($options['expand_native_types']) and $options['expand_native_types'] == true);
-        $should_compact = (isset($options['compact']) and $options['compact'] == true);
-        $should_expand = (isset($options['expand']) and $options['expand'] == true);
+        $use_native_types = !(isset($options['expand_native_types']) && true == $options['expand_native_types']);
+        $should_compact = (isset($options['compact']) && true == $options['compact']);
+        $should_expand = (isset($options['expand']) && true == $options['expand']);
         $should_frame = isset($options['frame']);
 
         // expanded form
@@ -138,10 +133,10 @@ class JsonLd extends Serialiser
         if ($should_compact) {
             // compact form
             $compact_context = isset($options['context']) ? $options['context'] : null;
-            $compact_options = array(
+            $compact_options = [
                 'useNativeTypes' => $use_native_types,
-                'base' => $graph->getUri()
-            );
+                'base' => $graph->getUri(),
+            ];
 
             $data = LD\JsonLD::compact($data, $compact_context, $compact_options);
         }

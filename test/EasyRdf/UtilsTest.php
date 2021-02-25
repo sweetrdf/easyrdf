@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class UtilsTest extends TestCase
 {
@@ -98,31 +97,31 @@ class UtilsTest extends TestCase
 
     public function testIsAssoc()
     {
-        $arr = array('foo' => 'bar');
+        $arr = ['foo' => 'bar'];
         $this->assertTrue(Utils::isAssociativeArray($arr));
     }
 
     public function testIsAssocNonArray()
     {
-         $this->assertFalse(Utils::isAssociativeArray('foo'));
+        $this->assertFalse(Utils::isAssociativeArray('foo'));
     }
 
     public function testIsAssocArray()
     {
-        $arr = array('foo', 'bar');
+        $arr = ['foo', 'bar'];
         $this->assertFalse(Utils::isAssociativeArray($arr));
     }
 
     public function testIsAssocIntAppend()
     {
-        $arr = array('foo' => 'bar');
-        array_push($arr, 'rat');
+        $arr = ['foo' => 'bar'];
+        $arr[] = 'rat';
         $this->assertTrue(Utils::isAssociativeArray($arr));
     }
 
     public function testIsAssocIntPreppend()
     {
-        $arr = array('foo' => 'bar');
+        $arr = ['foo' => 'bar'];
         array_unshift($arr, 'rat');
         $this->assertFalse(Utils::isAssociativeArray($arr));
     }
@@ -155,28 +154,28 @@ class UtilsTest extends TestCase
     {
         $res = new Resource('http://www.example.com/');
         $this->assertSame(
-            "http://www.example.com/",
+            'http://www.example.com/',
             Utils::dumpResourceValue($res, 'text')
         );
         $this->assertSame(
             "<a href='http://www.example.com/' ".
             "style='text-decoration:none;color:blue'>".
-            "http://www.example.com/</a>",
+            'http://www.example.com/</a>',
             Utils::dumpResourceValue($res, 'html')
         );
     }
 
     public function testDumpResourceValueFromArray()
     {
-        $res = array('type' => 'uri', 'value' => 'http://www.example.com/');
+        $res = ['type' => 'uri', 'value' => 'http://www.example.com/'];
         $this->assertSame(
-            "http://www.example.com/",
+            'http://www.example.com/',
             Utils::dumpResourceValue($res, 'text')
         );
         $this->assertSame(
             "<a href='http://www.example.com/' ".
             "style='text-decoration:none;color:blue'>".
-            "http://www.example.com/</a>",
+            'http://www.example.com/</a>',
             Utils::dumpResourceValue($res, 'html')
         );
     }
@@ -205,7 +204,7 @@ class UtilsTest extends TestCase
 
     public function testDumpLiteralValue()
     {
-        $literal = new Literal("hello & world");
+        $literal = new Literal('hello & world');
         $this->assertSame(
             '"hello & world"',
             Utils::dumpLiteralValue($literal, 'text')
@@ -218,7 +217,7 @@ class UtilsTest extends TestCase
 
     public function testDumpLiteralValueFromArray()
     {
-        $literal = array('type' => 'literal', 'value' => 'Hot Sauce');
+        $literal = ['type' => 'literal', 'value' => 'Hot Sauce'];
         $this->assertSame(
             '"Hot Sauce"',
             Utils::dumpLiteralValue($literal, 'text')
@@ -244,7 +243,7 @@ class UtilsTest extends TestCase
 
     public function testDumpLiteralValueWithLanguage()
     {
-        $literal = array('type' => 'literal', 'value' => 'Nick', 'lang' => 'en');
+        $literal = ['type' => 'literal', 'value' => 'Nick', 'lang' => 'en'];
         $this->assertSame(
             '"Nick"@en',
             Utils::dumpLiteralValue($literal, 'text')
@@ -257,11 +256,11 @@ class UtilsTest extends TestCase
 
     public function testDumpLiteralValueWithDatatype()
     {
-        $literal = array(
+        $literal = [
             'type' => 'literal',
             'value' => '1',
-            'datatype' => 'http://www.w3.org/2001/XMLSchema#integer'
-        );
+            'datatype' => 'http://www.w3.org/2001/XMLSchema#integer',
+        ];
         $this->assertSame(
             '"1"^^xsd:integer',
             Utils::dumpLiteralValue($literal, 'text')
@@ -274,18 +273,18 @@ class UtilsTest extends TestCase
 
     public function testDumpLiteralValueWithUriDatatype()
     {
-        $literal = array(
+        $literal = [
             'type' => 'literal',
             'value' => '1',
-            'datatype' => 'http://example.com/datatypes/int'
-        );
+            'datatype' => 'http://example.com/datatypes/int',
+        ];
         $this->assertSame(
             '"1"^^<http://example.com/datatypes/int>',
             Utils::dumpLiteralValue($literal, 'text')
         );
         $this->assertSame(
             "<span style='color:black'>&quot;1&quot;^^".
-            "&lt;http://example.com/datatypes/int&gt;</span>",
+            '&lt;http://example.com/datatypes/int&gt;</span>',
             Utils::dumpLiteralValue($literal, 'html')
         );
     }
@@ -350,7 +349,7 @@ class UtilsTest extends TestCase
 
     public function testExecCommandPipeLs()
     {
-        $output = Utils::execCommandPipe('ls', array('/bin/'));
+        $output = Utils::execCommandPipe('ls', ['/bin/']);
         $this->assertContains('cat', explode("\n", $output));
     }
 
@@ -369,7 +368,7 @@ class UtilsTest extends TestCase
     public function testExecCommandPipeCat()
     {
         $output = Utils::execCommandPipe('cat', null, 'Test Message 2');
-        $this->assertSame("Test Message 2", $output);
+        $this->assertSame('Test Message 2', $output);
     }
 
     public function testExecCommandPipeFalse()

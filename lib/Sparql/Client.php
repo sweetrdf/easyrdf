@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Sparql;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -45,7 +46,6 @@ use EasyRdf\Utils;
 /**
  * Class for making SPARQL queries using the SPARQL 1.1 Protocol
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2015 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -64,14 +64,14 @@ class Client
      * If the query and update endpoints are the same, then you
      * only need to give a single URI.
      *
-     * @param string $queryUri The address of the SPARQL Query Endpoint
+     * @param string $queryUri  The address of the SPARQL Query Endpoint
      * @param string $updateUri Optional address of the SPARQL Update Endpoint
      */
     public function __construct($queryUri, $updateUri = null)
     {
         $this->queryUri = $queryUri;
 
-        if (strlen(parse_url($queryUri, PHP_URL_QUERY)) > 0) {
+        if (\strlen(parse_url($queryUri, \PHP_URL_QUERY)) > 0) {
             $this->queryUri_has_params = true;
         } else {
             $this->queryUri_has_params = false;
@@ -121,7 +121,7 @@ class Client
      *
      * @param string $query The query string to be executed
      *
-     * @return Result|\EasyRdf\Graph  Result of the query.
+     * @return Result|\EasyRdf\Graph result of the query
      */
     public function query($query)
     {
@@ -137,7 +137,7 @@ class Client
      *
      * @param string $condition Triple-pattern condition for the count query
      *
-     * @return integer The number of triples
+     * @return int The number of triples
      */
     public function countTriples($condition = '?s ?p ?o')
     {
@@ -148,6 +148,7 @@ class Client
         //   {GRAPH ?g {?s ?p ?o}}
         // }
         $result = $this->query('SELECT (COUNT(*) AS ?count) {'.$condition.'}');
+
         return $result[0]->count->getValue();
     }
 
@@ -157,21 +158,22 @@ class Client
      *
      * @param string $limit Optional limit to the number of results
      *
-     * @return \EasyRdf\Resource[]  array of objects for each named graph
+     * @return \EasyRdf\Resource[] array of objects for each named graph
      */
     public function listNamedGraphs($limit = null)
     {
-        $query = "SELECT DISTINCT ?g WHERE {GRAPH ?g {?s ?p ?o}}";
-        if (!is_null($limit)) {
-            $query .= " LIMIT ".(int)$limit;
+        $query = 'SELECT DISTINCT ?g WHERE {GRAPH ?g {?s ?p ?o}}';
+        if (null !== $limit) {
+            $query .= ' LIMIT '.(int) $limit;
         }
         $result = $this->query($query);
 
         // Convert the result object into an array of resources
-        $graphs = array();
+        $graphs = [];
         foreach ($result as $row) {
-            array_push($graphs, $row->g);
+            $graphs[] = $row->g;
         }
+
         return $graphs;
     }
 
@@ -192,16 +194,17 @@ class Client
 
     public function insert($data, $graphUri = null)
     {
-        #$this->updateData('INSET',
+        //$this->updateData('INSET',
         $query = 'INSERT DATA {';
         if ($graphUri) {
             $query .= "GRAPH <$graphUri> {";
         }
         $query .= $this->convertToTriples($data);
         if ($graphUri) {
-            $query .= "}";
+            $query .= '}';
         }
         $query .= '}';
+
         return $this->update($query);
     }
 
@@ -213,23 +216,25 @@ class Client
         }
         $query .= $this->convertToTriples($data);
         if ($graphUri) {
-            $query .= "}";
+            $query .= '}';
         }
         $query .= '}';
+
         return $this->update($query);
     }
 
     public function clear($graphUri, $silent = false)
     {
-        $query = "CLEAR";
+        $query = 'CLEAR';
         if ($silent) {
-            $query .= " SILENT";
+            $query .= ' SILENT';
         }
         if (preg_match('/^all|named|default$/i', $graphUri)) {
             $query .= " $graphUri";
         } else {
             $query .= " GRAPH <$graphUri>";
         }
+
         return $this->update($query);
     }
 
@@ -244,10 +249,10 @@ class Client
         $response = $this->executeQuery($processed_query, $type);
 
         if (!$response->isSuccessful()) {
-            throw new Http\Exception("HTTP request for SPARQL query failed", 0, null, $response->getBody());
+            throw new Http\Exception('HTTP request for SPARQL query failed', 0, null, $response->getBody());
         }
 
-        if ($response->getStatus() == 204) {
+        if (204 == $response->getStatus()) {
             // No content
             return $response;
         }
@@ -257,15 +262,13 @@ class Client
 
     protected function convertToTriples($data)
     {
-        if (is_string($data)) {
+        if (\is_string($data)) {
             return $data;
-        } elseif (is_object($data) and $data instanceof Graph) {
-            # FIXME: insert Turtle when there is a way of seperateing out the prefixes
+        } elseif (\is_object($data) && $data instanceof Graph) {
+            // FIXME: insert Turtle when there is a way of seperateing out the prefixes
             return $data->serialise('ntriples');
         } else {
-            throw new Exception(
-                "Don't know how to convert to triples for SPARQL query"
-            );
+            throw new Exception("Don't know how to convert to triples for SPARQL query");
         }
     }
 
@@ -275,6 +278,7 @@ class Client
      * Overriding classes may execute arbitrary query-alteration here
      *
      * @param string $query
+     *
      * @return string
      */
     protected function preprocessQuery($query)
@@ -282,14 +286,14 @@ class Client
         // Check for undefined prefixes
         $prefixes = '';
         foreach (RdfNamespace::namespaces() as $prefix => $uri) {
-            if (strpos($query, "{$prefix}:") !== false and
-                strpos($query, "PREFIX {$prefix}:") === false
+            if (false !== strpos($query, "{$prefix}:") &&
+                false === strpos($query, "PREFIX {$prefix}:")
             ) {
                 $prefixes .= "PREFIX {$prefix}: <{$uri}>\n";
             }
         }
 
-        return $prefixes . $query;
+        return $prefixes.$query;
     }
 
     /**
@@ -299,6 +303,7 @@ class Client
      * @param string $type            Should be either "query" or "update"
      *
      * @return Http\Response|\Zend\Http\Response
+     *
      * @throws Exception
      */
     protected function executeQuery($processed_query, $type)
@@ -307,12 +312,12 @@ class Client
         $client->resetParameters();
 
         // Tell the server which response formats we can parse
-        $sparql_results_types = array(
+        $sparql_results_types = [
             'application/sparql-results+json' => 1.0,
-            'application/sparql-results+xml' => 0.8
-        );
+            'application/sparql-results+xml' => 0.8,
+        ];
 
-        if ($type == 'update') {
+        if ('update' == $type) {
             // accept anything, as "response body of a […] update request is implementation defined"
             // @see http://www.w3.org/TR/sparql11-protocol/#update-success
             $accept = Format::getHttpAcceptHeader($sparql_results_types);
@@ -322,24 +327,24 @@ class Client
             $client->setUri($this->updateUri);
             $client->setRawData($processed_query);
             $this->setHeaders($client, 'Content-Type', 'application/sparql-update');
-        } elseif ($type == 'query') {
+        } elseif ('query' == $type) {
             $re = '(?:(?:\s*BASE\s*<.*?>\s*)|(?:\s*PREFIX\s+.+:\s*<.*?>\s*))*'.
                 '(CONSTRUCT|SELECT|ASK|DESCRIBE)[\W]';
 
             $result = null;
             $matched = mb_eregi($re, $processed_query, $result);
 
-            if (false === $matched or count($result) !== 2) {
+            if (false === $matched || 2 !== \count($result)) {
                 // non-standard query. is this something non-standard?
                 $query_verb = null;
             } else {
                 $query_verb = strtoupper($result[1]);
             }
 
-            if ($query_verb === 'SELECT' or $query_verb === 'ASK') {
+            if ('SELECT' === $query_verb || 'ASK' === $query_verb) {
                 // only "results"
                 $accept = Format::formatAcceptHeader($sparql_results_types);
-            } elseif ($query_verb === 'CONSTRUCT' or $query_verb === 'DESCRIBE') {
+            } elseif ('CONSTRUCT' === $query_verb || 'DESCRIBE' === $query_verb) {
                 // only "graph"
                 $accept = Format::getHttpAcceptHeader();
             } else {
@@ -349,15 +354,15 @@ class Client
 
             $this->setHeaders($client, 'Accept', $accept);
 
-            $encodedQuery = 'query=' . urlencode($processed_query);
+            $encodedQuery = 'query='.urlencode($processed_query);
 
             // Use GET if the query is less than 2kB
             // 2046 = 2kB minus 1 for '?' and 1 for NULL-terminated string on server
-            if (strlen($encodedQuery) + strlen($this->queryUri) <= 2046) {
+            if (\strlen($encodedQuery) + \strlen($this->queryUri) <= 2046) {
                 $delimiter = $this->queryUri_has_params ? '&' : '?';
 
                 $client->setMethod('GET');
-                $client->setUri($this->queryUri . $delimiter . $encodedQuery);
+                $client->setUri($this->queryUri.$delimiter.$encodedQuery);
             } else {
                 // Fall back to POST instead (which is un-cacheable)
                 $client->setMethod('POST');
@@ -382,17 +387,20 @@ class Client
      * Can be overridden to do custom processing
      *
      * @param Http\Response|\Zend\Http\Response $response
+     *
      * @return Graph|Result
      */
     protected function parseResponseToQuery($response)
     {
-        list($content_type,) = Utils::parseMimeType($response->getHeader('Content-Type'));
+        list($content_type) = Utils::parseMimeType($response->getHeader('Content-Type'));
 
-        if (strpos($content_type, 'application/sparql-results') === 0) {
+        if (0 === strpos($content_type, 'application/sparql-results')) {
             $result = new Result($response->getBody(), $content_type);
+
             return $result;
         } else {
             $result = new Graph($this->queryUri, $response->getBody(), $content_type);
+
             return $result;
         }
     }

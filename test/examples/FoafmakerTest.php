@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class FoafmakerTest extends \EasyRdf\TestCase
 {
@@ -51,7 +50,7 @@ class FoafmakerTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'foafmaker.php',
-            array(
+            [
                 'uri' => 'http://www.example.com/joe#me',
                 'title' => 'Mr',
                 'given_name' => 'Joe',
@@ -63,8 +62,8 @@ class FoafmakerTest extends \EasyRdf\TestCase
                 'person_2' => 'http://www.example.com/alice#me',
                 'person_3' => '',
                 'person_4' => '',
-                'format' => 'turtle'
-            )
+                'format' => 'turtle',
+            ]
         );
 
         $this->assertContains('<title>EasyRdf FOAF Maker Example</title>', $output);
@@ -80,7 +79,7 @@ class FoafmakerTest extends \EasyRdf\TestCase
             "  foaf:givenname &quot;Joe&quot; ;\n".
             "  foaf:family_name &quot;Bloggs&quot; ;\n".
             "  foaf:nick &quot;Joe&quot; ;\n".
-            "  foaf:knows &lt;http://www.example.com/fred#me&gt;,".
+            '  foaf:knows &lt;http://www.example.com/fred#me&gt;,'.
             " &lt;http://www.example.com/alice#me&gt; .\n",
             $output
         );

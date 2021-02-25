@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class MockParserClass
 {
@@ -54,18 +53,18 @@ class FormatTest extends TestCase
     /**
      * Set up the test suite before each test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->format = Format::register(
             'my',
             'My Format',
             'http://example.com/myformat',
-            array('my/mime' => 1.0, 'my/x-mime' => 0.9),
-            array('mext')
+            ['my/mime' => 1.0, 'my/x-mime' => 0.9],
+            ['mext']
         );
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         Format::unregister('my');
     }
@@ -94,14 +93,14 @@ class FormatTest extends TestCase
             'InvalidArgumentException',
             '$name should be a string and cannot be null or empty'
         );
-        Format::register(array());
+        Format::register([]);
     }
 
     public function testGetFormats()
     {
         $formats = Format::getFormats();
         $this->assertInternalType('array', $formats);
-        $this->assertGreaterThan(0, count($formats));
+        $this->assertGreaterThan(0, \count($formats));
         foreach ($formats as $format) {
             $this->assertClass('EasyRdf\Format', $format);
         }
@@ -116,20 +115,20 @@ class FormatTest extends TestCase
 
     public function testGetHttpAcceptHeaderWithExtra()
     {
-        $accept = Format::getHttpAcceptHeader(array('extra/header' => 0.5));
+        $accept = Format::getHttpAcceptHeader(['extra/header' => 0.5]);
         $this->assertContains('application/json', $accept);
         $this->assertContains('extra/header;q=0.5', $accept);
     }
 
     public function testGetHttpAcceptHeaderLocale()
     {
-        $current_locale = setlocale(LC_NUMERIC, 0);
-        setlocale(LC_NUMERIC, 'fi_FI.UTF-8');
+        $current_locale = setlocale(\LC_NUMERIC, 0);
+        setlocale(\LC_NUMERIC, 'fi_FI.UTF-8');
 
-        $accept = Format::getHttpAcceptHeader(array('extra/header' => 0.5));
+        $accept = Format::getHttpAcceptHeader(['extra/header' => 0.5]);
         $this->assertContains('extra/header;q=0.5', $accept);
 
-        setlocale(LC_NUMERIC, $current_locale);
+        setlocale(\LC_NUMERIC, $current_locale);
     }
 
     public function testFormatExistsTrue()
@@ -222,7 +221,7 @@ class FormatTest extends TestCase
             'InvalidArgumentException',
             '$query should be a string and cannot be null or empty'
         );
-        Format::getFormat(array());
+        Format::getFormat([]);
     }
 
     public function testGetFormatUnknown()
@@ -231,14 +230,14 @@ class FormatTest extends TestCase
             'EasyRdf\Exception',
             'Format is not recognised: unknown'
         );
-        $this->assertSame(null, Format::getFormat('unknown'));
+        $this->assertNull(Format::getFormat('unknown'));
     }
 
     public function testGetNames()
     {
         $names = Format::getNames();
-        $this->assertTrue(is_array($names));
-        $this->assertTrue(in_array('ntriples', $names));
+        $this->assertTrue(\is_array($names));
+        $this->assertTrue(\in_array('ntriples', $names));
     }
 
     public function testGetName()
@@ -260,13 +259,13 @@ class FormatTest extends TestCase
     public function testSetLabelNull()
     {
         $this->format->setLabel(null);
-        $this->assertSame(null, $this->format->getLabel());
+        $this->assertNull($this->format->getLabel());
     }
 
     public function testSetLabelEmpty()
     {
         $this->format->setLabel('');
-        $this->assertSame(null, $this->format->getLabel());
+        $this->assertNull($this->format->getLabel());
     }
 
     public function testSetLabelNonString()
@@ -287,13 +286,13 @@ class FormatTest extends TestCase
     public function testSetUriNull()
     {
         $this->format->setUri(null);
-        $this->assertSame(null, $this->format->getUri());
+        $this->assertNull($this->format->getUri());
     }
 
     public function testSetUriEmpty()
     {
         $this->format->setUri('');
-        $this->assertSame(null, $this->format->getUri());
+        $this->assertNull($this->format->getUri());
     }
 
     public function testSetUriNonString()
@@ -332,7 +331,7 @@ class FormatTest extends TestCase
     public function testGetMimeTypes()
     {
         $this->assertSame(
-            array('my/mime' => 1.0, 'my/x-mime' => 0.9),
+            ['my/mime' => 1.0, 'my/x-mime' => 0.9],
             $this->format->getMimeTypes()
         );
     }
@@ -341,7 +340,7 @@ class FormatTest extends TestCase
     {
         $this->format->setMimeTypes('testSetMimeType');
         $this->assertSame(
-            array('testSetMimeType'),
+            ['testSetMimeType'],
             $this->format->getMimeTypes()
         );
     }
@@ -349,10 +348,10 @@ class FormatTest extends TestCase
     public function testSetMimeTypes()
     {
         $this->format->setMimeTypes(
-            array('testSetMimeTypes1', 'testSetMimeTypes2')
+            ['testSetMimeTypes1', 'testSetMimeTypes2']
         );
         $this->assertSame(
-            array('testSetMimeTypes1', 'testSetMimeTypes2'),
+            ['testSetMimeTypes1', 'testSetMimeTypes2'],
             $this->format->getMimeTypes()
         );
     }
@@ -360,7 +359,7 @@ class FormatTest extends TestCase
     public function testSetMimeTypeNull()
     {
         $this->format->setMimeTypes(null);
-        $this->assertSame(array(), $this->format->getMimeTypes());
+        $this->assertSame([], $this->format->getMimeTypes());
     }
 
     public function testGetDefaultExtension()
@@ -382,7 +381,7 @@ class FormatTest extends TestCase
     public function testGetExtensions()
     {
         $this->assertSame(
-            array('mext'),
+            ['mext'],
             $this->format->getExtensions()
         );
     }
@@ -391,7 +390,7 @@ class FormatTest extends TestCase
     {
         $this->format->setExtensions('testSetExtension');
         $this->assertSame(
-            array('testSetExtension'),
+            ['testSetExtension'],
             $this->format->getExtensions()
         );
     }
@@ -399,10 +398,10 @@ class FormatTest extends TestCase
     public function testSetExtensions()
     {
         $this->format->setExtensions(
-            array('ext1', 'ext2')
+            ['ext1', 'ext2']
         );
         $this->assertSame(
-            array('ext1', 'ext2'),
+            ['ext1', 'ext2'],
             $this->format->getExtensions()
         );
     }
@@ -410,7 +409,7 @@ class FormatTest extends TestCase
     public function testSetExtensionsNull()
     {
         $this->format->setExtensions(null);
-        $this->assertSame(array(), $this->format->getExtensions());
+        $this->assertSame([], $this->format->getExtensions());
     }
 
     public function testToString()
@@ -430,13 +429,13 @@ class FormatTest extends TestCase
     public function testSetParserClassNull()
     {
         $this->format->setParserClass(null);
-        $this->assertSame(null, $this->format->getParserClass());
+        $this->assertNull($this->format->getParserClass());
     }
 
     public function testSetParserClassEmpty()
     {
         $this->format->setParserClass('');
-        $this->assertSame(null, $this->format->getParserClass());
+        $this->assertNull($this->format->getParserClass());
     }
 
     public function testSetParserClassNonString()
@@ -495,13 +494,13 @@ class FormatTest extends TestCase
     public function testSetSerialiserClassNull()
     {
         $this->format->setSerialiserClass(null);
-        $this->assertSame(null, $this->format->getSerialiserClass());
+        $this->assertNull($this->format->getSerialiserClass());
     }
 
     public function testSetSerialiserClassEmpty()
     {
         $this->format->setSerialiserClass('');
-         $this->assertSame(null, $this->format->getSerialiserClass());
+        $this->assertNull($this->format->getSerialiserClass());
     }
 
     public function testSetSerialiserClassNonString()
@@ -556,7 +555,7 @@ class FormatTest extends TestCase
 
     public function testGuessFormatPhp()
     {
-        $data = array('http://www.example.com' => array());
+        $data = ['http://www.example.com' => []];
         $this->assertStringEquals('php', Format::guessFormat($data));
     }
 
@@ -645,7 +644,7 @@ class FormatTest extends TestCase
 
     public function testGuessFormatHtml()
     {
-        # We don't support any other microformats embedded in HTML
+        // We don't support any other microformats embedded in HTML
         $format = Format::guessFormat(
             '<html><head><title>Hello</title></head><body><h1>Hello World</h1></body></html>'
         );
@@ -660,11 +659,11 @@ class FormatTest extends TestCase
 
     public function testGuessFormatXml()
     {
-        # We support several different XML formats, don't know which one this is...
+        // We support several different XML formats, don't know which one this is...
         $format = Format::guessFormat(
             '<?xml version="1.0" encoding="UTF-8"?>'
         );
-        $this->assertSame(null, $format);
+        $this->assertNull($format);
     }
 
     public function testGuessFormatByFilenameTtl()

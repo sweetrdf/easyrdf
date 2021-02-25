@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,16 +32,13 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-
 /**
  * Static class to set the HTTP client used by EasyRdf
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -51,20 +49,20 @@ class Http
 
     /** Set the HTTP Client object used to fetch RDF data
      *
-     * @param  Http\Client|\Zend\Http\Client $httpClient The new HTTP client object
+     * @param Http\Client|\Zend\Http\Client $httpClient The new HTTP client object
      *
      * @throws \InvalidArgumentException
+     *
      * @return Http\Client|\Zend\Http\Client The new HTTP client object
      */
     public static function setDefaultHttpClient($httpClient)
     {
-        if (!is_object($httpClient) or
-            !($httpClient instanceof \Zend\Http\Client or
+        if (!\is_object($httpClient) ||
+            !($httpClient instanceof \Zend\Http\Client ||
               $httpClient instanceof Http\Client)) {
-            throw new \InvalidArgumentException(
-                '$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client'
-            );
+            throw new \InvalidArgumentException('$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client');
         }
+
         return self::$defaultHttpClient = $httpClient;
     }
 
@@ -80,6 +78,7 @@ class Http
         if (!isset(self::$defaultHttpClient)) {
             self::$defaultHttpClient = new Http\Client();
         }
+
         return self::$defaultHttpClient;
     }
 }

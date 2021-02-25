@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Serialiser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(dirname(__FILE__))).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class GraphVizTest extends TestCase
 {
@@ -49,10 +50,10 @@ class GraphVizTest extends TestCase
     /** @var GraphViz */
     private $serialiser;
 
-    public function setUp()
+    protected function setUp()
     {
         exec('which dot 2>&1', $output, $retval);
-        if ($retval == 0) {
+        if (0 == $retval) {
             $this->graph = new Graph();
             $this->serialiser = new GraphViz();
 
@@ -123,7 +124,7 @@ class GraphVizTest extends TestCase
         $this->serialiser->setOnlyLabelled(false);
         $dot = $this->serialiser->serialise($this->graph, 'dot');
         $this->assertSame(
-            array(
+            [
                 'digraph {',
                 '  charset="utf-8";',
                 '',
@@ -139,8 +140,8 @@ class GraphVizTest extends TestCase
                 '  "Rhttp://www.example.com/joe#me" [URL="http://www.example.com/joe#me",'.
                 'label="http://www.example.com/joe#me",shape=ellipse,color=blue];',
                 '}',
-                ''
-            ),
+                '',
+            ],
             explode("\n", $dot)
         );
     }
@@ -152,7 +153,7 @@ class GraphVizTest extends TestCase
         $dot = $this->serialiser->serialise($this->graph, 'dot');
 
         $this->assertSame(
-            array(
+            [
                 'digraph {',
                 '  charset="utf-8";',
                 '',
@@ -168,8 +169,8 @@ class GraphVizTest extends TestCase
                 '  "Rhttp://www.example.com/joe#me" [URL="http://www.example.com/joe#me",'.
                 'label="Joe Bloggs",shape=ellipse,color=blue];',
                 '}',
-                ''
-            ),
+                '',
+            ],
             explode("\n", $dot)
         );
     }
@@ -182,7 +183,7 @@ class GraphVizTest extends TestCase
         $dot = $this->serialiser->serialise($this->graph, 'dot');
 
         $this->assertSame(
-            array(
+            [
                 'digraph {',
                 '  charset="utf-8";',
                 '',
@@ -194,8 +195,8 @@ class GraphVizTest extends TestCase
                 '  "Rhttp://www.example.com/joe#me" [URL="http://www.example.com/joe#me",'.
                 'label="Joe Bloggs",shape=ellipse,color=blue];',
                 '}',
-                ''
-            ),
+                '',
+            ],
             explode("\n", $dot)
         );
     }
@@ -210,9 +211,9 @@ class GraphVizTest extends TestCase
         );
 
         $this->assertSame('image/png', $info['mime']);
-        $this->assertLessThan(500, $info[0], 'Image width is less than 500');  # width=469
+        $this->assertLessThan(500, $info[0], 'Image width is less than 500');  // width=469
         $this->assertGreaterThan(350, $info[0], 'Image width is greater than 350');
-        $this->assertLessThan(350, $info[1], 'Image height is less than 350');  # height=299
+        $this->assertLessThan(350, $info[1], 'Image height is less than 350');  // height=299
         $this->assertGreaterThan(250, $info[1], 'Image height is greater than 250');
     }
 
@@ -226,9 +227,9 @@ class GraphVizTest extends TestCase
         );
 
         $this->assertSame('image/gif', $info['mime']);
-        $this->assertLessThan(500, $info[0], 'Image width is less than 500');  # width=469
+        $this->assertLessThan(500, $info[0], 'Image width is less than 500');  // width=469
         $this->assertGreaterThan(350, $info[0], 'Image width is greater than 350');
-        $this->assertLessThan(350, $info[1], 'Image height is less than 350');  # height=304
+        $this->assertLessThan(350, $info[1], 'Image height is less than 350');  // height=304
         $this->assertGreaterThan(250, $info[1], 'Image height is greater than 250');
     }
 

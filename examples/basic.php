@@ -7,12 +7,10 @@
      * the primary topic of the document (me, Nicholas Humfrey) is returned
      * and then used to display my name.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
-
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
 ?>
 <html>
 <head>
@@ -26,7 +24,7 @@
 ?>
 
 <p>
-  My name is: <?= $me->get('foaf:name') ?>
+  My name is: <?php echo $me->get('foaf:name'); ?>
 </p>
 
 </body>

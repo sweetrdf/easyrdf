@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,8 +39,7 @@ namespace EasyRdf;
 
 use EasyRdf\Http\MockClient;
 
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
-
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class GraphStoreTest extends TestCase
 {
@@ -48,7 +48,7 @@ class GraphStoreTest extends TestCase
     /** @var MockClient */
     private $client;
 
-    public function setUp()
+    protected function setUp()
     {
         Http::setDefaultHttpClient(
             $this->client = new MockClient()
@@ -108,7 +108,7 @@ class GraphStoreTest extends TestCase
         );
         $graph = $this->graphStore->getDefault();
         $this->assertClass('EasyRdf\Graph', $graph);
-        $this->assertSame(null, $graph->getUri());
+        $this->assertNull($graph->getUri());
         $this->assertStringEquals(
             'Joe Bloggs',
             $graph->get('http://www.example.com/joe#me', 'foaf:name')
@@ -143,7 +143,7 @@ class GraphStoreTest extends TestCase
             'DELETE',
             'http://localhost:8080/data/filenotfound',
             'Graph not found.',
-            array('status' => 404)
+            ['status' => 404]
         );
         $this->setExpectedException(
             'EasyRdf\Exception',
@@ -158,7 +158,8 @@ class GraphStoreTest extends TestCase
             "<urn:subject> <urn:predicate> \"object\" .\n",
             $client->getRawData()
         );
-        $this->assertSame("application/n-triples", $client->getHeader('Content-Type'));
+        $this->assertSame('application/n-triples', $client->getHeader('Content-Type'));
+
         return true;
     }
 
@@ -170,7 +171,7 @@ class GraphStoreTest extends TestCase
             'POST',
             'http://localhost:8080/data/new.rdf',
             'OK',
-            array('callback' => array($this, 'checkNtriplesRequest'))
+            ['callback' => [$this, 'checkNtriplesRequest']]
         );
         $response = $this->graphStore->insert($graph);
         $this->assertSame(200, $response->getStatus());
@@ -183,9 +184,9 @@ class GraphStoreTest extends TestCase
             'POST',
             '/data/?graph=http%3A%2F%2Ffoo.com%2Fbar.rdf',
             'OK',
-            array('callback' => array($this, 'checkNtriplesRequest'))
+            ['callback' => [$this, 'checkNtriplesRequest']]
         );
-        $response = $this->graphStore->insert($data, "http://foo.com/bar.rdf");
+        $response = $this->graphStore->insert($data, 'http://foo.com/bar.rdf');
         $this->assertSame(200, $response->getStatus());
     }
 
@@ -196,7 +197,7 @@ class GraphStoreTest extends TestCase
             'POST',
             '/data/?default',
             'OK',
-            array('callback' => array($this, 'checkNtriplesRequest'))
+            ['callback' => [$this, 'checkNtriplesRequest']]
         );
         $response = $this->graphStore->insertIntoDefault($data);
         $this->assertSame(200, $response->getStatus());
@@ -209,7 +210,7 @@ class GraphStoreTest extends TestCase
             'POST',
             '/data/new.rdf',
             'Internal Server Error',
-            array('status' => 500)
+            ['status' => 500]
         );
         $this->setExpectedException(
             'EasyRdf\Exception',
@@ -225,9 +226,9 @@ class GraphStoreTest extends TestCase
             'PUT',
             '/data/?graph=http%3A%2F%2Ffoo.com%2Fbar.rdf',
             'OK',
-            array('callback' => array($this, 'checkNtriplesRequest'))
+            ['callback' => [$this, 'checkNtriplesRequest']]
         );
-        $response = $this->graphStore->replace($data, "http://foo.com/bar.rdf");
+        $response = $this->graphStore->replace($data, 'http://foo.com/bar.rdf');
         $this->assertSame(200, $response->getStatus());
     }
 
@@ -238,7 +239,7 @@ class GraphStoreTest extends TestCase
             'PUT',
             '/data/?default',
             'OK',
-            array('callback' => array($this, 'checkNtriplesRequest'))
+            ['callback' => [$this, 'checkNtriplesRequest']]
         );
         $response = $this->graphStore->replaceDefault($data);
         $this->assertSame(200, $response->getStatus());
@@ -250,7 +251,8 @@ class GraphStoreTest extends TestCase
             '{"urn:subject":{"urn:predicate":[{"type":"literal","value":"object"}]}}',
             $client->getRawData()
         );
-        $this->assertSame("application/json", $client->getHeader('Content-Type'));
+        $this->assertSame('application/json', $client->getHeader('Content-Type'));
+
         return true;
     }
 
@@ -262,9 +264,9 @@ class GraphStoreTest extends TestCase
             'PUT',
             '/data/?graph=http%3A%2F%2Ffoo.com%2Fbar.rdf',
             'OK',
-            array('callback' => array($this, 'checkJsonRequest'))
+            ['callback' => [$this, 'checkJsonRequest']]
         );
-        $response = $this->graphStore->replace($graph, "http://foo.com/bar.rdf", 'json');
+        $response = $this->graphStore->replace($graph, 'http://foo.com/bar.rdf', 'json');
         $this->assertSame(200, $response->getStatus());
     }
 
@@ -275,7 +277,7 @@ class GraphStoreTest extends TestCase
             'PUT',
             '/data/existing.rdf',
             'Internal Server Error',
-            array('status' => 500)
+            ['status' => 500]
         );
         $this->setExpectedException(
             'EasyRdf\Exception',

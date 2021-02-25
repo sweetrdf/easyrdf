@@ -11,19 +11,17 @@
      * Rending a graph to an image will only work if you have the
      * GraphViz 'dot' command installed.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2012-2014 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+    require_once __DIR__.'/html_tag_helpers.php';
 
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
-    require_once __DIR__."/html_tag_helpers.php";
-
-    $formats = array(
+    $formats = [
       'PNG' => 'png',
       'GIF' => 'gif',
-      'SVG' => 'svg'
-    );
+      'SVG' => 'svg',
+    ];
 
     $format = \EasyRdf\Format::getFormat(
         isset($_REQUEST['format']) ? $_REQUEST['format'] : 'png'
@@ -50,7 +48,7 @@
 
     // If this is a request for the image, just render it and exit
     if (isset($_REQUEST['image'])) {
-        header("Content-Type: ".$format->getDefaultMimeType());
+        header('Content-Type: '.$format->getDefaultMimeType());
         echo $gv->renderImage($graph, $format);
         exit;
     }
@@ -70,12 +68,12 @@
 </form>
 
 <div>
-    <img src='?image&<?=$_SERVER["QUERY_STRING"]?>' />
+    <img src='?image&<?php echo $_SERVER['QUERY_STRING']; ?>' />
 </div>
 
 <pre style="margin: 0.5em; padding:0.5em; background-color:#eee; border:dashed 1px grey;">
 <?php
-    print htmlspecialchars(
+    echo htmlspecialchars(
         $gv->serialise($graph, 'dot')
     );
 ?>

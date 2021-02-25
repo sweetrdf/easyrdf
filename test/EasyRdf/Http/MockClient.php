@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Http;
 
 use EasyRdf\Exception;
@@ -34,19 +35,18 @@ use EasyRdf\Format;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
 class MockClient extends Client
 {
-    private $mocks = array();
+    private $mocks = [];
 
     /**
      * @param null $method
      *
      * @return Response
+     *
      * @throws \EasyRdf\Exception
      */
     public function request($method = null)
@@ -66,17 +66,17 @@ class MockClient extends Client
             $uri['query'] .= http_build_query($params, null, '&');
         }
 
-        # Try and find a matching response
-        $n = sizeof($this->mocks);
-        for ($i = 0; $i < $n; $i++) {
+        // Try and find a matching response
+        $n = count($this->mocks);
+        for ($i = 0; $i < $n; ++$i) {
             list($m, $response, $once) = $this->mocks[$i];
             if (isset($m['uri']) && !$this->matchUri($m['uri'], $uri)) {
                 continue;
             } elseif (isset($m['method']) && $m['method'] !== $this->getMethod()) {
                 continue;
             } elseif (isset($m['callback'])) {
-                $args = array_merge($m['callbackArgs'], array($this));
-                $test = call_user_func_array($m['callback'], $args);
+                $args = array_merge($m['callbackArgs'], [$this]);
+                $test = \call_user_func_array($m['callback'], $args);
                 if (!$test) {
                     continue;
                 }
@@ -84,32 +84,31 @@ class MockClient extends Client
             if ($once) {
                 array_splice($this->mocks, $i, 1);
             }
+
             return $response;
         }
 
-        # FIXME: change to a different type of exception?
-        throw new Exception(
-            'Unexpected request: ' . $this->getMethod() . ' ' . $this->getUri()
-        );
+        // FIXME: change to a different type of exception?
+        throw new Exception('Unexpected request: '.$this->getMethod().' '.$this->getUri());
     }
 
-    public function addMock($method, $uri, $body, $options = array())
+    public function addMock($method, $uri, $body, $options = [])
     {
-        $match = array();
+        $match = [];
         $match['method'] = $method;
-        $match['uri'] = array();
+        $match['uri'] = [];
         if (isset($options['callback'])) {
             $match['callback'] = $options['callback'];
             if (isset($options['callbackArgs'])) {
                 $match['callbackArgs'] = $options['callbackArgs'];
             } else {
-                $match['callbackArgs'] = array();
+                $match['callbackArgs'] = [];
             }
         }
         if (!isset($uri)) {
             $match['uri'] = null;
         } else {
-            $match['uri'] = strval($uri);
+            $match['uri'] = (string) $uri;
         }
 
         if ($body instanceof Response) {
@@ -123,41 +122,41 @@ class MockClient extends Client
             if (isset($options['headers'])) {
                 $headers = $options['headers'];
             } else {
-                $headers = array();
+                $headers = [];
                 $format = Format::guessFormat($body);
                 if (isset($format)) {
                     $headers['Content-Type'] = $format->getDefaultMimeType();
                 }
                 if (isset($body)) {
-                    $headers['Content-Length'] = strlen($body);
+                    $headers['Content-Length'] = \strlen($body);
                 }
             }
             $response = new Response($status, $headers, $body);
         }
         $once = isset($options['once']) ? $options['once'] : false;
 
-        $this->mocks[] = array($match, $response, $once);
+        $this->mocks[] = [$match, $response, $once];
     }
 
-    public function addMockOnce($method, $uri, $body, $options = array())
+    public function addMockOnce($method, $uri, $body, $options = [])
     {
-        $options = array('once' => true) + $options;
+        $options = ['once' => true] + $options;
         $this->addMock($method, $uri, $body, $options);
     }
 
-    public function addMockRedirect($method, $uri, $location, $status = 302, $options = array())
+    public function addMockRedirect($method, $uri, $location, $status = 302, $options = [])
     {
-        $options = array('status' => $status, 'headers' => array('Location' => $location)) + $options;
+        $options = ['status' => $status, 'headers' => ['Location' => $location]] + $options;
         $body = "$status redirect to $location";
         $this->addMock($method, $uri, $body, $options);
     }
 
     protected function buildUrl($parts)
     {
-        $url = $parts['scheme'] . '://';
+        $url = $parts['scheme'].'://';
         $url .= $parts['host'];
         if (isset($parts['port'])) {
-            $url .= ':' . $parts['port'];
+            $url .= ':'.$parts['port'];
         }
         if (isset($parts['path'])) {
             $url .= $parts['path'];
@@ -165,22 +164,23 @@ class MockClient extends Client
             $url .= '/';
         }
         if (isset($parts['query'])) {
-            $url .= '?' . $parts['query'];
+            $url .= '?'.$parts['query'];
         }
+
         return $url;
     }
 
     private function matchUri($match, $parts)
     {
-        # FIXME: Ugh, this is nasty
+        // FIXME: Ugh, this is nasty
         $url = $this->buildUrl($parts);
         if ($match == $url) {
             return true;
         } else {
             if (isset($parts['query'])) {
-                return ($match == $parts['path'].'?'.$parts['query']);
+                return $parts['path'].'?'.$parts['query'] == $match;
             } else {
-                return ($match == $parts['path']);
+                return $match == $parts['path'];
             }
         }
     }

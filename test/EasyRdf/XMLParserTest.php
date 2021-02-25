@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,41 +32,38 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
-
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class XMLParserTest extends TestCase
 {
-    public $result = array();
+    public $result = [];
 
     public function testParseNoop()
     {
         $parser = new XMLParser();
         $parser->parse('<html><body>Body Text</body></html>');
-        $this->assertTrue(true, "Sucessfully parsed XML");
+        $this->assertTrue(true, 'Sucessfully parsed XML');
     }
 
     public function testElementDepth()
     {
         $parser = new XMLParser();
-        $this->result = array();
+        $this->result = [];
         $parser->startElementCallback = function ($parser) {
             $this->result[$parser->path()] = $parser->depth();
         };
         $parser->parse('<html><head /><body>Body <b>Text</b></body><tail /></html>');
         $this->assertSame(
-            array(
+            [
                 'html' => 1,
                 'html/head' => 2,
                 'html/body' => 2,
                 'html/body/b' => 3,
-                'html/tail' => 2
-            ),
+                'html/tail' => 2,
+            ],
             $this->result
         );
     }
@@ -73,19 +71,19 @@ class XMLParserTest extends TestCase
     public function testTextArray()
     {
         $parser = new XMLParser();
-        $this->result = array();
+        $this->result = [];
         $parser->textCallback = function ($parser) {
-            if ($parser->depth() == 2) {
+            if (2 == $parser->depth()) {
                 $name = end($parser->path);
                 $this->result[$name] = $parser->value;
             }
         };
         $parser->parse('<root><a>Hello</a><b>World</b></root>');
         $this->assertSame(
-            array(
+            [
                 'a' => 'Hello',
-                'b' => 'World'
-            ),
+                'b' => 'World',
+            ],
             $this->result
         );
     }

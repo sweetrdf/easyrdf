@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Literal;
 /**
  * Class that represents an RDF Literal of datatype xsd:integer
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#integer
+ * @see       http://www.w3.org/TR/xmlschema-2/#integer
+ *
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -49,9 +50,9 @@ class Integer extends Literal
 {
     /** Constructor for creating a new integer literal
      *
-     * @param  mixed  $value     The value of the literal
-     * @param  string $lang      Should be null (literals with a datatype can't have a language)
-     * @param  string $datatype  Optional datatype (default 'xsd:integer')
+     * @param mixed  $value    The value of the literal
+     * @param string $lang     Should be null (literals with a datatype can't have a language)
+     * @param string $datatype Optional datatype (default 'xsd:integer')
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
@@ -64,6 +65,6 @@ class Integer extends Literal
      */
     public function getValue()
     {
-        return (int)$this->value;
+        return (int) $this->value;
     }
 }

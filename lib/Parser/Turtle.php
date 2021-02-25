@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -51,7 +52,6 @@ use EasyRdf\RdfNamespace;
  * Lasted updated against version:
  * ecda6a15a200a2fc6a062e2e43081257c3ccd4e6   (Mon Jul 29 12:05:58 2013)
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  *             Copyright (c) 1997-2013 Aduna (http://www.aduna-software.com/)
  * @license    https://www.opensource.org/licenses/bsd-license.php
@@ -86,20 +86,19 @@ class Turtle extends Ntriples
      * @param string $baseUri the base URI of the data being parsed
      *
      * @throws \EasyRdf\Exception
-     * @return integer             The number of triples added to the graph
+     *
+     * @return int The number of triples added to the graph
      */
     public function parse($graph, $data, $format, $baseUri)
     {
         parent::checkParseParams($graph, $data, $format, $baseUri);
 
-        if ($format != 'turtle') {
-            throw new \EasyRdf\Exception(
-                "EasyRdf\\Parser\\Turtle does not support: {$format}"
-            );
+        if ('turtle' != $format) {
+            throw new \EasyRdf\Exception("EasyRdf\\Parser\\Turtle does not support: {$format}");
         }
 
         $this->data = $data;
-        $this->namespaces = array();
+        $this->namespaces = [];
         $this->subject = null;
         $this->predicate = null;
         $this->object = null;
@@ -113,7 +112,7 @@ class Turtle extends Ntriples
         $this->resetBnodeMap();
 
         $c = $this->skipWSC();
-        while ($c != -1) {
+        while (-1 != $c) {
             $this->parseStatement();
             $c = $this->skipWSC();
         }
@@ -121,9 +120,9 @@ class Turtle extends Ntriples
         return $this->tripleCount;
     }
 
-
     /**
      * Parse a statement [2]
+     *
      * @ignore
      */
     protected function parseStatement()
@@ -131,7 +130,7 @@ class Turtle extends Ntriples
         $directive = '';
         while (true) {
             $c = $this->read();
-            if ($c == -1 || self::isWhitespace($c)) {
+            if (-1 == $c || self::isWhitespace($c)) {
                 $this->unread($c);
                 break;
             } else {
@@ -143,45 +142,39 @@ class Turtle extends Ntriples
             $this->parseDirective($directive);
             $this->skipWSC();
             // SPARQL BASE and PREFIX lines do not end in .
-            if ($directive[0] == "@") {
-                $this->verifyCharacterOrFail($this->read(), ".");
+            if ('@' == $directive[0]) {
+                $this->verifyCharacterOrFail($this->read(), '.');
             }
         } else {
             $this->unread($directive);
             $this->parseTriples();
             $this->skipWSC();
-            $this->verifyCharacterOrFail($this->read(), ".");
+            $this->verifyCharacterOrFail($this->read(), '.');
         }
     }
 
     /**
      * Parse a directive [3]
+     *
      * @ignore
      */
     protected function parseDirective($directive)
     {
         $directive = strtolower($directive);
-        if ($directive == "prefix" || $directive == '@prefix') {
+        if ('prefix' == $directive || '@prefix' == $directive) {
             $this->parsePrefixID();
-        } elseif ($directive == "base" || $directive == '@base') {
+        } elseif ('base' == $directive || '@base' == $directive) {
             $this->parseBase();
-        } elseif (mb_strlen($directive, "UTF-8") == 0) {
-            throw new Exception(
-                "Turtle Parse Error: directive name is missing, expected @prefix or @base",
-                $this->line,
-                $this->column
-            );
+        } elseif (0 == mb_strlen($directive, 'UTF-8')) {
+            throw new Exception('Turtle Parse Error: directive name is missing, expected @prefix or @base', $this->line, $this->column);
         } else {
-            throw new Exception(
-                "Turtle Parse Error: unknown directive \"$directive\"",
-                $this->line,
-                $this->column
-            );
+            throw new Exception("Turtle Parse Error: unknown directive \"$directive\"", $this->line, $this->column);
         }
     }
 
     /**
      * Parse a prefixID [4]
+     *
      * @ignore
      */
     protected function parsePrefixID()
@@ -193,24 +186,20 @@ class Turtle extends Ntriples
 
         while (true) {
             $c = $this->read();
-            if ($c == ':') {
+            if (':' == $c) {
                 $this->unread($c);
                 break;
             } elseif (self::isWhitespace($c)) {
                 break;
-            } elseif ($c == -1) {
-                throw new Exception(
-                    "Turtle Parse Error: unexpected end of file while reading prefix id",
-                    $this->line,
-                    $this->column
-                );
+            } elseif (-1 == $c) {
+                throw new Exception('Turtle Parse Error: unexpected end of file while reading prefix id', $this->line, $this->column);
             }
 
             $prefixID .= $c;
         }
 
         $this->skipWSC();
-        $this->verifyCharacterOrFail($this->read(), ":");
+        $this->verifyCharacterOrFail($this->read(), ':');
         $this->skipWSC();
 
         // Read the namespace URI
@@ -222,6 +211,7 @@ class Turtle extends Ntriples
 
     /**
      * Parse base [5]
+     *
      * @ignore
      */
     protected function parseBase()
@@ -235,6 +225,7 @@ class Turtle extends Ntriples
     /**
      * Parse triples [6] modified to use a pointer instead of
      * manipulating the input buffer directly.
+     *
      * @ignore
      */
     protected function parseTriples()
@@ -243,11 +234,11 @@ class Turtle extends Ntriples
 
         // If the first character is an open bracket we need to decide which of
         // the two parsing methods for blank nodes to use
-        if ($c == '[') {
+        if ('[' == $c) {
             $c = $this->read();
             $this->skipWSC();
             $c = $this->peek();
-            if ($c == ']') {
+            if (']' == $c) {
                 $c = $this->read();
                 $this->subject = $this->createBNode();
                 $this->skipWSC();
@@ -263,7 +254,7 @@ class Turtle extends Ntriples
             // if this is not the end of the statement, recurse into the list of
             // predicate and objects, using the subject parsed above as the subject
             // of the statement.
-            if ($c != '.') {
+            if ('.' != $c) {
                 $this->parsePredicateObjectList();
             }
         } else {
@@ -279,6 +270,7 @@ class Turtle extends Ntriples
 
     /**
      * Parse a predicateObjectList [7]
+     *
      * @ignore
      */
     protected function parsePredicateObjectList()
@@ -288,14 +280,14 @@ class Turtle extends Ntriples
         $this->skipWSC();
         $this->parseObjectList();
 
-        while ($this->skipWSC() == ';') {
+        while (';' == $this->skipWSC()) {
             $this->read();
 
             $c = $this->skipWSC();
 
-            if ($c == '.' || $c == ']') {
+            if ('.' == $c || ']' == $c) {
                 break;
-            } elseif ($c == ';') {
+            } elseif (';' == $c) {
                 // empty predicateObjectList, skip to next
                 continue;
             }
@@ -310,13 +302,14 @@ class Turtle extends Ntriples
 
     /**
      * Parse a objectList [8]
+     *
      * @ignore
      */
     protected function parseObjectList()
     {
         $this->parseObject();
 
-        while ($this->skipWSC() == ',') {
+        while (',' == $this->skipWSC()) {
             $this->read();
             $this->skipWSC();
             $this->parseObject();
@@ -325,32 +318,30 @@ class Turtle extends Ntriples
 
     /**
      * Parse a subject [10]
+     *
      * @ignore
      */
     protected function parseSubject()
     {
         $c = $this->peek();
-        if ($c == '(') {
+        if ('(' == $c) {
             $this->subject = $this->parseCollection();
-        } elseif ($c == '[') {
+        } elseif ('[' == $c) {
             $this->subject = $this->parseImplicitBlank();
         } else {
             $value = $this->parseValue();
 
-            if ($value['type'] == 'uri' or $value['type'] == 'bnode') {
+            if ('uri' == $value['type'] || 'bnode' == $value['type']) {
                 $this->subject = $value;
             } else {
-                throw new Exception(
-                    "Turtle Parse Error: illegal subject type: ".$value['type'],
-                    $this->line,
-                    $this->column
-                );
+                throw new Exception('Turtle Parse Error: illegal subject type: '.$value['type'], $this->line, $this->column);
             }
         }
     }
 
     /**
      * Parse a predicate [11]
+     *
      * @ignore
      */
     protected function parsePredicate()
@@ -358,15 +349,15 @@ class Turtle extends Ntriples
         // Check if the short-cut 'a' is used
         $c1 = $this->read();
 
-        if ($c1 == 'a') {
+        if ('a' == $c1) {
             $c2 = $this->read();
 
             if (self::isWhitespace($c2)) {
                 // Short-cut is used, return the rdf:type URI
-                return array(
+                return [
                     'type' => 'uri',
-                    'value' => RdfNamespace::get('rdf') . 'type'
-                );
+                    'value' => RdfNamespace::get('rdf').'type',
+                ];
             }
 
             // Short-cut is not used, unread all characters
@@ -376,28 +367,25 @@ class Turtle extends Ntriples
 
         // Predicate is a normal resource
         $predicate = $this->parseValue();
-        if ($predicate['type'] == 'uri') {
+        if ('uri' == $predicate['type']) {
             return $predicate;
         } else {
-            throw new Exception(
-                "Turtle Parse Error: Illegal predicate type: " . $predicate['type'],
-                $this->line,
-                $this->column
-            );
+            throw new Exception('Turtle Parse Error: Illegal predicate type: '.$predicate['type'], $this->line, $this->column);
         }
     }
 
     /**
      * Parse a object [12]
+     *
      * @ignore
      */
     protected function parseObject()
     {
         $c = $this->peek();
 
-        if ($c == '(') {
+        if ('(' == $c) {
             $this->object = $this->parseCollection();
-        } elseif ($c == '[') {
+        } elseif ('[' == $c) {
             $this->object = $this->parseImplicitBlank();
         } else {
             $this->object = $this->parseValue();
@@ -420,12 +408,12 @@ class Turtle extends Ntriples
      */
     protected function parseImplicitBlank()
     {
-        $this->verifyCharacterOrFail($this->read(), "[");
+        $this->verifyCharacterOrFail($this->read(), '[');
 
         $bnode = $this->createBNode();
 
         $c = $this->read();
-        if ($c != ']') {
+        if (']' != $c) {
             $this->unread($c);
 
             // Remember current subject and predicate
@@ -443,7 +431,7 @@ class Turtle extends Ntriples
             $this->skipWSC();
 
             // Read closing bracket
-            $this->verifyCharacterOrFail($this->read(), "]");
+            $this->verifyCharacterOrFail($this->read(), ']');
 
             // Restore previous subject and predicate
             $this->subject = $oldSubject;
@@ -455,20 +443,22 @@ class Turtle extends Ntriples
 
     /**
      * Parses a collection [16], e.g: ( item1 item2 item3 )
+     *
      * @ignore
      */
     protected function parseCollection()
     {
-        $this->verifyCharacterOrFail($this->read(), "(");
+        $this->verifyCharacterOrFail($this->read(), '(');
 
         $c = $this->skipWSC();
-        if ($c == ')') {
+        if (')' == $c) {
             // Empty list
             $this->read();
-            return array(
+
+            return [
                 'type' => 'uri',
-                'value' => RdfNamespace::get('rdf') . 'nil'
-            );
+                'value' => RdfNamespace::get('rdf').'nil',
+            ];
         } else {
             $listRoot = $this->createBNode();
 
@@ -478,21 +468,21 @@ class Turtle extends Ntriples
 
             // generated bNode becomes subject, predicate becomes rdf:first
             $this->subject = $listRoot;
-            $this->predicate = array(
+            $this->predicate = [
                 'type' => 'uri',
-                'value' => RdfNamespace::get('rdf') . 'first'
-            );
+                'value' => RdfNamespace::get('rdf').'first',
+            ];
 
             $this->parseObject();
             $bNode = $listRoot;
 
-            while ($this->skipWSC() != ')') {
+            while (')' != $this->skipWSC()) {
                 // Create another list node and link it to the previous
                 $newNode = $this->createBNode();
 
                 $this->addTriple(
                     $bNode['value'],
-                    RdfNamespace::get('rdf') . 'rest',
+                    RdfNamespace::get('rdf').'rest',
                     $newNode
                 );
 
@@ -508,11 +498,11 @@ class Turtle extends Ntriples
             // Close the list
             $this->addTriple(
                 $bNode['value'],
-                RdfNamespace::get('rdf') . 'rest',
-                array(
+                RdfNamespace::get('rdf').'rest',
+                [
                     'type' => 'uri',
-                    'value' => RdfNamespace::get('rdf') . 'nil'
-                )
+                    'value' => RdfNamespace::get('rdf').'nil',
+                ]
             );
 
             // Restore previous subject and predicate
@@ -526,44 +516,38 @@ class Turtle extends Ntriples
     /**
      * Parses an RDF value. This method parses uriref, qname, node ID, quoted
      * literal, integer, double and boolean.
+     *
      * @ignore
      */
     protected function parseValue()
     {
         $c = $this->peek();
 
-        if ($c == '<') {
+        if ('<' == $c) {
             // uriref, e.g. <foo://bar>
             return $this->parseURI();
-        } elseif ($c == ':' || self::isPrefixStartChar($c)) {
+        } elseif (':' == $c || self::isPrefixStartChar($c)) {
             // qname or boolean
             return $this->parseQNameOrBoolean();
-        } elseif ($c == '_') {
+        } elseif ('_' == $c) {
             // node ID, e.g. _:n1
             return $this->parseNodeID();
-        } elseif ($c == '"' || $c == "'") {
+        } elseif ('"' == $c || "'" == $c) {
             // quoted literal, e.g. "foo" or """foo""" or 'foo' or '''foo'''
             return $this->parseQuotedLiteral();
-        } elseif (ctype_digit($c) || $c == '.' || $c == '+' || $c == '-') {
+        } elseif (ctype_digit($c) || '.' == $c || '+' == $c || '-' == $c) {
             // integer or double, e.g. 123 or 1.2e3
             return $this->parseNumber();
-        } elseif ($c == -1) {
-            throw new Exception(
-                "Turtle Parse Error: unexpected end of file while reading value",
-                $this->line,
-                $this->column
-            );
+        } elseif (-1 == $c) {
+            throw new Exception('Turtle Parse Error: unexpected end of file while reading value', $this->line, $this->column);
         } else {
-            throw new Exception(
-                "Turtle Parse Error: expected an RDF value here, found '$c'",
-                $this->line,
-                $this->column
-            );
+            throw new Exception("Turtle Parse Error: expected an RDF value here, found '$c'", $this->line, $this->column);
         }
     }
 
     /**
      * Parses a quoted string, optionally followed by a language tag or datatype.
+     *
      * @ignore
      */
     protected function parseQuotedLiteral()
@@ -573,83 +557,68 @@ class Turtle extends Ntriples
         // Check for presence of a language tag or datatype
         $c = $this->peek();
 
-        if ($c == '@') {
+        if ('@' == $c) {
             $this->read();
 
             // Read language
             $lang = '';
             $c = $this->read();
-            if ($c == -1) {
-                throw new Exception(
-                    "Turtle Parse Error: unexpected end of file while reading language",
-                    $this->line,
-                    $this->column
-                );
+            if (-1 == $c) {
+                throw new Exception('Turtle Parse Error: unexpected end of file while reading language', $this->line, $this->column);
             } elseif (!self::isLanguageStartChar($c)) {
-                throw new Exception(
-                    "Turtle Parse Error: expected a letter, found '$c'",
-                    $this->line,
-                    $this->column
-                );
+                throw new Exception("Turtle Parse Error: expected a letter, found '$c'", $this->line, $this->column);
             }
 
             $lang .= $c;
 
             $c = $this->read();
             while (!self::isWhitespace($c)) {
-                if ($c == '.' || $c == ';' || $c == ',' || $c == ')' || $c == ']' || $c == -1) {
+                if ('.' == $c || ';' == $c || ',' == $c || ')' == $c || ']' == $c || -1 == $c) {
                     break;
                 }
                 if (self::isLanguageChar($c)) {
                     $lang .= $c;
                 } else {
-                    throw new Exception(
-                        "Turtle Parse Error: illegal language tag char: '$c'",
-                        $this->line,
-                        $this->column
-                    );
+                    throw new Exception("Turtle Parse Error: illegal language tag char: '$c'", $this->line, $this->column);
                 }
                 $c = $this->read();
             }
 
             $this->unread($c);
 
-            return array(
+            return [
                 'type' => 'literal',
                 'value' => $label,
-                'lang' => $lang
-            );
-        } elseif ($c == '^') {
+                'lang' => $lang,
+            ];
+        } elseif ('^' == $c) {
             $this->read();
 
             // next character should be another '^'
-            $this->verifyCharacterOrFail($this->read(), "^");
+            $this->verifyCharacterOrFail($this->read(), '^');
 
             // Read datatype
             $datatype = $this->parseValue();
-            if ($datatype['type'] == 'uri') {
-                return array(
+            if ('uri' == $datatype['type']) {
+                return [
                     'type' => 'literal',
                     'value' => $label,
-                    'datatype' => $datatype['value']
-                );
+                    'datatype' => $datatype['value'],
+                ];
             } else {
-                throw new Exception(
-                    "Turtle Parse Error: illegal datatype type: " . $datatype['type'],
-                    $this->line,
-                    $this->column
-                );
+                throw new Exception('Turtle Parse Error: illegal datatype type: '.$datatype['type'], $this->line, $this->column);
             }
         } else {
-            return array(
+            return [
                 'type' => 'literal',
-                'value' => $label
-            );
+                'value' => $label,
+            ];
         }
     }
 
     /**
      * Parses a quoted string, which is either a "normal string" or a """long string""".
+     *
      * @ignore
      */
     protected function parseQuotedString()
@@ -687,6 +656,7 @@ class Turtle extends Ntriples
      * @param string $closingCharacter The type of quote to use (either ' or ")
      *
      * @throws Exception
+     *
      * @return string
      * @ignore
      */
@@ -699,25 +669,17 @@ class Turtle extends Ntriples
 
             if ($c == $closingCharacter) {
                 break;
-            } elseif ($c == -1) {
-                throw new Exception(
-                    "Turtle Parse Error: unexpected end of file while reading string",
-                    $this->line,
-                    $this->column
-                );
+            } elseif (-1 == $c) {
+                throw new Exception('Turtle Parse Error: unexpected end of file while reading string', $this->line, $this->column);
             }
 
             $str .= $c;
 
-            if ($c == '\\') {
+            if ('\\' == $c) {
                 // This escapes the next character, which might be a ' or a "
                 $c = $this->read();
-                if ($c == -1) {
-                    throw new Exception(
-                        "Turtle Parse Error: unexpected end of file while reading string",
-                        $this->line,
-                        $this->column
-                    );
+                if (-1 == $c) {
+                    throw new Exception('Turtle Parse Error: unexpected end of file while reading string', $this->line, $this->column);
                 }
                 $str .= $c;
             }
@@ -733,6 +695,7 @@ class Turtle extends Ntriples
      * @param string $closingCharacter The type of quote to use (either ' or ")
      *
      * @throws Exception
+     *
      * @return string
      * @ignore
      */
@@ -744,39 +707,32 @@ class Turtle extends Ntriples
         while ($doubleQuoteCount < 3) {
             $c = $this->read();
 
-            if ($c == -1) {
-                throw new Exception(
-                    "Turtle Parse Error: unexpected end of file while reading long string",
-                    $this->line,
-                    $this->column
-                );
+            if (-1 == $c) {
+                throw new Exception('Turtle Parse Error: unexpected end of file while reading long string', $this->line, $this->column);
             } elseif ($c == $closingCharacter) {
-                $doubleQuoteCount++;
+                ++$doubleQuoteCount;
             } else {
                 $doubleQuoteCount = 0;
             }
 
             $str .= $c;
 
-            if ($c == '\\') {
+            if ('\\' == $c) {
                 // This escapes the next character, which might be a ' or "
                 $c = $this->read();
-                if ($c == -1) {
-                    throw new Exception(
-                        "Turtle Parse Error: unexpected end of file while reading long string",
-                        $this->line,
-                        $this->column
-                    );
+                if (-1 == $c) {
+                    throw new Exception('Turtle Parse Error: unexpected end of file while reading long string', $this->line, $this->column);
                 }
                 $str .= $c;
             }
         }
 
-        return mb_substr($str, 0, -3, "UTF-8");
+        return mb_substr($str, 0, -3, 'UTF-8');
     }
 
     /**
      * Parses a numeric value, either of type integer, decimal or double
+     *
      * @ignore
      */
     protected function parseNumber()
@@ -787,7 +743,7 @@ class Turtle extends Ntriples
         $c = $this->read();
 
         // read optional sign character
-        if ($c == '+' || $c == '-') {
+        if ('+' == $c || '-' == $c) {
             $value .= $c;
             $c = $this->read();
         }
@@ -797,9 +753,9 @@ class Turtle extends Ntriples
             $c = $this->read();
         }
 
-        if ($c == '.' || $c == 'e' || $c == 'E') {
+        if ('.' == $c || 'e' == $c || 'E' == $c) {
             // read optional fractional digits
-            if ($c == '.') {
+            if ('.' == $c) {
                 if (self::isWhitespace($this->peek())) {
                     // We're parsing an integer that did not have a space before the
                     // period to end the statement
@@ -811,46 +767,34 @@ class Turtle extends Ntriples
                         $c = $this->read();
                     }
 
-                    if (mb_strlen($value, "UTF-8") == 1) {
+                    if (1 == mb_strlen($value, 'UTF-8')) {
                         // We've only parsed a '.'
-                        throw new Exception(
-                            "Turtle Parse Error: object for statement missing",
-                            $this->line,
-                            $this->column
-                        );
+                        throw new Exception('Turtle Parse Error: object for statement missing', $this->line, $this->column);
                     }
 
                     // We're parsing a decimal or a double
                     $datatype = RdfNamespace::get('xsd').'decimal';
                 }
             } else {
-                if (mb_strlen($value, "UTF-8") == 0) {
+                if (0 == mb_strlen($value, 'UTF-8')) {
                     // We've only parsed an 'e' or 'E'
-                    throw new Exception(
-                        "Turtle Parse Error: object for statement missing",
-                        $this->line,
-                        $this->column
-                    );
+                    throw new Exception('Turtle Parse Error: object for statement missing', $this->line, $this->column);
                 }
             }
 
             // read optional exponent
-            if ($c == 'e' || $c == 'E') {
+            if ('e' == $c || 'E' == $c) {
                 $datatype = RdfNamespace::get('xsd').'double';
                 $value .= $c;
 
                 $c = $this->read();
-                if ($c == '+' || $c == '-') {
+                if ('+' == $c || '-' == $c) {
                     $value .= $c;
                     $c = $this->read();
                 }
 
                 if (!ctype_digit($c)) {
-                    throw new Exception(
-                        "Turtle Parse Error: exponent value missing",
-                        $this->line,
-                        $this->column
-                    );
+                    throw new Exception('Turtle Parse Error: exponent value missing', $this->line, $this->column);
                 }
 
                 $value .= $c;
@@ -867,15 +811,16 @@ class Turtle extends Ntriples
         $this->unread($c);
 
         // Return result as a typed literal
-        return array(
+        return [
             'type' => 'literal',
             'value' => $value,
-            'datatype' => $datatype
-        );
+            'datatype' => $datatype,
+        ];
     }
 
     /**
      * Parses a URI / IRI
+     *
      * @ignore
      */
     protected function parseURI()
@@ -883,33 +828,25 @@ class Turtle extends Ntriples
         $uri = '';
 
         // First character should be '<'
-        $this->verifyCharacterOrFail($this->read(), "<");
+        $this->verifyCharacterOrFail($this->read(), '<');
 
         // Read up to the next '>' character
         while (true) {
             $c = $this->read();
 
-            if ($c == '>') {
+            if ('>' == $c) {
                 break;
-            } elseif ($c == -1) {
-                throw new Exception(
-                    "Turtle Parse Error: unexpected end of file while reading URI",
-                    $this->line,
-                    $this->column
-                );
+            } elseif (-1 == $c) {
+                throw new Exception('Turtle Parse Error: unexpected end of file while reading URI', $this->line, $this->column);
             }
 
             $uri .= $c;
 
-            if ($c == '\\') {
+            if ('\\' == $c) {
                 // This escapes the next character, which might be a '>'
                 $c = $this->read();
-                if ($c == -1) {
-                    throw new Exception(
-                        "Turtle Parse Error: unexpected end of file while reading URI",
-                        $this->line,
-                        $this->column
-                    );
+                if (-1 == $c) {
+                    throw new Exception('Turtle Parse Error: unexpected end of file while reading URI', $this->line, $this->column);
                 }
                 $uri .= $c;
             }
@@ -918,48 +855,37 @@ class Turtle extends Ntriples
         // Unescape any escape sequences
         $uri = $this->unescapeString($uri);
 
-        return array(
+        return [
             'type' => 'uri',
-            'value' => $this->resolve($uri)
-        );
+            'value' => $this->resolve($uri),
+        ];
     }
 
     /**
      * Parses qnames and boolean values, which have equivalent starting
      * characters.
+     *
      * @ignore
      */
     protected function parseQNameOrBoolean()
     {
         // First character should be a ':' or a letter
         $c = $this->read();
-        if ($c == -1) {
-            throw new Exception(
-                "Turtle Parse Error: unexpected end of file while readying value",
-                $this->line,
-                $this->column
-            );
+        if (-1 == $c) {
+            throw new Exception('Turtle Parse Error: unexpected end of file while readying value', $this->line, $this->column);
         }
-        if ($c != ':' && !self::isPrefixStartChar($c)) {
-            throw new Exception(
-                "Turtle Parse Error: expected a ':' or a letter, found '$c'",
-                $this->line,
-                $this->column
-            );
+        if (':' != $c && !self::isPrefixStartChar($c)) {
+            throw new Exception("Turtle Parse Error: expected a ':' or a letter, found '$c'", $this->line, $this->column);
         }
 
         $namespace = null;
 
-        if ($c == ':') {
+        if (':' == $c) {
             // qname using default namespace
             if (isset($this->namespaces[''])) {
                 $namespace = $this->namespaces[''];
             } else {
-                throw new Exception(
-                    "Turtle Parse Error: default namespace used but not defined",
-                    $this->line,
-                    $this->column
-                );
+                throw new Exception('Turtle Parse Error: default namespace used but not defined', $this->line, $this->column);
             }
         } else {
             // $c is the first letter of the prefix
@@ -971,29 +897,25 @@ class Turtle extends Ntriples
                 $c = $this->read();
             }
 
-            if ($c != ':') {
+            if (':' != $c) {
                 // prefix may actually be a boolean value
                 $value = $prefix;
 
-                if ($value == "true" || $value == "false") {
-                    return array(
+                if ('true' == $value || 'false' == $value) {
+                    return [
                         'type' => 'literal',
                         'value' => $value,
-                        'datatype' => RdfNamespace::get('xsd') . 'boolean'
-                    );
+                        'datatype' => RdfNamespace::get('xsd').'boolean',
+                    ];
                 }
             }
 
-            $this->verifyCharacterOrFail($c, ":");
+            $this->verifyCharacterOrFail($c, ':');
 
             if (isset($this->namespaces[$prefix])) {
                 $namespace = $this->namespaces[$prefix];
             } else {
-                throw new Exception(
-                    "Turtle Parse Error: namespace prefix '$prefix' used but not defined",
-                    $this->line,
-                    $this->column
-                );
+                throw new Exception("Turtle Parse Error: namespace prefix '$prefix' used but not defined", $this->line, $this->column);
             }
         }
 
@@ -1001,7 +923,7 @@ class Turtle extends Ntriples
         $localName = '';
         $c = $this->read();
         if (self::isNameStartChar($c)) {
-            if ($c == '\\') {
+            if ('\\' == $c) {
                 $localName .= $this->readLocalEscapedChar();
             } else {
                 $localName .= $c;
@@ -1009,7 +931,7 @@ class Turtle extends Ntriples
 
             $c = $this->read();
             while (self::isNameChar($c)) {
-                if ($c == '\\') {
+                if ('\\' == $c) {
                     $localName .= $this->readLocalEscapedChar();
                 } else {
                     $localName .= $c;
@@ -1022,10 +944,10 @@ class Turtle extends Ntriples
         $this->unread($c);
 
         // Note: namespace has already been resolved
-        return array(
+        return [
             'type' => 'uri',
-            'value' => $namespace . $localName
-        );
+            'value' => $namespace.$localName,
+        ];
     }
 
     protected function readLocalEscapedChar()
@@ -1035,38 +957,27 @@ class Turtle extends Ntriples
         if (self::isLocalEscapedChar($c)) {
             return $c;
         } else {
-            throw new Exception(
-                "found '" . $c . "', expected one of: " . implode(', ', self::$localEscapedChars),
-                $this->line,
-                $this->column
-            );
+            throw new Exception("found '".$c."', expected one of: ".implode(', ', self::$localEscapedChars), $this->line, $this->column);
         }
     }
 
     /**
      * Parses a blank node ID, e.g: _:node1
+     *
      * @ignore
      */
     protected function parseNodeID()
     {
         // Node ID should start with "_:"
-        $this->verifyCharacterOrFail($this->read(), "_");
-        $this->verifyCharacterOrFail($this->read(), ":");
+        $this->verifyCharacterOrFail($this->read(), '_');
+        $this->verifyCharacterOrFail($this->read(), ':');
 
         // Read the node ID
         $c = $this->read();
-        if ($c == -1) {
-            throw new Exception(
-                "Turtle Parse Error: unexpected end of file while reading node id",
-                $this->line,
-                $this->column
-            );
+        if (-1 == $c) {
+            throw new Exception('Turtle Parse Error: unexpected end of file while reading node id', $this->line, $this->column);
         } elseif (!self::isNameStartChar($c)) {
-            throw new Exception(
-                "Turtle Parse Error: expected a letter, found '$c'",
-                $this->line,
-                $this->column
-            );
+            throw new Exception("Turtle Parse Error: expected a letter, found '$c'", $this->line, $this->column);
         }
 
         // Read all following letter and numbers, they are part of the name
@@ -1079,10 +990,10 @@ class Turtle extends Ntriples
 
         $this->unread($c);
 
-        return array(
+        return [
             'type' => 'bnode',
-            'value' => $this->remapBnode($name)
-        );
+            'value' => $this->remapBnode($name),
+        ];
     }
 
     protected function resolve($uri)
@@ -1098,43 +1009,37 @@ class Turtle extends Ntriples
      * Verifies that the supplied character $c is one of the expected
      * characters specified in $expected. This method will throw a
      * exception if this is not the case.
+     *
      * @ignore
      */
     protected function verifyCharacterOrFail($c, $expected)
     {
-        if ($c == -1) {
-            throw new Exception(
-                "Turtle Parse Error: unexpected end of file",
-                $this->line,
-                $this->column
-            );
-        } elseif (strpbrk($c, $expected) === false) {
+        if (-1 == $c) {
+            throw new Exception('Turtle Parse Error: unexpected end of file', $this->line, $this->column);
+        } elseif (false === strpbrk($c, $expected)) {
             $msg = 'expected ';
-            for ($i = 0; $i < strlen($expected); $i++) {
+            for ($i = 0; $i < \strlen($expected); ++$i) {
                 if ($i > 0) {
-                    $msg .= " or ";
+                    $msg .= ' or ';
                 }
                 $msg .= '\''.$expected[$i].'\'';
             }
             $msg .= ", found '$c'";
 
-            throw new Exception(
-                "Turtle Parse Error: $msg",
-                $this->line,
-                $this->column
-            );
+            throw new Exception("Turtle Parse Error: $msg", $this->line, $this->column);
         }
     }
 
     /**
      * Skip through whitespace and comments
+     *
      * @ignore
      */
     protected function skipWSC()
     {
         $c = $this->read();
-        while (self::isWhitespace($c) || $c == '#') {
-            if ($c == '#') {
+        while (self::isWhitespace($c) || '#' == $c) {
+            if ('#' == $c) {
                 $this->processComment();
             }
 
@@ -1142,27 +1047,29 @@ class Turtle extends Ntriples
         }
 
         $this->unread($c);
+
         return $c;
     }
 
     /**
      * Consumes characters from reader until the first EOL has been read.
+     *
      * @ignore
      */
     protected function processComment()
     {
         $comment = '';
         $c = $this->read();
-        while ($c != -1 && $c != "\r" && $c != "\n") {
+        while (-1 != $c && "\r" != $c && "\n" != $c) {
             $comment .= $c;
             $c = $this->read();
         }
 
         // c is equal to -1, \r or \n.
         // In case c is equal to \r, we should also read a following \n.
-        if ($c == "\r") {
+        if ("\r" == $c) {
             $c = $this->read();
-            if ($c != "\n") {
+            if ("\n" != $c) {
                 $this->unread($c);
             }
         }
@@ -1173,22 +1080,24 @@ class Turtle extends Ntriples
      * Returns -1 when the end of the file is reached.
      * Does not manipulate the data variable. Keeps track of the
      * byte position instead.
+     *
      * @ignore
      */
     protected function read()
     {
         $char = $this->peek();
-        if ($char == -1) {
+        if (-1 == $char) {
             return -1;
         }
-        $this->bytePos += strlen($char);
+        $this->bytePos += \strlen($char);
         // Keep tracks of which line we are on (0A = Line Feed)
-        if ($char == "\x0A") {
-            $this->line += 1;
+        if ("\x0A" == $char) {
+            ++$this->line;
             $this->column = 1;
         } else {
-            $this->column += 1;
+            ++$this->column;
         }
+
         return $char;
     }
 
@@ -1196,29 +1105,30 @@ class Turtle extends Ntriples
      * Gets the next character to be returned by read()
      * without moving the pointer position. Speeds up the
      * mb_substr() call by only giving it the next 4 bytes to parse.
+     *
      * @ignore
      */
     protected function peek()
     {
         if (!$this->dataLength) {
-            $this->dataLength = strlen($this->data);
+            $this->dataLength = \strlen($this->data);
         }
         if ($this->dataLength > $this->bytePos) {
             $slice = substr($this->data, $this->bytePos, 4);
-            return mb_substr($slice, 0, 1, "UTF-8");
+
+            return mb_substr($slice, 0, 1, 'UTF-8');
         } else {
             return -1;
         }
     }
-
 
     /**
      * Steps back, restoring the previous character read() to the input buffer
      */
     protected function unread($chars)
     {
-        $this->column -= mb_strlen($chars, "UTF-8");
-        $this->bytePos -= strlen($chars);
+        $this->column -= mb_strlen($chars, 'UTF-8');
+        $this->bytePos -= \strlen($chars);
         if ($this->bytePos < 0) {
             $this->bytePos = 0;
         }
@@ -1230,18 +1140,19 @@ class Turtle extends Ntriples
     /**
      * Reverse skips through whitespace in 4 byte increments.
      * (Keeps the byte pointer accurate when unreading.)
+     *
      * @ignore
      */
     protected function unskipWS()
     {
         if ($this->bytePos - 4 > 0) {
             $slice = substr($this->data, $this->bytePos - 4, 4);
-            while ($slice != '') {
-                if (!self::isWhitespace(mb_substr($slice, -1, 1, "UTF-8"))) {
+            while ('' != $slice) {
+                if (!self::isWhitespace(mb_substr($slice, -1, 1, 'UTF-8'))) {
                     return;
                 }
                 $slice = substr($slice, 0, -1);
-                $this->bytePos -= 1;
+                --$this->bytePos;
             }
             // This 4 byte slice was full of whitespace.
             // We need to check that there isn't more in the next slice.
@@ -1252,29 +1163,31 @@ class Turtle extends Ntriples
     /** @ignore */
     protected function createBNode()
     {
-        return array(
+        return [
             'type' => 'bnode',
-            'value' => $this->graph->newBNodeId()
-        );
+            'value' => $this->graph->newBNodeId(),
+        ];
     }
 
     /**
      * Returns true if $c is a whitespace character
+     *
      * @ignore
      */
     public static function isWhitespace($c)
     {
         // Whitespace character are space, tab, newline and carriage return:
-        return $c == "\x20" || $c == "\x09" || $c == "\x0A" || $c == "\x0D";
+        return "\x20" == $c || "\x09" == $c || "\x0A" == $c || "\x0D" == $c;
     }
 
     /** @ignore */
     public static function isPrefixStartChar($c)
     {
-        $o = ord($c);
+        $o = \ord($c);
+
         return
-            $o >= 0x41   && $o <= 0x5a ||     # A-Z
-            $o >= 0x61   && $o <= 0x7a ||     # a-z
+            $o >= 0x41 && $o <= 0x5a ||     // A-Z
+            $o >= 0x61 && $o <= 0x7a ||     // a-z
             $o >= 0x00C0 && $o <= 0x00D6 ||
             $o >= 0x00D8 && $o <= 0x00F6 ||
             $o >= 0x00F8 && $o <= 0x02FF ||
@@ -1293,10 +1206,10 @@ class Turtle extends Ntriples
     public static function isNameStartChar($c)
     {
         return
-            $c == '\\' ||
-            $c == '_' ||
-            $c == ':' ||
-            $c == '%' ||
+            '\\' == $c ||
+            '_' == $c ||
+            ':' == $c ||
+            '%' == $c ||
             ctype_digit($c) ||
             self::isPrefixStartChar($c);
     }
@@ -1304,38 +1217,40 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isNameChar($c)
     {
-        $o = ord($c);
+        $o = \ord($c);
+
         return
             self::isNameStartChar($c) ||
-            $o >= 0x30 && $o <= 0x39 ||     # 0-9
-            $c == '-' ||
-            $o == 0x00B7 ||
+            $o >= 0x30 && $o <= 0x39 ||     // 0-9
+            '-' == $c ||
+            0x00B7 == $o ||
             $o >= 0x0300 && $o <= 0x036F ||
             $o >= 0x203F && $o <= 0x2040;
     }
 
     /** @ignore */
-    private static $localEscapedChars = array(
+    private static $localEscapedChars = [
         '_', '~', '.', '-', '!', '$', '&', '\'', '(', ')',
-        '*', '+', ',', ';', '=', '/', '?', '#', '@', '%'
-    );
+        '*', '+', ',', ';', '=', '/', '?', '#', '@', '%',
+    ];
 
     /** @ignore */
     public static function isLocalEscapedChar($c)
     {
-        return in_array($c, self::$localEscapedChars);
+        return \in_array($c, self::$localEscapedChars);
     }
 
     /** @ignore */
     public static function isPrefixChar($c)
     {
-        $o = ord($c);
+        $o = \ord($c);
+
         return
-            $c == '_' ||
-            $o >= 0x30 && $o <= 0x39 ||     # 0-9
+            '_' == $c ||
+            $o >= 0x30 && $o <= 0x39 ||     // 0-9
             self::isPrefixStartChar($c) ||
-            $c == '-' ||
-            $o == 0x00B7 ||
+            '-' == $c ||
+            0x00B7 == $o ||
             $c >= 0x0300 && $c <= 0x036F ||
             $c >= 0x203F && $c <= 0x2040;
     }
@@ -1343,20 +1258,22 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isLanguageStartChar($c)
     {
-        $o = ord($c);
+        $o = \ord($c);
+
         return
-            $o >= 0x41 && $o <= 0x5a ||   # A-Z
-            $o >= 0x61 && $o <= 0x7a;     # a-z
+            $o >= 0x41 && $o <= 0x5a ||   // A-Z
+            $o >= 0x61 && $o <= 0x7a;     // a-z
     }
 
     /** @ignore */
     public static function isLanguageChar($c)
     {
-        $o = ord($c);
+        $o = \ord($c);
+
         return
-            $o >= 0x41 && $o <= 0x5a ||   # A-Z
-            $o >= 0x61 && $o <= 0x7a ||   # a-z
-            $o >= 0x30 && $o <= 0x39 ||   # 0-9
-            $c == '-';
+            $o >= 0x41 && $o <= 0x5a ||   // A-Z
+            $o >= 0x61 && $o <= 0x7a ||   // a-z
+            $o >= 0x30 && $o <= 0x39 ||   // 0-9
+            '-' == $c;
     }
 }

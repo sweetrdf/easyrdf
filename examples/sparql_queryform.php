@@ -12,13 +12,11 @@
      * statements will automatically be added to the start of the query
      * string.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
-
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
-    require_once __DIR__."/html_tag_helpers.php";
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+    require_once __DIR__.'/html_tag_helpers.php';
 ?>
 <html>
 <head>
@@ -38,33 +36,33 @@
 
 <div style="margin: 0.5em">
   <?php
-    print form_tag();
-    print label_tag('endpoint');
-    print text_field_tag('endpoint', "http://dbpedia.org/sparql", array('size'=>80)).'<br />';
-    print "<code>";
-    foreach(\EasyRdf\RdfNamespace::namespaces() as $prefix => $uri) {
-        print "PREFIX $prefix: &lt;".htmlspecialchars($uri)."&gt;<br />\n";
+    echo form_tag();
+    echo label_tag('endpoint');
+    echo text_field_tag('endpoint', 'http://dbpedia.org/sparql', ['size' => 80]).'<br />';
+    echo '<code>';
+    foreach (\EasyRdf\RdfNamespace::namespaces() as $prefix => $uri) {
+        echo "PREFIX $prefix: &lt;".htmlspecialchars($uri)."&gt;<br />\n";
     }
-    print "</code>";
-    print text_area_tag('query', "SELECT * WHERE {\n  ?s ?p ?o\n}\nLIMIT 10", array('rows' => 10, 'cols' => 80)).'<br />';
-    print check_box_tag('text') . label_tag('text', 'Plain text results').'<br />';
-    print reset_tag() . submit_tag();
-    print form_end_tag();
+    echo '</code>';
+    echo text_area_tag('query', "SELECT * WHERE {\n  ?s ?p ?o\n}\nLIMIT 10", ['rows' => 10, 'cols' => 80]).'<br />';
+    echo check_box_tag('text').label_tag('text', 'Plain text results').'<br />';
+    echo reset_tag().submit_tag();
+    echo form_end_tag();
   ?>
 </div>
 
 <?php
-  if (isset($_REQUEST['endpoint']) and isset($_REQUEST['query'])) {
+  if (isset($_REQUEST['endpoint']) && isset($_REQUEST['query'])) {
       $sparql = new \EasyRdf\Sparql\Client($_REQUEST['endpoint']);
       try {
           $results = $sparql->query($_REQUEST['query']);
           if (isset($_REQUEST['text'])) {
-              print "<pre>".htmlspecialchars($results->dump('text'))."</pre>";
+              echo '<pre>'.htmlspecialchars($results->dump('text')).'</pre>';
           } else {
-              print $results->dump('html');
+              echo $results->dump('html');
           }
       } catch (Exception $e) {
-          print "<div class='error'>".$e->getMessage()."</div>\n";
+          echo "<div class='error'>".$e->getMessage()."</div>\n";
       }
   }
 ?>

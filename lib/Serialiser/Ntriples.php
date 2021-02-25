@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -43,13 +44,12 @@ use EasyRdf\Serialiser;
  * Class to serialise an EasyRdf\Graph to N-Triples
  * with no external dependencies.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class Ntriples extends Serialiser
 {
-    private $escChars = array();   // Character encoding cache
+    private $escChars = [];   // Character encoding cache
 
     /**
      * @ignore
@@ -57,10 +57,10 @@ class Ntriples extends Serialiser
     protected function escapeString($str)
     {
         $result = '';
-        $strLen = mb_strlen($str, "UTF-8");
+        $strLen = mb_strlen($str, 'UTF-8');
 
-        for ($i = 0; $i < $strLen; $i++) {
-            $c = mb_substr($str, $i, 1, "UTF-8");
+        for ($i = 0; $i < $strLen; ++$i) {
+            $c = mb_substr($str, $i, 1, 'UTF-8');
 
             if (!isset($this->escChars[$c])) {
                 $this->escChars[$c] = $this->escapedChar($c);
@@ -77,28 +77,29 @@ class Ntriples extends Serialiser
      */
     protected function unicodeCharNo($cUtf)
     {
-        $bl = strlen($cUtf); /* binary length */
+        $bl = \strlen($cUtf); /* binary length */
         $r = 0;
         switch ($bl) {
             case 1: /* 0####### (0-127) */
-                $r = ord($cUtf);
+                $r = \ord($cUtf);
                 break;
             case 2: /* 110##### 10###### = 192+x 128+x */
-                $r = ((ord($cUtf[0]) - 192) * 64) +
-                     (ord($cUtf[1]) - 128);
+                $r = ((\ord($cUtf[0]) - 192) * 64) +
+                     (\ord($cUtf[1]) - 128);
                 break;
             case 3: /* 1110#### 10###### 10###### = 224+x 128+x 128+x */
-                $r = ((ord($cUtf[0]) - 224) * 4096) +
-                     ((ord($cUtf[1]) - 128) * 64) +
-                     (ord($cUtf[2]) - 128);
+                $r = ((\ord($cUtf[0]) - 224) * 4096) +
+                     ((\ord($cUtf[1]) - 128) * 64) +
+                     (\ord($cUtf[2]) - 128);
                 break;
             case 4: /* 1111#### 10###### 10###### 10###### = 240+x 128+x 128+x 128+x */
-                $r = ((ord($cUtf[0]) - 240) * 262144) +
-                     ((ord($cUtf[1]) - 128) * 4096) +
-                     ((ord($cUtf[2]) - 128) * 64) +
-                     (ord($cUtf[3]) - 128);
+                $r = ((\ord($cUtf[0]) - 240) * 262144) +
+                     ((\ord($cUtf[1]) - 128) * 4096) +
+                     ((\ord($cUtf[2]) - 128) * 64) +
+                     (\ord($cUtf[3]) - 128);
                 break;
         }
+
         return $r;
     }
 
@@ -111,31 +112,31 @@ class Ntriples extends Serialiser
 
         /* see http://www.w3.org/TR/rdf-testcases/#ntrip_strings */
         if ($no < 9) {
-            return "\\u" . sprintf('%04X', $no);  /* #x0-#x8 (0-8) */
-        } elseif ($no == 9) {
+            return '\\u'.sprintf('%04X', $no);  /* #x0-#x8 (0-8) */
+        } elseif (9 == $no) {
             return '\t';                          /* #x9 (9) */
-        } elseif ($no == 10) {
+        } elseif (10 == $no) {
             return '\n';                          /* #xA (10) */
         } elseif ($no < 13) {
-            return "\\u" . sprintf('%04X', $no);  /* #xB-#xC (11-12) */
-        } elseif ($no == 13) {
+            return '\\u'.sprintf('%04X', $no);  /* #xB-#xC (11-12) */
+        } elseif (13 == $no) {
             return '\r';                          /* #xD (13) */
         } elseif ($no < 32) {
-            return "\\u" . sprintf('%04X', $no);  /* #xE-#x1F (14-31) */
+            return '\\u'.sprintf('%04X', $no);  /* #xE-#x1F (14-31) */
         } elseif ($no < 34) {
             return $c;                            /* #x20-#x21 (32-33) */
-        } elseif ($no == 34) {
+        } elseif (34 == $no) {
             return '\"';                          /* #x22 (34) */
         } elseif ($no < 92) {
             return $c;                            /* #x23-#x5B (35-91) */
-        } elseif ($no == 92) {
+        } elseif (92 == $no) {
             return '\\\\'; // double backslash    /* #x5C (92) */
         } elseif ($no < 127) {
             return $c;                            /* #x5D-#x7E (93-126) */
         } elseif ($no < 65536) {
-            return "\\u" . sprintf('%04X', $no);  /* #x7F-#xFFFF (128-65535) */
+            return '\\u'.sprintf('%04X', $no);  /* #x7F-#xFFFF (128-65535) */
         } elseif ($no < 1114112) {
-            return "\\U" . sprintf('%08X', $no);  /* #x10000-#x10FFFF (65536-1114111) */
+            return '\\U'.sprintf('%08X', $no);  /* #x10000-#x10FFFF (65536-1114111) */
         } else {
             return '';                            /* not defined => ignore */
         }
@@ -147,7 +148,7 @@ class Ntriples extends Serialiser
     protected function serialiseResource($res)
     {
         $escaped = $this->escapeString($res);
-        if (substr($res, 0, 2) == '_:') {
+        if ('_:' == substr($res, 0, 2)) {
             return $escaped;
         } else {
             return "<$escaped>";
@@ -160,7 +161,7 @@ class Ntriples extends Serialiser
      * The value can either be an array in RDF/PHP form, or
      * an EasyRdf\Literal or EasyRdf\Resource object.
      *
-     * @param array|object  $value   An associative array or an object
+     * @param array|object $value An associative array or an object
      *
      * @throws Exception
      *
@@ -168,61 +169,59 @@ class Ntriples extends Serialiser
      */
     public function serialiseValue($value)
     {
-        if (is_object($value)) {
+        if (\is_object($value)) {
             $value = $value->toRdfPhp();
         }
 
-        if ($value['type'] == 'uri' or $value['type'] == 'bnode') {
+        if ('uri' == $value['type'] || 'bnode' == $value['type']) {
             return $this->serialiseResource($value['value']);
-        } elseif ($value['type'] == 'literal') {
+        } elseif ('literal' == $value['type']) {
             $escaped = $this->escapeString($value['value']);
             if (isset($value['lang'])) {
                 $lang = $this->escapeString($value['lang']);
-                return '"' . $escaped . '"' . '@' . $lang;
+
+                return '"'.$escaped.'"'.'@'.$lang;
             } elseif (isset($value['datatype'])) {
                 $datatype = $this->escapeString($value['datatype']);
-                return '"' . $escaped . '"' . "^^<$datatype>";
+
+                return '"'.$escaped.'"'."^^<$datatype>";
             } else {
-                return '"' . $escaped . '"';
+                return '"'.$escaped.'"';
             }
         } else {
-            throw new Exception(
-                "Unable to serialise object of type '".$value['type']."' to ntriples: "
-            );
+            throw new Exception("Unable to serialise object of type '".$value['type']."' to ntriples: ");
         }
     }
-
 
     /**
      * Serialise an EasyRdf\Graph into N-Triples
      *
-     * @param Graph  $graph  An EasyRdf\Graph object.
-     * @param string $format The name of the format to convert to.
-     * @param array  $options
+     * @param Graph  $graph  an EasyRdf\Graph object
+     * @param string $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
+     *
      * @throws Exception
      */
-    public function serialise(Graph $graph, $format, array $options = array())
+    public function serialise(Graph $graph, $format, array $options = [])
     {
         parent::checkSerialiseParams($format);
 
-        if ($format == 'ntriples') {
+        if ('ntriples' == $format) {
             $nt = '';
             foreach ($graph->toRdfPhp() as $resource => $properties) {
                 foreach ($properties as $property => $values) {
                     foreach ($values as $value) {
-                        $nt .= $this->serialiseResource($resource)." ";
-                        $nt .= "<" . $this->escapeString($property) . "> ";
+                        $nt .= $this->serialiseResource($resource).' ';
+                        $nt .= '<'.$this->escapeString($property).'> ';
                         $nt .= $this->serialiseValue($value)." .\n";
                     }
                 }
             }
+
             return $nt;
         } else {
-            throw new Exception(
-                __CLASS__." does not support: $format"
-            );
+            throw new Exception(__CLASS__." does not support: $format");
         }
     }
 }

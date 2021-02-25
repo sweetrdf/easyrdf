@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Http;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -45,7 +46,6 @@ use EasyRdf\ParsedUri;
  * It supports basic HTTP 1.0 and 1.1 requests. For a more complete
  * implementation try Zend_Http_Client.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -56,11 +56,11 @@ class Client
      *
      * @var array
      */
-    private $config = array(
-        'maxredirects'    => 5,
-        'useragent'       => 'EasyRdf HTTP Client',
-        'timeout'         => 10
-    );
+    private $config = [
+        'maxredirects' => 5,
+        'useragent' => 'EasyRdf HTTP Client',
+        'timeout' => 10,
+    ];
 
     /**
      * Request URI
@@ -74,7 +74,7 @@ class Client
      *
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * HTTP request method
@@ -88,7 +88,7 @@ class Client
      *
      * @var array
      */
-    private $paramsGet = array();
+    private $paramsGet = [];
 
     /**
      * The raw post data to send. Could be set by setRawData($data).
@@ -109,14 +109,14 @@ class Client
      * URL and optionally configuration array.
      *
      * @param string $uri
-     * @param array $config Configuration key-value pairs.
+     * @param array  $config configuration key-value pairs
      */
     public function __construct($uri = null, $config = null)
     {
-        if ($uri !== null) {
+        if (null !== $uri) {
             $this->setUri($uri);
         }
-        if ($config !== null) {
+        if (null !== $config) {
             $this->setConfig($config);
         }
     }
@@ -124,21 +124,20 @@ class Client
     /**
      * Set the URI for the next request
      *
-     * @param  string $uri
+     * @param string $uri
      *
      * @throws \InvalidArgumentException
+     *
      * @return self
      */
     public function setUri($uri)
     {
-        if (!is_string($uri)) {
-            $uri = strval($uri);
+        if (!\is_string($uri)) {
+            $uri = (string) $uri;
         }
 
         if (!preg_match('/^http(s?):/', $uri)) {
-            throw new \InvalidArgumentException(
-                "EasyRdf\\Http\\Client only supports the 'http' and 'https' schemes."
-            );
+            throw new \InvalidArgumentException("EasyRdf\\Http\\Client only supports the 'http' and 'https' schemes.");
         }
 
         $this->uri = $uri;
@@ -161,17 +160,16 @@ class Client
     /**
      * Set configuration parameters for this HTTP client
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return self
+     *
      * @throws \InvalidArgumentException
      */
-    public function setConfig($config = array())
+    public function setConfig($config = [])
     {
-        if ($config == null or !is_array($config)) {
-            throw new \InvalidArgumentException(
-                "\$config should be an array and cannot be null"
-            );
+        if (null == $config || !\is_array($config)) {
+            throw new \InvalidArgumentException('$config should be an array and cannot be null');
         }
 
         foreach ($config as $k => $v) {
@@ -184,7 +182,7 @@ class Client
     /**
      * Set a request header
      *
-     * @param string $name Header name (e.g. 'Accept')
+     * @param string $name  Header name (e.g. 'Accept')
      * @param string $value Header value or null
      *
      * @return self
@@ -194,11 +192,11 @@ class Client
         $normalizedName = strtolower($name);
 
         // If $value is null or false, unset the header
-        if ($value === null || $value === false) {
+        if (null === $value || false === $value) {
             unset($this->headers[$normalizedName]);
         } else {
             // Else, set the header
-            $this->headers[$normalizedName] = array($name, $value);
+            $this->headers[$normalizedName] = [$name, $value];
         }
 
         return $this;
@@ -212,12 +210,13 @@ class Client
      * @param string $method
      *
      * @return self
+     *
      * @throws \InvalidArgumentException
      */
     public function setMethod($method)
     {
-        if (!is_string($method) or !preg_match('/^[A-Z]+$/', $method)) {
-            throw new \InvalidArgumentException("Invalid HTTP request method.");
+        if (!\is_string($method) || !preg_match('/^[A-Z]+$/', $method)) {
+            throw new \InvalidArgumentException('Invalid HTTP request method.');
         }
 
         $this->method = $method;
@@ -265,7 +264,7 @@ class Client
      */
     public function setParameterGet($name, $value = null)
     {
-        if ($value === null) {
+        if (null === $value) {
             if (isset($this->paramsGet[$name])) {
                 unset($this->paramsGet[$name]);
             }
@@ -329,6 +328,7 @@ class Client
     public function setRawData($data)
     {
         $this->rawPostData = $data;
+
         return $this;
     }
 
@@ -358,12 +358,12 @@ class Client
     public function resetParameters($clearAll = false)
     {
         // Reset parameter data
-        $this->paramsGet   = array();
+        $this->paramsGet = [];
         $this->rawPostData = null;
-        $this->method      = 'GET';
+        $this->method = 'GET';
 
         if ($clearAll) {
-            $this->headers = array();
+            $this->headers = [];
         } else {
             // Clear outdated headers
             if (isset($this->headers['content-type'])) {
@@ -380,17 +380,16 @@ class Client
     /**
      * Send the HTTP request and return an HTTP response object
      *
-     * @param null|string $method
+     * @param string|null $method
      *
      * @throws \EasyRdf\Exception
+     *
      * @return Response
      */
     public function request($method = null)
     {
         if (!$this->uri) {
-            throw new Exception(
-                "Set URI before calling Client->request()"
-            );
+            throw new Exception('Set URI before calling Client->request()');
         }
 
         if ($method) {
@@ -403,20 +402,18 @@ class Client
         do {
             // Clone the URI and add the additional GET parameters to it
             $uri = parse_url($this->uri);
-            if ($uri['scheme'] === 'http') {
+            if ('http' === $uri['scheme']) {
                 $host = $uri['host'];
-            } elseif ($uri['scheme'] === 'https') {
+            } elseif ('https' === $uri['scheme']) {
                 $host = 'ssl://'.$uri['host'];
             } else {
-                throw new Exception(
-                    "Unsupported URI scheme: ".$uri['scheme']
-                );
+                throw new Exception('Unsupported URI scheme: '.$uri['scheme']);
             }
 
             if (isset($uri['port'])) {
                 $port = $uri['port'];
             } else {
-                if ($uri['scheme'] === 'https') {
+                if ('https' === $uri['scheme']) {
                     $port = 443;
                 } else {
                     $port = 80;
@@ -456,12 +453,12 @@ class Client
                 $path = '/';
             }
             if (isset($uri['query'])) {
-                $path .= '?' . $uri['query'];
+                $path .= '?'.$uri['query'];
             }
             fwrite($socket, "{$this->method} {$path} HTTP/1.1\r\n");
             foreach ($headers as $k => $v) {
-                if (is_string($k)) {
-                    $v = ucfirst($k) . ": $v";
+                if (\is_string($k)) {
+                    $v = ucfirst($k).": $v";
                 }
                 fwrite($socket, "$v\r\n");
             }
@@ -505,7 +502,7 @@ class Client
                 $location = $baseUri->resolve($location)->toString();
 
                 // If it is a 303 then drop the parameters and send a GET request
-                if ($response->getStatus() == 303) {
+                if (303 == $response->getStatus()) {
                     $this->resetParameters();
                     $this->setMethod('GET');
                 }
@@ -515,10 +512,7 @@ class Client
                     $this->setHeaders('host', null);
                     $this->setUri($location);
                 } else {
-                    throw new Exception(
-                        "Failed to parse Location header returned by ".
-                        $this->uri
-                    );
+                    throw new Exception('Failed to parse Location header returned by '.$this->uri);
                 }
                 ++$this->redirectCounter;
             } else {
@@ -542,36 +536,36 @@ class Client
      */
     protected function prepareHeaders($host, $port)
     {
-        $headers = array();
+        $headers = [];
 
         // Set the host header
-        if (! isset($this->headers['host'])) {
+        if (!isset($this->headers['host'])) {
             // If the port is not default, add it
-            if ($port !== 80 and $port !== 443) {
-                $host .= ':' . $port;
+            if (80 !== $port && 443 !== $port) {
+                $host .= ':'.$port;
             }
             $headers[] = "Host: {$host}";
         }
 
         // Set the connection header
-        if (! isset($this->headers['connection'])) {
-            $headers[] = "Connection: close";
+        if (!isset($this->headers['connection'])) {
+            $headers[] = 'Connection: close';
         }
 
         // Set the user agent header
-        if (! isset($this->headers['user-agent'])) {
+        if (!isset($this->headers['user-agent'])) {
             $headers[] = "User-Agent: {$this->config['useragent']}";
         }
 
         // If we have rawPostData set, set the content-length header
         if (isset($this->rawPostData)) {
-            $headers[] = "Content-Length: ".strlen($this->rawPostData);
+            $headers[] = 'Content-Length: '.\strlen($this->rawPostData);
         }
 
         // Add all other user defined headers
         foreach ($this->headers as $header) {
             list($name, $value) = $header;
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $value = implode(', ', $value);
             }
 

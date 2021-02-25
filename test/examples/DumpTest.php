@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class DumpTest extends \EasyRdf\TestCase
 {
@@ -51,10 +50,10 @@ class DumpTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'dump.php',
-            array(
+            [
                 'uri' => 'http://www.w3.org/2000/10/rdf-tests/rdfcore/amp-in-url/test001.rdf',
-                'format' => 'html'
-            )
+                'format' => 'html',
+            ]
         );
 
         $this->assertContains('<title>EasyRdf Graph Dumper</title>', $output);
@@ -69,10 +68,10 @@ class DumpTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'dump.php',
-            array(
+            [
                 'uri' => 'http://www.w3.org/2000/10/rdf-tests/rdfcore/amp-in-url/test001.rdf',
-                'format' => 'text'
-            )
+                'format' => 'text',
+            ]
         );
         $this->assertContains('<title>EasyRdf Graph Dumper</title>', $output);
         $this->assertContains('<h1>EasyRdf Graph Dumper</h1>', $output);

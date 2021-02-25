@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,28 +32,26 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class NamespaceTest extends TestCase
 {
     /** @var Graph */
     private $graph;
-    /** @var Resource */
+    /** @var resource */
     private $resource;
 
-    public function setUp()
+    protected function setUp()
     {
         RdfNamespace::setDefault(null);
         $this->graph = new Graph();
         $this->resource = $this->graph->resource('http://xmlns.com/foaf/0.1/name');
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         RdfNamespace::delete('po');
         RdfNamespace::reset();
@@ -128,7 +127,7 @@ class NamespaceTest extends TestCase
             'InvalidArgumentException',
             '$prefix should be a string and cannot be null or empty'
         );
-        RdfNamespace::get(array());
+        RdfNamespace::get([]);
     }
 
     public function testGetNonAlphanumeric()
@@ -183,7 +182,7 @@ class NamespaceTest extends TestCase
             'InvalidArgumentException',
             '$prefix should be a string and cannot be null or empty'
         );
-        RdfNamespace::set(array(), 'http://purl.org/ontology/ko/');
+        RdfNamespace::set([], 'http://purl.org/ontology/ko/');
     }
 
     public function testAddNamespaceShortInvalid()
@@ -219,7 +218,7 @@ class NamespaceTest extends TestCase
             'InvalidArgumentException',
             '$long should be a string and cannot be null or empty'
         );
-        RdfNamespace::set('ko', array());
+        RdfNamespace::set('ko', []);
     }
 
     public function testDeleteNamespace()
@@ -279,7 +278,7 @@ class NamespaceTest extends TestCase
     {
         RdfNamespace::setDefault('http://ogp.me/ns#');
         RdfNamespace::setDefault('');
-        $this->assertSame(null, RdfNamespace::getDefault());
+        $this->assertNull(RdfNamespace::getDefault());
     }
 
     public function testSetDefaultUnknown()
@@ -294,7 +293,7 @@ class NamespaceTest extends TestCase
     public function testSplitUriFoafName()
     {
         $this->assertSame(
-            array('foaf', 'name'),
+            ['foaf', 'name'],
             RdfNamespace::splitUri('http://xmlns.com/foaf/0.1/name')
         );
     }
@@ -302,15 +301,14 @@ class NamespaceTest extends TestCase
     public function testSplitUriResource()
     {
         $this->assertSame(
-            array('foaf','name'),
+            ['foaf', 'name'],
             RdfNamespace::splitUri($this->resource)
         );
     }
 
     public function testSlitUriUnknown()
     {
-        $this->assertSame(
-            null,
+        $this->assertNull(
             RdfNamespace::splitUri('http://example.com/ns/foo/bar')
         );
     }
@@ -318,7 +316,7 @@ class NamespaceTest extends TestCase
     public function testSplitUriAndCreateOneUnknown()
     {
         $this->assertSame(
-            array('ns0', 'bar'),
+            ['ns0', 'bar'],
             RdfNamespace::splitUri('http://example.com/ns/foo/bar', true)
         );
     }
@@ -326,11 +324,11 @@ class NamespaceTest extends TestCase
     public function testSplitUriAndCreateTwice()
     {
         $this->assertSame(
-            array('ns0', 'bar'),
+            ['ns0', 'bar'],
             RdfNamespace::splitUri('http://example.com/ns/foo/bar', true)
         );
         $this->assertSame(
-            array('ns0', 'bar'),
+            ['ns0', 'bar'],
             RdfNamespace::splitUri('http://example.com/ns/foo/bar', true)
         );
     }
@@ -338,19 +336,18 @@ class NamespaceTest extends TestCase
     public function testSplitUriAndCreateTwoUnknown()
     {
         $this->assertSame(
-            array('ns0', 'bar'),
+            ['ns0', 'bar'],
             RdfNamespace::splitUri('http://example1.org/ns/foo/bar', true)
         );
         $this->assertSame(
-            array('ns1', 'bar'),
+            ['ns1', 'bar'],
             RdfNamespace::splitUri('http://example2.org/ns/foo/bar', true)
         );
     }
 
     public function testSplitUriUnsplitable()
     {
-        $this->assertSame(
-            null,
+        $this->assertNull(
             RdfNamespace::splitUri('http://example.com/foo/', true)
         );
     }
@@ -381,7 +378,6 @@ class NamespaceTest extends TestCase
         );
         RdfNamespace::splitUri($this);
     }
-
 
     public function testShortenFoafName()
     {
@@ -423,8 +419,7 @@ class NamespaceTest extends TestCase
 
     public function testShortenUnknown()
     {
-        $this->assertSame(
-            null,
+        $this->assertNull(
             RdfNamespace::shorten('http://example.com/ns/foo/bar')
         );
     }
@@ -451,8 +446,7 @@ class NamespaceTest extends TestCase
 
     public function testShortenUnshortenable()
     {
-        $this->assertSame(
-            null,
+        $this->assertNull(
             RdfNamespace::shorten('http://example.com/foo/', true)
         );
     }
@@ -502,8 +496,7 @@ class NamespaceTest extends TestCase
 
     public function testPrefixOfUnknownUrl()
     {
-        $this->assertSame(
-            null,
+        $this->assertNull(
             RdfNamespace::prefixOfUri('http://www.aelius.com/njh/')
         );
     }
@@ -544,7 +537,7 @@ class NamespaceTest extends TestCase
             'InvalidArgumentException',
             '$uri should be a string or EasyRdf\Resource'
         );
-        RdfNamespace::prefixOfUri(array());
+        RdfNamespace::prefixOfUri([]);
     }
 
     public function testExpandFoafName()

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -42,13 +43,11 @@ use EasyRdf\Graph;
 /**
  * Class to serialise an EasyRdf\Graph to an array of triples.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2016 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class NtriplesArray extends Ntriples
 {
-
     /**
      * Sort an array of triples into a consistent order
      *
@@ -67,39 +66,38 @@ class NtriplesArray extends Ntriples
         }
     }
 
-
     /**
      * Serialise an EasyRdf\Graph into an array of N-Triples objects
      *
-     * @param Graph  $graph  An EasyRdf\Graph object.
-     * @param string $format The name of the format to convert to.
-     * @param array  $options
+     * @param Graph  $graph  an EasyRdf\Graph object
+     * @param string $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
+     *
      * @throws Exception
      */
-    public function serialise(Graph $graph, $format, array $options = array())
+    public function serialise(Graph $graph, $format, array $options = [])
     {
         parent::checkSerialiseParams($format);
 
-        $triples = array();
+        $triples = [];
         foreach ($graph->toRdfPhp() as $resource => $properties) {
             foreach ($properties as $property => $values) {
                 foreach ($values as $value) {
                     array_push(
                         $triples,
-                        array(
+                        [
                             's' => $this->serialiseResource($resource),
-                            'p' => "<" . $this->escapeString($property) . ">",
-                            'o' => $this->serialiseValue($value)
-                        )
+                            'p' => '<'.$this->escapeString($property).'>',
+                            'o' => $this->serialiseValue($value),
+                        ]
                     );
                 }
             }
         }
 
         // Sort the triples into a consistent order
-        usort($triples, array($this, 'compareTriples'));
+        usort($triples, [$this, 'compareTriples']);
 
         return $triples;
     }

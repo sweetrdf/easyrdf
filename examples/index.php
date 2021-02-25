@@ -8,14 +8,14 @@
 <?php
   $dh = opendir(__DIR__);
   if (!$dh) {
-      die("Failed to open directory: " . __DIR__);
+      exit('Failed to open directory: '.__DIR__);
   }
 
-  $exampleList = array();
+  $exampleList = [];
   while (($filename = readdir($dh)) !== false) {
-      if (substr($filename, 0, 1) == '.' or
-          $filename == 'index.php' or
-          $filename == 'html_tag_helpers.php') {
+      if ('.' == substr($filename, 0, 1) ||
+          'index.php' == $filename ||
+          'html_tag_helpers.php' == $filename) {
           continue;
       }
 
@@ -25,11 +25,11 @@
 
   sort($exampleList);
 
-  echo "<ul>";
-  foreach($exampleList as $example) {
+  echo '<ul>';
+  foreach ($exampleList as $example) {
       echo "<li><a href='./$example'>$example</a></li>\n";
   }
-  echo "</ul>";
+  echo '</ul>';
 ?>
 </body>
 </html>

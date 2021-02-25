@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2015 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -39,7 +39,6 @@ namespace EasyRdf;
 /**
  * Class that represents an RDF resource
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2015 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -51,32 +50,26 @@ class Resource implements \ArrayAccess
     /** The Graph that this resource belongs to */
     protected $graph = null;
 
-
     /** Constructor
      *
      * * Please do not call new EasyRdf\Resource() directly *
      *
      * To create a new resource use the get method in a graph:
      * $resource = $graph->resource('http://www.example.com/');
-     *
      */
     public function __construct($uri, $graph = null)
     {
-        if (!is_string($uri) or $uri == null or $uri == '') {
-            throw new \InvalidArgumentException(
-                "\$uri should be a string and cannot be null or empty"
-            );
+        if (!\is_string($uri) || null == $uri || '' == $uri) {
+            throw new \InvalidArgumentException('$uri should be a string and cannot be null or empty');
         }
 
         $this->uri = $uri;
 
         // Check that $graph is an EasyRdf\Graph object
-        if (is_object($graph) and $graph instanceof Graph) {
+        if (\is_object($graph) && $graph instanceof Graph) {
             $this->graph = $graph;
-        } elseif (!is_null($graph)) {
-            throw new \InvalidArgumentException(
-                '$graph should be an EasyRdf\Graph object'
-            );
+        } elseif (null !== $graph) {
+            throw new \InvalidArgumentException('$graph should be an EasyRdf\Graph object');
         }
     }
 
@@ -92,7 +85,7 @@ class Resource implements \ArrayAccess
 
     /** Returns the URI for the resource.
      *
-     * @return string  URI of this resource.
+     * @return string URI of this resource
      */
     public function getUri()
     {
@@ -101,11 +94,11 @@ class Resource implements \ArrayAccess
 
     /** Check to see if a resource is a blank node.
      *
-     * @return bool True if this resource is a blank node.
+     * @return bool true if this resource is a blank node
      */
     public function isBNode()
     {
-        if (substr($this->uri, 0, 2) == '_:') {
+        if ('_:' == substr($this->uri, 0, 2)) {
             return true;
         } else {
             return false;
@@ -120,7 +113,7 @@ class Resource implements \ArrayAccess
      */
     public function getBNodeId()
     {
-        if (substr($this->uri, 0, 2) == '_:') {
+        if ('_:' == substr($this->uri, 0, 2)) {
             return substr($this->uri, 2);
         } else {
             return null;
@@ -160,7 +153,7 @@ class Resource implements \ArrayAccess
      */
     public function localName()
     {
-        if (preg_match("|([^#:/]+)$|", $this->uri, $matches)) {
+        if (preg_match('|([^#:/]+)$|', $this->uri, $matches)) {
             return $matches[1];
         }
     }
@@ -178,31 +171,30 @@ class Resource implements \ArrayAccess
      *
      * If no text is given, then the URI also uses as the link text.
      *
-     * @param  string  $text    Text for the link.
-     * @param  array   $options Associative array of attributes for the anchor tag
+     * @param string $text    text for the link
+     * @param array  $options Associative array of attributes for the anchor tag
      *
      * @throws \InvalidArgumentException
-     * @return string  The HTML link string
+     *
+     * @return string The HTML link string
      */
-    public function htmlLink($text = null, $options = array())
+    public function htmlLink($text = null, $options = [])
     {
-        $options = array_merge(array('href' => $this->uri), $options);
-        if ($text === null) {
+        $options = array_merge(['href' => $this->uri], $options);
+        if (null === $text) {
             $text = $this->uri;
         }
 
-        $html = "<a";
+        $html = '<a';
         foreach ($options as $key => $value) {
             if (!preg_match('/^[-\w]+$/', $key)) {
-                throw new \InvalidArgumentException(
-                    "\$options should use valid attribute names as keys"
-                );
+                throw new \InvalidArgumentException('$options should use valid attribute names as keys');
             }
 
-            $html .= " ".htmlspecialchars($key)."=\"".
-                         htmlspecialchars($value)."\"";
+            $html .= ' '.htmlspecialchars($key).'="'.
+                         htmlspecialchars($value).'"';
         }
-        $html .= ">".htmlspecialchars($text)."</a>";
+        $html .= '>'.htmlspecialchars($text).'</a>';
 
         return $html;
     }
@@ -212,21 +204,21 @@ class Resource implements \ArrayAccess
      * For example:
      * array('type' => 'uri', 'value' => 'http://www.example.com/')
      *
-     * @return array  The properties of the resource
+     * @return array The properties of the resource
      */
     public function toRdfPhp()
     {
         if ($this->isBNode()) {
-            return array('type' => 'bnode', 'value' => $this->uri);
+            return ['type' => 'bnode', 'value' => $this->uri];
         } else {
-            return array('type' => 'uri', 'value' => $this->uri);
+            return ['type' => 'uri', 'value' => $this->uri];
         }
     }
 
     /** Return pretty-print view of the resource
      *
-     * @param  string $format Either 'html' or 'text'
-     * @param  string $color The colour of the text
+     * @param string $format Either 'html' or 'text'
+     * @param string $color  The colour of the text
      *
      * @return string
      */
@@ -244,17 +236,13 @@ class Resource implements \ArrayAccess
         return $this->uri;
     }
 
-
-
     /** Throw can exception if the resource does not belong to a graph
      *  @ignore
      */
     protected function checkHasGraph()
     {
         if (!$this->graph) {
-            throw new Exception(
-                'EasyRdf\Resource is not part of a graph.'
-            );
+            throw new Exception('EasyRdf\Resource is not part of a graph.');
         }
     }
 
@@ -263,26 +251,28 @@ class Resource implements \ArrayAccess
      * The document type is optional but should be specified if it
      * can't be guessed or got from the HTTP headers.
      *
-     * @param  string  $format  Optional format of the data (eg. rdfxml)
+     * @param string $format Optional format of the data (eg. rdfxml)
      *
-     * @return integer
+     * @return int
      */
     public function load($format = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->load($this->uri, $format);
     }
 
     /** Delete a property (or optionally just a specific value)
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
-     * @param  object  $value The value to delete (null to delete all values)
+     * @param string $property The name of the property (e.g. foaf:name)
+     * @param object $value    The value to delete (null to delete all values)
      *
-     * @return integer
+     * @return int
      */
     public function delete($property, $value = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->delete($this->uri, $property, $value);
     }
 
@@ -291,14 +281,15 @@ class Resource implements \ArrayAccess
      * Example:
      *   $resource->add('prefix:property', 'value');
      *
-     * @param  mixed $property   The property name
-     * @param  mixed $value      The value for the property
+     * @param mixed $property The property name
+     * @param mixed $value    The value for the property
      *
-     * @return integer           The number of values added (1 or 0)
+     * @return int The number of values added (1 or 0)
      */
     public function add($property, $value)
     {
         $this->checkHasGraph();
+
         return $this->graph->add($this->uri, $property, $value);
     }
 
@@ -309,15 +300,16 @@ class Resource implements \ArrayAccess
      * Example:
      *   $resource->add('dc:title', 'Title of Page');
      *
-     * @param  mixed  $property  The property name
-     * @param  mixed  $values    The value or values for the property
-     * @param  string $lang      The language of the literal
+     * @param mixed  $property The property name
+     * @param mixed  $values   The value or values for the property
+     * @param string $lang     The language of the literal
      *
-     * @return integer           The number of values added
+     * @return int The number of values added
      */
     public function addLiteral($property, $values, $lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->addLiteral($this->uri, $property, $values, $lang);
     }
 
@@ -326,14 +318,15 @@ class Resource implements \ArrayAccess
      * Example:
      *   $bob->add('foaf:knows', 'http://example.com/alice');
      *
-     * @param  mixed $property   The property name
-     * @param  mixed $resource2  The resource to be the value of the property
+     * @param mixed $property  The property name
+     * @param mixed $resource2 The resource to be the value of the property
      *
-     * @return integer           The number of values added (1 or 0)
+     * @return int The number of values added (1 or 0)
      */
     public function addResource($property, $resource2)
     {
         $this->checkHasGraph();
+
         return $this->graph->addResource($this->uri, $property, $resource2);
     }
 
@@ -344,14 +337,15 @@ class Resource implements \ArrayAccess
      * If you set a property to null or an empty array, then the property
      * will be deleted.
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
-     * @param  mixed   $value    The value for the property.
+     * @param string $property The name of the property (e.g. foaf:name)
+     * @param mixed  $value    the value for the property
      *
-     * @return integer           The number of values added (1 or 0)
+     * @return int The number of values added (1 or 0)
      */
     public function set($property, $value)
     {
         $this->checkHasGraph();
+
         return $this->graph->set($this->uri, $property, $value);
     }
 
@@ -365,15 +359,16 @@ class Resource implements \ArrayAccess
      *
      * This method will return null if the property does not exist.
      *
-     * @param  string|array $property The name of the property (e.g. foaf:name)
-     * @param  string       $type     The type of value to filter by (e.g. literal or resource)
-     * @param  string       $lang     The language to filter by (e.g. en)
+     * @param string|array $property The name of the property (e.g. foaf:name)
+     * @param string       $type     The type of value to filter by (e.g. literal or resource)
+     * @param string       $lang     The language to filter by (e.g. en)
      *
-     * @return mixed                  A value associated with the property
+     * @return mixed A value associated with the property
      */
     public function get($property, $type = null, $lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->get($this->uri, $property, $type, $lang);
     }
 
@@ -385,14 +380,15 @@ class Resource implements \ArrayAccess
      * This method will return null if there is not literal value for the
      * property.
      *
-     * @param  string|array $property The name of the property (e.g. foaf:name)
-     * @param  string       $lang     The language to filter by (e.g. en)
+     * @param string|array $property The name of the property (e.g. foaf:name)
+     * @param string       $lang     The language to filter by (e.g. en)
      *
-     * @return \EasyRdf\Literal  Literal value associated with the property
+     * @return \EasyRdf\Literal Literal value associated with the property
      */
     public function getLiteral($property, $lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->get($this->uri, $property, 'literal', $lang);
     }
 
@@ -404,13 +400,14 @@ class Resource implements \ArrayAccess
      * This method will return null if there is not resource for the
      * property.
      *
-     * @param  string|array $property The name of the property (e.g. foaf:name)
+     * @param string|array $property The name of the property (e.g. foaf:name)
      *
-     * @return self  Resource associated with the property
+     * @return self Resource associated with the property
      */
     public function getResource($property)
     {
         $this->checkHasGraph();
+
         return $this->graph->get($this->uri, $property, 'resource');
     }
 
@@ -418,15 +415,16 @@ class Resource implements \ArrayAccess
      *
      * This method will return an empty array if the property does not exist.
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
-     * @param  string  $type     The type of value to filter by (e.g. literal)
-     * @param  string  $lang     The language to filter by (e.g. en)
+     * @param string $property The name of the property (e.g. foaf:name)
+     * @param string $type     The type of value to filter by (e.g. literal)
+     * @param string $lang     The language to filter by (e.g. en)
      *
-     * @return array             An array of values associated with the property
+     * @return array An array of values associated with the property
      */
     public function all($property, $type = null, $lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->all($this->uri, $property, $type, $lang);
     }
 
@@ -435,14 +433,15 @@ class Resource implements \ArrayAccess
      * This method will return an empty array if the resource does not
      * has any literal values for that property.
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
-     * @param  string  $lang     The language to filter by (e.g. en)
+     * @param string $property The name of the property (e.g. foaf:name)
+     * @param string $lang     The language to filter by (e.g. en)
      *
-     * @return array             An array of values associated with the property
+     * @return array An array of values associated with the property
      */
     public function allLiterals($property, $lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->all($this->uri, $property, 'literal', $lang);
     }
 
@@ -451,13 +450,14 @@ class Resource implements \ArrayAccess
      * This method will return an empty array if the resource does not
      * has any resources for that property.
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
+     * @param string $property The name of the property (e.g. foaf:name)
      *
-     * @return array             An array of values associated with the property
+     * @return array An array of values associated with the property
      */
     public function allResources($property)
     {
         $this->checkHasGraph();
+
         return $this->graph->all($this->uri, $property, 'resource');
     }
 
@@ -465,15 +465,16 @@ class Resource implements \ArrayAccess
      *
      * This method will return 0 if the property does not exist.
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
-     * @param  string  $type     The type of value to filter by (e.g. literal)
-     * @param  string  $lang     The language to filter by (e.g. en)
+     * @param string $property The name of the property (e.g. foaf:name)
+     * @param string $type     The type of value to filter by (e.g. literal)
+     * @param string $lang     The language to filter by (e.g. en)
      *
-     * @return integer           The number of values associated with the property
+     * @return int The number of values associated with the property
      */
     public function countValues($property, $type = null, $lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->countValues($this->uri, $property, $type, $lang);
     }
 
@@ -482,15 +483,16 @@ class Resource implements \ArrayAccess
      * The default is to join the values together with a space character.
      * This method will return an empty string if the property does not exist.
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
-     * @param  string  $glue     The string to glue the values together with.
-     * @param  string  $lang     The language to filter by (e.g. en)
+     * @param string $property The name of the property (e.g. foaf:name)
+     * @param string $glue     the string to glue the values together with
+     * @param string $lang     The language to filter by (e.g. en)
      *
-     * @return string            Concatenation of all the values.
+     * @return string concatenation of all the values
      */
     public function join($property, $glue = ' ', $lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->join($this->uri, $property, $glue, $lang);
     }
 
@@ -498,11 +500,12 @@ class Resource implements \ArrayAccess
      *
      * This method will return an empty array if the resource has no properties.
      *
-     * @return array            Array of full URIs
+     * @return array Array of full URIs
      */
     public function propertyUris()
     {
         $this->checkHasGraph();
+
         return $this->graph->propertyUris($this->uri);
     }
 
@@ -510,21 +513,23 @@ class Resource implements \ArrayAccess
      *
      * This method will return an empty array if the resource has no properties.
      *
-     * @return array            Array of shortened URIs
+     * @return array Array of shortened URIs
      */
     public function properties()
     {
         $this->checkHasGraph();
+
         return $this->graph->properties($this->uri);
     }
 
     /** Get a list of the full URIs for the properties that point to this resource.
      *
-     * @return array   Array of full property URIs
+     * @return array Array of full property URIs
      */
     public function reversePropertyUris()
     {
         $this->checkHasGraph();
+
         return $this->graph->reversePropertyUris($this->uri);
     }
 
@@ -534,14 +539,15 @@ class Resource implements \ArrayAccess
      * If the value parameter is given, then it will only return true
      * if the value also exists for that property.
      *
-     * @param  string  $property The name of the property (e.g. foaf:name)
-     * @param  mixed   $value    An optional value of the property
+     * @param string $property The name of the property (e.g. foaf:name)
+     * @param mixed  $value    An optional value of the property
      *
-     * @return bool              True if value the property exists.
+     * @return bool true if value the property exists
      */
     public function hasProperty($property, $value = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->hasProperty($this->uri, $property, $value);
     }
 
@@ -555,6 +561,7 @@ class Resource implements \ArrayAccess
     public function types()
     {
         $this->checkHasGraph();
+
         return $this->graph->types($this->uri);
     }
 
@@ -570,6 +577,7 @@ class Resource implements \ArrayAccess
     public function type()
     {
         $this->checkHasGraph();
+
         return $this->graph->type($this->uri);
     }
 
@@ -580,47 +588,52 @@ class Resource implements \ArrayAccess
      * may be arbitrary.
      * This method will return null if the resource has no type.
      *
-     * @return Resource A type assocated with the resource.
+     * @return resource a type assocated with the resource
      */
     public function typeAsResource()
     {
         $this->checkHasGraph();
+
         return $this->graph->typeAsResource($this->uri);
     }
 
     /**
      * Get a list of types for a resource, as EasyRdf\Resource
      *
-     * @return Resource[]
+     * @return resource[]
+     *
      * @throws Exception
      */
     public function typesAsResources()
     {
         $this->checkHasGraph();
+
         return $this->graph->typesAsResources($this->uri);
     }
 
     /** Check if a resource is of the specified type
      *
-     * @param  string  $type The type to check (e.g. foaf:Person)
+     * @param string $type The type to check (e.g. foaf:Person)
      *
-     * @return boolean       True if resource is of specified type.
+     * @return bool true if resource is of specified type
      */
     public function isA($type)
     {
         $this->checkHasGraph();
+
         return $this->graph->isA($this->uri, $type);
     }
 
     /** Add one or more rdf:type properties to the resource
      *
-     * @param  string  $types    One or more types to add (e.g. foaf:Person)
+     * @param string $types One or more types to add (e.g. foaf:Person)
      *
-     * @return integer           The number of types added
+     * @return int The number of types added
      */
     public function addType($types)
     {
         $this->checkHasGraph();
+
         return $this->graph->addType($this->uri, $types);
     }
 
@@ -628,13 +641,14 @@ class Resource implements \ArrayAccess
      *
      * Note that the PHP class of the resource will not change.
      *
-     * @param  string  $type     The new type (e.g. foaf:Person)
+     * @param string $type The new type (e.g. foaf:Person)
      *
-     * @return integer           The number of types added
+     * @return int The number of types added
      */
     public function setType($type)
     {
         $this->checkHasGraph();
+
         return $this->graph->setType($this->uri, $type);
     }
 
@@ -642,11 +656,12 @@ class Resource implements \ArrayAccess
      *
      * Returns null if no primary topic is available.
      *
-     * @return Resource The primary topic of this resource.
+     * @return resource the primary topic of this resource
      */
     public function primaryTopic()
     {
         $this->checkHasGraph();
+
         return $this->graph->primaryTopic($this->uri);
     }
 
@@ -659,11 +674,12 @@ class Resource implements \ArrayAccess
      *
      * @param string|null $lang
      *
-     * @return \EasyRdf\Literal|null An instance of Literal which contains the label or null.
+     * @return \EasyRdf\Literal|null an instance of Literal which contains the label or null
      */
     public function label($lang = null)
     {
         $this->checkHasGraph();
+
         return $this->graph->label($this->uri, $lang);
     }
 
@@ -672,13 +688,14 @@ class Resource implements \ArrayAccess
      * This method is intended to be a debugging aid and will
      * print a resource and its properties.
      *
-     * @param  string $format   Either 'html' or 'text'
+     * @param string $format Either 'html' or 'text'
      *
      * @return string
      */
     public function dump($format = 'html')
     {
         $this->checkHasGraph();
+
         return $this->graph->dumpResource($this->uri, $format);
     }
 
@@ -691,9 +708,9 @@ class Resource implements \ArrayAccess
      *
      * @see EasyRdf\RdfNamespace::setDefault()
      *
-     * @param  string $name  The name of the property
+     * @param string $name The name of the property
      *
-     * @return string  A single value for the named property
+     * @return string A single value for the named property
      */
     public function __get($name)
     {
@@ -709,8 +726,8 @@ class Resource implements \ArrayAccess
      *
      * @see EasyRdf\RdfNamespace::setDefault()
      *
-     * @param  string $name  The name of the property
-     * @param  string $value The value for the property
+     * @param string $name  The name of the property
+     * @param string $value The value for the property
      *
      * @return int
      */
@@ -763,11 +780,11 @@ class Resource implements \ArrayAccess
      * Example:
      *   if(isset($resource['rdfs:label'])) { }
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @see http://php.net/manual/en/arrayaccess.offsetexists.php
      *
-     * @param mixed $offset An offset to check for.
+     * @param mixed $offset an offset to check for
      *
-     * @return boolean true on success or false on failure.
+     * @return bool true on success or false on failure
      */
     public function offsetExists($offset)
     {
@@ -780,11 +797,11 @@ class Resource implements \ArrayAccess
      * Example:
      *   $label = $resource['rdfs:label'];
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @see http://php.net/manual/en/arrayaccess.offsetget.php
      *
-     * @param mixed $offset The offset to retrieve.
+     * @param mixed $offset the offset to retrieve
      *
-     * @return mixed Can return all value types.
+     * @return mixed can return all value types
      */
     public function offsetGet($offset)
     {
@@ -797,10 +814,10 @@ class Resource implements \ArrayAccess
      * Example:
      *   $resource['rdfs:label'] = 'label';
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @see http://php.net/manual/en/arrayaccess.offsetset.php
      *
-     * @param mixed The offset to assign the value to.
-     * @param mixed $value The value to set.
+     * @param mixed the offset to assign the value to
+     * @param mixed $value the value to set
      *
      * @return void
      */
@@ -815,9 +832,9 @@ class Resource implements \ArrayAccess
      * Example:
      *   unset($resource['rdfs:label']);
      *
-     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @see http://php.net/manual/en/arrayaccess.offsetunset.php
      *
-     * @param mixed $offset  The offset to unset.
+     * @param mixed $offset the offset to unset
      *
      * @return void
      */

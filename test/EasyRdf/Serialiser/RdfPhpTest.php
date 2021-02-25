@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Graph;
 use EasyRdf\Literal;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(dirname(__FILE__))).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class RdfPhpTest extends TestCase
 {
@@ -50,7 +51,7 @@ class RdfPhpTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->serialiser = new RdfPhp();

@@ -10,40 +10,38 @@
      * and description are shown, along with a list of the
      * person's friends.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
-
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
-    require_once __DIR__."/html_tag_helpers.php";
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+    require_once __DIR__.'/html_tag_helpers.php';
 ?>
 <html>
 <head><title>EasyRdf FOAF Info Example</title></head>
 <body>
 <h1>EasyRdf FOAF Info Example</h1>
 
-<?= form_tag() ?>
-<?= text_field_tag('uri', 'http://njh.me/foaf.rdf', array('size'=>50)) ?>
-<?= submit_tag() ?>
-<?= form_end_tag() ?>
+<?php echo form_tag(); ?>
+<?php echo text_field_tag('uri', 'http://njh.me/foaf.rdf', ['size' => 50]); ?>
+<?php echo submit_tag(); ?>
+<?php echo form_end_tag(); ?>
 
 <?php
     if (isset($_REQUEST['uri'])) {
         $graph = \EasyRdf\Graph::newAndLoad($_REQUEST['uri']);
-        if ($graph->type() == 'foaf:PersonalProfileDocument') {
+        if ('foaf:PersonalProfileDocument' == $graph->type()) {
             $person = $graph->primaryTopic();
-        } elseif ($graph->type() == 'foaf:Person') {
+        } elseif ('foaf:Person' == $graph->type()) {
             $person = $graph->resource();
         }
     }
 
     if (isset($person)) {
-?>
+        ?>
 
 <dl>
-  <dt>Name:</dt><dd><?= $person->get('foaf:name') ?></dd>
-  <dt>Homepage:</dt><dd><?= link_to($person->get('foaf:homepage')) ?></dd>
+  <dt>Name:</dt><dd><?php echo $person->get('foaf:name'); ?></dd>
+  <dt>Homepage:</dt><dd><?php echo link_to($person->get('foaf:homepage')); ?></dd>
 </dl>
 
 <?php
@@ -58,7 +56,7 @@
             if ($friend->isBNode()) {
                 echo "<li>$label</li>";
             } else {
-                echo "<li>".link_to_self($label, 'uri='.urlencode($friend))."</li>";
+                echo '<li>'.link_to_self($label, 'uri='.urlencode($friend)).'</li>';
             }
         }
         echo "</ul>\n";
@@ -71,7 +69,7 @@
                 if ($interest->isBNode()) {
                     echo "<li>$label</li>";
                 } else {
-                    echo "<li>".$interest->htmlLink($label)."</li>";
+                    echo '<li>'.$interest->htmlLink($label).'</li>';
                 }
             }
         }
@@ -79,7 +77,7 @@
     }
 
     if (isset($graph)) {
-        echo "<br />";
+        echo '<br />';
         echo $graph->dump();
     }
 ?>

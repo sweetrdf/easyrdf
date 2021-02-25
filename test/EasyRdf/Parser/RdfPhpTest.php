@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Parser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class RdfPhpTest extends TestCase
 {
@@ -50,21 +51,21 @@ class RdfPhpTest extends TestCase
     protected $graph = null;
     protected $rdf_data = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->parser = new RdfPhp();
-        $this->rdf_data = array(
-            'http://example.com/joe' => array(
-                'http://xmlns.com/foaf/0.1/name' => array(
-                    array(
+        $this->rdf_data = [
+            'http://example.com/joe' => [
+                'http://xmlns.com/foaf/0.1/name' => [
+                    [
                         'type' => 'literal',
                         'value' => 'Joseph Bloggs',
-                        'lang' => 'en'
-                    )
-                )
-            )
-        );
+                        'lang' => 'en',
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function testParse()
@@ -83,7 +84,7 @@ class RdfPhpTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joseph Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
     }
 
     public function testParseTwice()
@@ -97,12 +98,12 @@ class RdfPhpTest extends TestCase
     public function testParseDuplicateBNodes()
     {
         $foafName = 'http://xmlns.com/foaf/0.1/name';
-        $bnodeA = array( '_:genid1' => array(
-            $foafName => array(array( 'type' => 'literal', 'value' => 'A' ))
-        ));
-        $bnodeB = array( '_:genid1' => array(
-            $foafName => array(array( 'type' => 'literal', 'value' => 'B' ))
-        ));
+        $bnodeA = ['_:genid1' => [
+            $foafName => [['type' => 'literal', 'value' => 'A']],
+        ]];
+        $bnodeB = ['_:genid1' => [
+            $foafName => [['type' => 'literal', 'value' => 'B']],
+        ]];
 
         $this->parser->parse($this->graph, $bnodeA, 'php', null);
         $this->parser->parse($this->graph, $bnodeB, 'php', null);
@@ -133,7 +134,8 @@ class RdfPhpTest extends TestCase
 
     /**
      * 'foo' is not a valid input for RdfPhp
-     * @expectedException Exception
+     *
+     * @expectedException \Exception
      */
     public function testParseInvalidInput1()
     {
@@ -142,37 +144,41 @@ class RdfPhpTest extends TestCase
 
     /**
      * list of strings is not a valid input for RdfPhp
-     * @expectedException Exception
+     *
+     * @expectedException \Exception
      */
     public function testParseInvalidInput2()
     {
-        $this->parser->parse($this->graph, array('foo', 'bar'), 'php', null);
+        $this->parser->parse($this->graph, ['foo', 'bar'], 'php', null);
     }
 
     /**
      * 1-level dictionary of strings is not a valid input for RdfPhp
-     * @expectedException Exception
+     *
+     * @expectedException \Exception
      */
     public function testParseInvalidInput3()
     {
-        $this->parser->parse($this->graph, array('foo' => 'bar'), 'php', null);
+        $this->parser->parse($this->graph, ['foo' => 'bar'], 'php', null);
     }
 
     /**
      * 2-level dictionary of strings is not a valid input for RdfPhp
-     * @expectedException Exception
+     *
+     * @expectedException \Exception
      */
     public function testParseInvalidInput4()
     {
-        $this->parser->parse($this->graph, array('foo' => array('bar' => 'baz')), 'php', null);
+        $this->parser->parse($this->graph, ['foo' => ['bar' => 'baz']], 'php', null);
     }
 
     /**
      * 2-level dictionary of incorrect arrays is not a valid input for RdfPhp
-     * @expectedException Exception
+     *
+     * @expectedException \Exception
      */
     public function testParseInvalidInput5()
     {
-        $this->parser->parse($this->graph, array('foo' => array('bar' => array('baz' => 'buzz'))), 'php', null);
+        $this->parser->parse($this->graph, ['foo' => ['bar' => ['baz' => 'buzz']]], 'php', null);
     }
 }

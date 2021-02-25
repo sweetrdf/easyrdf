@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,8 +39,8 @@ namespace EasyRdf\Parser;
 
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class ExceptionTest extends TestCase
 {

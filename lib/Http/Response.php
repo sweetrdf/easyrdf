@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Http;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -43,14 +44,12 @@ use EasyRdf\Exception;
 /**
  * Class that represents an HTTP 1.0 / 1.1 response message.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  *             Copyright (c) 2005-2009 Zend Technologies USA Inc.
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class Response
 {
-
     /**
      * The HTTP response status code
      *
@@ -71,7 +70,7 @@ class Response
      *
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * The HTTP response body
@@ -83,11 +82,11 @@ class Response
     /**
      * Constructor.
      *
-     * @param  int     $status HTTP Status code
-     * @param  array   $headers The HTTP response headers
-     * @param  string  $body The content of the response
-     * @param  string  $version The HTTP Version (1.0 or 1.1)
-     * @param  string  $message The HTTP response Message
+     * @param int    $status  HTTP Status code
+     * @param array  $headers The HTTP response headers
+     * @param string $body    The content of the response
+     * @param string $version The HTTP Version (1.0 or 1.1)
+     * @param string $message The HTTP response Message
      */
     public function __construct(
         $status,
@@ -110,31 +109,31 @@ class Response
     /**
      * Check whether the response in successful
      *
-     * @return boolean
+     * @return bool
      */
     public function isSuccessful()
     {
-        return ($this->status >= 200 && $this->status < 300);
+        return $this->status >= 200 && $this->status < 300;
     }
 
     /**
      * Check whether the response is an error
      *
-     * @return boolean
+     * @return bool
      */
     public function isError()
     {
-        return ($this->status >= 400 && $this->status < 600);
+        return $this->status >= 400 && $this->status < 600;
     }
 
     /**
      * Check whether the response is a redirection
      *
-     * @return boolean
+     * @return bool
      */
     public function isRedirect()
     {
-        return ($this->status >= 300 && $this->status < 400);
+        return $this->status >= 300 && $this->status < 400;
     }
 
     /**
@@ -225,7 +224,7 @@ class Response
     public function getHeader($header)
     {
         $header = ucwords(strtolower($header));
-        if (array_key_exists($header, $this->headers)) {
+        if (\array_key_exists($header, $this->headers)) {
             return $this->headers[$header];
         }
 
@@ -235,8 +234,8 @@ class Response
     /**
      * Get all headers as string
      *
-     * @param boolean $statusLine Whether to return the first status line (ie "HTTP 200 OK")
-     * @param string  $br         Line breaks (eg. "\n", "\r\n", "<br />")
+     * @param bool   $statusLine Whether to return the first status line (ie "HTTP 200 OK")
+     * @param string $br         Line breaks (eg. "\n", "\r\n", "<br />")
      *
      * @return string
      */
@@ -250,9 +249,9 @@ class Response
 
         // Iterate over the headers and stringify them
         foreach ($this->headers as $name => $value) {
-            if (is_string($value)) {
+            if (\is_string($value)) {
                 $str .= "{$name}: {$value}{$br}";
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 foreach ($value as $subval) {
                     $str .= "{$name}: {$subval}{$br}";
                 }
@@ -268,18 +267,17 @@ class Response
      * @param string $responseStr
      *
      * @throws \EasyRdf\Exception
+     *
      * @return self
      */
     public static function fromString($responseStr)
     {
         // First, split body and headers
         $matches = preg_split('|(?:\r?\n){2}|m', $responseStr, 2);
-        if ($matches and 2 === count($matches)) {
-            list ($headerLines, $body) = $matches;
+        if ($matches && 2 === \count($matches)) {
+            list($headerLines, $body) = $matches;
         } else {
-            throw new Exception(
-                "Failed to parse HTTP response."
-            );
+            throw new Exception('Failed to parse HTTP response.');
         }
 
         // Split headers part to lines
@@ -288,23 +286,21 @@ class Response
         if (preg_match("|^HTTP\/([\d\.x]+) (\d+) ?([^\r\n]*)|", $status, $m)) {
             $version = $m[1];
             $status = $m[2];
-            $message = $m[3] ? $m[3] : null;
+            $message = $m[3] ?: null;
         } else {
-            throw new Exception(
-                "Failed to parse HTTP response status line."
-            );
+            throw new Exception('Failed to parse HTTP response status line.');
         }
 
         // Process the rest of the header lines
-        $headers = array();
+        $headers = [];
         foreach ($headerLines as $line) {
             if (preg_match("|^([\w-]+):\s+(.+)$|", $line, $m)) {
                 $hName = ucwords(strtolower($m[1]));
                 $hValue = $m[2];
 
                 if (isset($headers[$hName])) {
-                    if (! is_array($headers[$hName])) {
-                        $headers[$hName] = array($headers[$hName]);
+                    if (!\is_array($headers[$hName])) {
+                        $headers[$hName] = [$headers[$hName]];
                     }
                     $headers[$hName][] = $hValue;
                 } else {
@@ -315,7 +311,6 @@ class Response
 
         return new self($status, $headers, $body, $version, $message);
     }
-
 
     /**
      * Decode a "chunked" transfer-encoded body and return the decoded text
@@ -332,14 +327,12 @@ class Response
 
         while (trim($body)) {
             if (!preg_match("/^([\da-fA-F]+)[^\r\n]*\r\n/sm", $body, $m)) {
-                throw new Exception(
-                    "Error parsing body - doesn't seem to be a chunked message"
-                );
+                throw new Exception("Error parsing body - doesn't seem to be a chunked message");
             }
-            $length   = hexdec(trim($m[1]));
-            $cut      = strlen($m[0]);
+            $length = hexdec(trim($m[1]));
+            $cut = \strlen($m[0]);
             $decBody .= substr($body, $cut, $length);
-            $body     = substr($body, $cut + $length + 2);
+            $body = substr($body, $cut + $length + 2);
         }
 
         return $decBody;
@@ -358,10 +351,8 @@ class Response
      */
     public static function decodeGzip($body)
     {
-        if (!function_exists('gzinflate')) {
-            throw new Exception(
-                'zlib extension is required in order to decode "gzip" encoding'
-            );
+        if (!\function_exists('gzinflate')) {
+            throw new Exception('zlib extension is required in order to decode "gzip" encoding');
         }
 
         return gzinflate(substr($body, 10));
@@ -380,10 +371,8 @@ class Response
      */
     public static function decodeDeflate($body)
     {
-        if (!function_exists('gzuncompress')) {
-            throw new Exception(
-                'zlib extension is required in order to decode "deflate" encoding'
-            );
+        if (!\function_exists('gzuncompress')) {
+            throw new Exception('zlib extension is required in order to decode "deflate" encoding');
         }
 
         /**
@@ -395,7 +384,7 @@ class Response
          *
          * This method was adapted from PEAR HTTP_Request2 by (c) Alexey Borzov
          *
-         * @link http://framework.zend.com/issues/browse/ZF-6040
+         * @see http://framework.zend.com/issues/browse/ZF-6040
          */
         $zlibHeader = unpack('n', substr($body, 0, 2));
 
@@ -406,7 +395,6 @@ class Response
         return gzinflate($body);
     }
 
-
     /**
      * Get the entire response as string
      *
@@ -416,7 +404,7 @@ class Response
      */
     public function asString($br = "\n")
     {
-        return $this->getHeadersAsString(true, $br) . $br . $this->getRawBody();
+        return $this->getHeadersAsString(true, $br).$br.$this->getRawBody();
     }
 
     /**

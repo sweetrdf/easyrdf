@@ -10,13 +10,11 @@
      * Note how the namespace prefix declarations are automatically
      * added to the query.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
-
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
-    require_once __DIR__."/html_tag_helpers.php";
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+    require_once __DIR__.'/html_tag_helpers.php';
 
     // Setup some additional prefixes for DBpedia
     \EasyRdf\RdfNamespace::set('dbc', 'http://dbpedia.org/resource/Category:');
@@ -46,11 +44,11 @@
         '} ORDER BY ?label'
     );
     foreach ($result as $row) {
-        echo "<li>".link_to($row->label, $row->country)."</li>\n";
+        echo '<li>'.link_to($row->label, $row->country)."</li>\n";
     }
 ?>
 </ul>
-<p>Total number of countries: <?= $result->numRows() ?></p>
+<p>Total number of countries: <?php echo $result->numRows(); ?></p>
 
 </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,22 +32,20 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class ContainerTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         RdfNamespace::set('ex', 'http://example.org/');
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         RdfNamespace::delete('ex');
     }
@@ -63,35 +62,35 @@ class ContainerTest extends TestCase
         $this->assertSame('rdf:Seq', $favourites->type());
         $this->assertClass('EasyRdf\Container', $favourites);
 
-        $this->assertSame(true, $favourites->valid());
+        $this->assertTrue($favourites->valid());
         $this->assertSame(1, $favourites->key());
         $this->assertStringEquals('http://example.org/banana', $favourites->current());
 
         $favourites->next();
 
-        $this->assertSame(true, $favourites->valid());
+        $this->assertTrue($favourites->valid());
         $this->assertSame(2, $favourites->key());
         $this->assertStringEquals('http://example.org/apple', $favourites->current());
 
         $favourites->next();
 
-        $this->assertSame(true, $favourites->valid());
+        $this->assertTrue($favourites->valid());
         $this->assertSame(3, $favourites->key());
         $this->assertStringEquals('http://example.org/pear', $favourites->current());
 
         $favourites->next();
 
-        $this->assertSame(true, $favourites->valid());
+        $this->assertTrue($favourites->valid());
         $this->assertSame(4, $favourites->key());
         $this->assertStringEquals('http://example.org/pear', $favourites->current());
 
         $favourites->next();
 
-        $this->assertSame(false, $favourites->valid());
+        $this->assertFalse($favourites->valid());
 
         $favourites->rewind();
 
-        $this->assertSame(true, $favourites->valid());
+        $this->assertTrue($favourites->valid());
         $this->assertSame(1, $favourites->key());
         $this->assertStringEquals('http://example.org/banana', $favourites->current());
     }
@@ -106,18 +105,18 @@ class ContainerTest extends TestCase
 
         $favourites = $this->graph->resource('ex:favourite-fruit');
 
-        $list = array();
+        $list = [];
         foreach ($favourites as $fruit) {
             $list[] = $fruit->getUri();
         }
 
         $this->assertEquals(
-            array(
+            [
                 'http://example.org/banana',
                 'http://example.org/apple',
                 'http://example.org/pear',
-                'http://example.org/pear'
-            ),
+                'http://example.org/pear',
+            ],
             $list
         );
     }
@@ -193,14 +192,14 @@ class ContainerTest extends TestCase
     public function testCountEmpty()
     {
         $seq = $this->graph->newBnode('rdf:Seq');
-        $this->assertSame(0, count($seq));
+        $this->assertSame(0, \count($seq));
     }
 
     public function testCountOne()
     {
         $seq = $this->graph->newBnode('rdf:Seq');
         $seq->add('rdf:_1', 'Item');
-        $this->assertSame(1, count($seq));
+        $this->assertSame(1, \count($seq));
     }
 
     public function testCountTwo()
@@ -208,7 +207,7 @@ class ContainerTest extends TestCase
         $seq = $this->graph->newBnode('rdf:Seq');
         $seq->add('rdf:_1', 'Item 1');
         $seq->add('rdf:_2', 'Item 2');
-        $this->assertSame(2, count($seq));
+        $this->assertSame(2, \count($seq));
     }
 
     public function testArrayOffsetExists()

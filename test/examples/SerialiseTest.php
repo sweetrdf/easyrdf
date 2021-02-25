@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class SerialiseTest extends \EasyRdf\TestCase
 {
@@ -44,7 +43,7 @@ class SerialiseTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'serialise.php',
-            array('format' => 'ntriples')
+            ['format' => 'ntriples']
         );
         $this->assertContains('<title>EasyRdf Serialiser Example</title>', $output);
         $this->assertContains(
@@ -59,7 +58,7 @@ class SerialiseTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'serialise.php',
-            array('format' => 'rdfxml')
+            ['format' => 'rdfxml']
         );
         $this->assertContains('<title>EasyRdf Serialiser Example</title>', $output);
         $this->assertContains(
@@ -72,7 +71,7 @@ class SerialiseTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'serialise.php',
-            array('format' => 'php')
+            ['format' => 'php']
         );
         $this->assertContains('<title>EasyRdf Serialiser Example</title>', $output);
         $this->assertContains("'value' =&gt; 'http://xmlns.com/foaf/0.1/Person',", $output);

@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,22 +32,20 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class CollectionTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         RdfNamespace::set('ex', 'http://example.org/');
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         RdfNamespace::delete('ex');
     }
@@ -79,13 +78,13 @@ class CollectionTest extends TestCase
 
         $this->assertFalse($pets->valid());
         $this->assertSame(4, $pets->key());
-        $this->assertSame(null, $pets->current());
+        $this->assertNull($pets->current());
 
         $pets->next();
 
         $this->assertFalse($pets->valid());
         $this->assertSame(5, $pets->key());
-        $this->assertSame(null, $pets->current());
+        $this->assertNull($pets->current());
 
         $pets->rewind();
 
@@ -101,17 +100,17 @@ class CollectionTest extends TestCase
         $owner = $this->graph->resource('ex:owner');
         $pets = $owner->get('ex:pets');
 
-        $list = array();
+        $list = [];
         foreach ($pets as $pet) {
             $list[] = $pet->getUri();
         }
 
         $this->assertEquals(
-            array(
+            [
                 'http://example.org/rat',
                 'http://example.org/cat',
-                'http://example.org/goat'
-            ),
+                'http://example.org/goat',
+            ],
             $list
         );
     }
@@ -181,14 +180,14 @@ class CollectionTest extends TestCase
     public function testCountEmpty()
     {
         $list = $this->graph->newBnode('rdf:List');
-        $this->assertSame(0, count($list));
+        $this->assertSame(0, \count($list));
     }
 
     public function testCountOne()
     {
         $list = $this->graph->newBnode('rdf:List');
         $list->append('Item');
-        $this->assertSame(1, count($list));
+        $this->assertSame(1, \count($list));
     }
 
     public function testCountTwo()
@@ -196,7 +195,7 @@ class CollectionTest extends TestCase
         $list = $this->graph->newBnode('rdf:List');
         $list->append('Item 1');
         $list->append('Item 2');
-        $this->assertSame(2, count($list));
+        $this->assertSame(2, \count($list));
     }
 
     public function testCountThree()
@@ -205,7 +204,7 @@ class CollectionTest extends TestCase
         $list->append('Item 1');
         $list->append('Item 2');
         $list->append('Item 3');
-        $this->assertSame(3, count($list));
+        $this->assertSame(3, \count($list));
     }
 
     public function testArrayOffsetExists()
@@ -261,7 +260,6 @@ class CollectionTest extends TestCase
         $list = $this->graph->newBnode('rdf:List');
         isset($list['foo']);
     }
-
 
     public function testArrayOffsetGet()
     {
@@ -326,13 +324,13 @@ class CollectionTest extends TestCase
         $list[2] = 'Item 2';
         $list[3] = 'Item 3';
 
-        $strings = array();
+        $strings = [];
         foreach ($list as $item) {
-            $strings[] = strval($item);
+            $strings[] = (string) $item;
         }
 
         $this->assertEquals(
-            array('Item 1', 'Item 2', 'Item 3'),
+            ['Item 1', 'Item 2', 'Item 3'],
             $strings
         );
     }
@@ -502,13 +500,13 @@ class CollectionTest extends TestCase
         $this->assertEquals(1, $animals->append('Cat'));
         $this->assertEquals(1, $animals->append('Dog'));
 
-        $list = array();
+        $list = [];
         foreach ($animals as $animal) {
-            $list[] = strval($animal);
+            $list[] = (string) $animal;
         }
 
         $this->assertEquals(
-            array('Rat', 'Cat', 'Dog'),
+            ['Rat', 'Cat', 'Dog'],
             $list
         );
     }

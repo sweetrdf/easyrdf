@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -42,8 +42,8 @@ namespace EasyRdf;
  *
  * This class can be used to iterate through a list of items.
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#date
+ * @see       http://www.w3.org/TR/xmlschema-2/#date
+ *
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -65,25 +65,21 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      *
      * The first item is postion 1
      *
-     * @param  integer  $position     The position in the container to seek to
+     * @param int $position The position in the container to seek to
      *
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
     public function seek($position)
     {
-        if (is_int($position) and $position > 0) {
+        if (\is_int($position) && $position > 0) {
             if ($this->hasProperty('rdf:_'.$position)) {
                 $this->position = $position;
             } else {
-                throw new \OutOfBoundsException(
-                    "Unable to seek to position $position in the container"
-                );
+                throw new \OutOfBoundsException("Unable to seek to position $position in the container");
             }
         } else {
-            throw new \InvalidArgumentException(
-                "Container position must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Container position must be a positive integer');
         }
     }
 
@@ -118,7 +114,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      */
     public function next()
     {
-        $this->position++;
+        ++$this->position;
     }
 
     /** Checks if current position is valid
@@ -135,29 +131,30 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      * Note that this is an slow method - it is more efficient to use
      * the iterator interface, if you can.
      *
-     * @return integer The number of items in the container
+     * @return int The number of items in the container
      */
     public function count()
     {
         $pos = 1;
         while ($this->hasProperty('rdf:_'.$pos)) {
-            $pos++;
+            ++$pos;
         }
+
         return $pos - 1;
     }
 
     /** Append an item to the end of the container
      *
-     * @param  mixed $value      The value to append
+     * @param mixed $value The value to append
      *
-     * @return integer           The number of values appended (1 or 0)
+     * @return int The number of values appended (1 or 0)
      */
     public function append($value)
     {
         // Find the end of the list
         $pos = 1;
         while ($this->hasProperty('rdf:_'.$pos)) {
-            $pos++;
+            ++$pos;
         }
 
         // Add the item
@@ -170,12 +167,10 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      */
     public function offsetExists($offset)
     {
-        if (is_int($offset) and $offset > 0) {
+        if (\is_int($offset) && $offset > 0) {
             return $this->hasProperty('rdf:_'.$offset);
         } else {
-            throw new \InvalidArgumentException(
-                "Container position must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Container position must be a positive integer');
         }
     }
 
@@ -185,12 +180,10 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      */
     public function offsetGet($offset)
     {
-        if (is_int($offset) and $offset > 0) {
+        if (\is_int($offset) && $offset > 0) {
             return $this->get('rdf:_'.$offset);
         } else {
-            throw new \InvalidArgumentException(
-                "Container position must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Container position must be a positive integer');
         }
     }
 
@@ -203,14 +196,12 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      */
     public function offsetSet($offset, $value)
     {
-        if (is_int($offset) and $offset > 0) {
+        if (\is_int($offset) && $offset > 0) {
             return $this->set('rdf:_'.$offset, $value);
-        } elseif (is_null($offset)) {
+        } elseif (null === $offset) {
             return $this->append($value);
         } else {
-            throw new \InvalidArgumentException(
-                "Container position must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Container position must be a positive integer');
         }
     }
 
@@ -223,12 +214,10 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      */
     public function offsetUnset($offset)
     {
-        if (is_int($offset) and $offset > 0) {
+        if (\is_int($offset) && $offset > 0) {
             return $this->delete('rdf:_'.$offset);
         } else {
-            throw new \InvalidArgumentException(
-                "Container position must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Container position must be a positive integer');
         }
     }
 }

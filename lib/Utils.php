@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,22 +32,18 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-
 /**
  * Class containing static utility functions
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class Utils
 {
-
     /**
      * Convert a string into CamelCase
      *
@@ -66,6 +63,7 @@ class Utils
         foreach (preg_split('/[\W_]+/', $str) as $part) {
             $cc .= ucfirst(strtolower($part));
         }
+
         return $cc;
     }
 
@@ -80,9 +78,9 @@ class Utils
      */
     public static function isAssociativeArray($param)
     {
-        if (is_array($param)) {
+        if (\is_array($param)) {
             $keys = array_keys($param);
-            if ($keys[0] === 0) {
+            if (0 === $keys[0]) {
                 return false;
             } else {
                 return true;
@@ -102,7 +100,7 @@ class Utils
     public static function removeFragmentFromUri($uri)
     {
         $pos = strpos($uri, '#');
-        if ($pos === false) {
+        if (false === $pos) {
             return $uri;
         } else {
             return substr($uri, 0, $pos);
@@ -115,32 +113,31 @@ class Utils
      * EasyRdf\Graph and EasyRdf\Sparql\Result to format a resource
      * for display.
      *
-     * @param  mixed  $resource An EasyRdf\Resource object or an associative array
-     * @param  string $format   Either 'html' or 'text'
-     * @param  string $color    The colour of the text
+     * @param mixed  $resource An EasyRdf\Resource object or an associative array
+     * @param string $format   Either 'html' or 'text'
+     * @param string $color    The colour of the text
      *
      * @throws \InvalidArgumentException
+     *
      * @return string
      */
     public static function dumpResourceValue($resource, $format = 'html', $color = 'blue')
     {
         if (!preg_match('/^#?[-\w]+$/', $color)) {
-            throw new \InvalidArgumentException(
-                "\$color must be a legal color code or name"
-            );
+            throw new \InvalidArgumentException('$color must be a legal color code or name');
         }
 
-        if (is_object($resource)) {
-            $resource = strval($resource);
-        } elseif (is_array($resource)) {
+        if (\is_object($resource)) {
+            $resource = (string) $resource;
+        } elseif (\is_array($resource)) {
             $resource = $resource['value'];
         }
 
         $short = RdfNamespace::shorten($resource);
-        if ($format == 'html') {
-            $escaped = htmlentities($resource, ENT_QUOTES);
-            if (substr($resource, 0, 2) == '_:') {
-                $href = '#' . $escaped;
+        if ('html' == $format) {
+            $escaped = htmlentities($resource, \ENT_QUOTES);
+            if ('_:' == substr($resource, 0, 2)) {
+                $href = '#'.$escaped;
             } else {
                 $href = $escaped;
             }
@@ -164,44 +161,43 @@ class Utils
      * EasyRdf\Graph and EasyRdf\Sparql\Result to format a literal
      * for display.
      *
-     * @param  mixed  $literal  An EasyRdf\Literal object or an associative array
-     * @param  string $format   Either 'html' or 'text'
-     * @param  string $color    The colour of the text
+     * @param mixed  $literal An EasyRdf\Literal object or an associative array
+     * @param string $format  Either 'html' or 'text'
+     * @param string $color   The colour of the text
      *
      * @throws \InvalidArgumentException
+     *
      * @return string
      */
     public static function dumpLiteralValue($literal, $format = 'html', $color = 'black')
     {
         if (!preg_match('/^#?[-\w]+$/', $color)) {
-            throw new \InvalidArgumentException(
-                "\$color must be a legal color code or name"
-            );
+            throw new \InvalidArgumentException('$color must be a legal color code or name');
         }
 
-        if (is_object($literal)) {
+        if (\is_object($literal)) {
             $literal = $literal->toRdfPhp();
-        } elseif (!is_array($literal)) {
-            $literal = array('value' => $literal);
+        } elseif (!\is_array($literal)) {
+            $literal = ['value' => $literal];
         }
 
         $text = '"'.$literal['value'].'"';
         if (isset($literal['lang'])) {
-            $text .= '@' . $literal['lang'];
+            $text .= '@'.$literal['lang'];
         }
         if (isset($literal['datatype'])) {
             $short = RdfNamespace::shorten($literal['datatype']);
             if ($short) {
                 $text .= "^^$short";
             } else {
-                $text .= "^^<".$literal['datatype'].">";
+                $text .= '^^<'.$literal['datatype'].'>';
             }
         }
 
-        if ($format == 'html') {
+        if ('html' == $format) {
             return "<span style='color:$color'>".
-                   htmlentities($text, ENT_COMPAT, "UTF-8").
-                   "</span>";
+                   htmlentities($text, \ENT_COMPAT, 'UTF-8').
+                   '</span>';
         } else {
             return $text;
         }
@@ -209,21 +205,22 @@ class Utils
 
     /** Clean up and split a mime-type up into its parts
      *
-     * @param  string $mimeType   A MIME Type, optionally with parameters
+     * @param string $mimeType A MIME Type, optionally with parameters
      *
-     * @return array  $type, $parameters
+     * @return array $type, $parameters
      */
     public static function parseMimeType($mimeType)
     {
         $parts = explode(';', strtolower($mimeType));
         $type = trim(array_shift($parts));
-        $params = array();
+        $params = [];
         foreach ($parts as $part) {
             if (preg_match('/^\s*(\w+)\s*=\s*(.+?)\s*$/', $part, $matches)) {
                 $params[$matches[1]] = $matches[2];
             }
         }
-        return array($type, $params);
+
+        return [$type, $params];
     }
 
     /** Execute a command as a pipe
@@ -233,31 +230,32 @@ class Utils
      * and throwing an exception if anything is written to STDERR or the
      * process returns non-zero.
      *
-     * @param  string $command The command to execute
-     * @param  array  $args    Optional list of arguments to pass to the command
-     * @param  string $input   Optional buffer to send to the command
-     * @param  string $dir     Path to directory to run command in (defaults to /tmp)
+     * @param string $command The command to execute
+     * @param array  $args    Optional list of arguments to pass to the command
+     * @param string $input   Optional buffer to send to the command
+     * @param string $dir     Path to directory to run command in (defaults to /tmp)
      *
      * @throws Exception
+     *
      * @return string The result of the command, printed to STDOUT
      */
     public static function execCommandPipe($command, $args = null, $input = null, $dir = null)
     {
-        $descriptorspec = array(
-            0 => array('pipe', 'r'),
-            1 => array('pipe', 'w'),
-            2 => array('pipe', 'w')
-        );
+        $descriptorspec = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
 
         // Use the system tmp directory by default
         if (!$dir) {
             $dir = sys_get_temp_dir();
         }
 
-        if (is_array($args)) {
+        if (\is_array($args)) {
             $fullCommand = implode(
                 ' ',
-                array_map('escapeshellcmd', array_merge(array($command), $args))
+                array_map('escapeshellcmd', array_merge([$command], $args))
             );
         } else {
             $fullCommand = escapeshellcmd($command);
@@ -267,7 +265,7 @@ class Utils
         }
 
         $process = proc_open($fullCommand, $descriptorspec, $pipes, $dir);
-        if (is_resource($process)) {
+        if (\is_resource($process)) {
             // $pipes now looks like this:
             // 0 => writeable handle connected to child stdin
             // 1 => readable handle connected to child stdout
@@ -287,14 +285,10 @@ class Utils
             // proc_close in order to avoid a deadlock
             $returnValue = proc_close($process);
             if ($returnValue) {
-                throw new Exception(
-                    "Error while executing command $command: ".$error
-                );
+                throw new Exception("Error while executing command $command: ".$error);
             }
         } else {
-            throw new Exception(
-                "Failed to execute command $command"
-            );
+            throw new Exception("Failed to execute command $command");
         }
 
         return $output;

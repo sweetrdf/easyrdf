@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -41,8 +42,8 @@ use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(dirname(__FILE__))).
-    DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+    \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class JsonLdTest extends TestCase
 {
@@ -52,11 +53,10 @@ class JsonLdTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph('http://example.com/');
         $this->serialiser = new JsonLd();
-
 
         $joe = $this->graph->resource('http://www.example.com/joe#me', 'foaf:Person');
         $joe->set('foaf:name', new Literal('Joe Bloggs', 'en'));
@@ -73,7 +73,7 @@ class JsonLdTest extends TestCase
         RdfNamespace::set('xsd', 'http://www.w3.org/2001/XMLSchema#');
         RdfNamespace::set('', 'http://foo/bar/');
 
-        $chapter=$this->graph->resource('http://example.org/library/the-republic#introduction', 'ex:Chapter');
+        $chapter = $this->graph->resource('http://example.org/library/the-republic#introduction', 'ex:Chapter');
         $chapter->set('dc:description', new Literal('An introductory chapter on The Republic.'));
         $chapter->set('dc:title', new Literal('The Introduction'));
 
@@ -86,7 +86,7 @@ class JsonLdTest extends TestCase
         $library->addResource('ex:contains', $book);
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         parent::tearDown();
         RdfNamespace::resetNamespaces();
@@ -135,47 +135,43 @@ class JsonLdTest extends TestCase
         $decoded = json_decode($string, true);
 
         $this->assertArrayNotHasKey('@graph', $decoded);
-        $this->assertInternalType('array', $decoded[8]["http://xmlns.com/foaf/0.1/age"][0]);
-        $this->assertSame(59, $decoded[8]["http://xmlns.com/foaf/0.1/age"][0]['@value']);
-        $this->assertArrayNotHasKey('@type', $decoded[8]["http://xmlns.com/foaf/0.1/age"][0]);
-
+        $this->assertInternalType('array', $decoded[8]['http://xmlns.com/foaf/0.1/age'][0]);
+        $this->assertSame(59, $decoded[8]['http://xmlns.com/foaf/0.1/age'][0]['@value']);
+        $this->assertArrayNotHasKey('@type', $decoded[8]['http://xmlns.com/foaf/0.1/age'][0]);
 
         // Expanded form + explicit types
-        $string = $this->serialiser->serialise($this->graph, 'jsonld', array('expand_native_types' => true));
+        $string = $this->serialiser->serialise($this->graph, 'jsonld', ['expand_native_types' => true]);
         $decoded = json_decode($string, true);
 
         $this->assertArrayNotHasKey('@graph', $decoded);
-        $this->assertInternalType('array', $decoded[8]["http://xmlns.com/foaf/0.1/age"][0]);
-        $this->assertSame('59', $decoded[8]["http://xmlns.com/foaf/0.1/age"][0]['@value']);
+        $this->assertInternalType('array', $decoded[8]['http://xmlns.com/foaf/0.1/age'][0]);
+        $this->assertSame('59', $decoded[8]['http://xmlns.com/foaf/0.1/age'][0]['@value']);
         $this->assertSame(
             'http://www.w3.org/2001/XMLSchema#integer',
-            $decoded[8]["http://xmlns.com/foaf/0.1/age"][0]['@type']
+            $decoded[8]['http://xmlns.com/foaf/0.1/age'][0]['@type']
         );
 
-
         // Compact form
-        $string = $this->serialiser->serialise($this->graph, 'jsonld', array('compact' => true));
+        $string = $this->serialiser->serialise($this->graph, 'jsonld', ['compact' => true]);
         $decoded = json_decode($string, true);
 
         $this->assertArrayHasKey('@graph', $decoded);
-        $this->assertSame(59, $decoded['@graph'][4]["http://xmlns.com/foaf/0.1/age"]);
-
+        $this->assertSame(59, $decoded['@graph'][4]['http://xmlns.com/foaf/0.1/age']);
 
         // Compact form + explicit types
         $string = $this->serialiser->serialise(
             $this->graph,
             'jsonld',
-            array('compact' => true, 'expand_native_types' => true)
+            ['compact' => true, 'expand_native_types' => true]
         );
         $decoded = json_decode($string, true);
 
         $this->assertArrayHasKey('@graph', $decoded);
-        $this->assertSame('59', $decoded['@graph'][4]["http://xmlns.com/foaf/0.1/age"]['@value']);
+        $this->assertSame('59', $decoded['@graph'][4]['http://xmlns.com/foaf/0.1/age']['@value']);
         $this->assertSame(
             'http://www.w3.org/2001/XMLSchema#integer',
-            $decoded['@graph'][4]["http://xmlns.com/foaf/0.1/age"]['@type']
+            $decoded['@graph'][4]['http://xmlns.com/foaf/0.1/age']['@type']
         );
-
 
         // Compact form + explicit types + context
         $ctx = new \stdClass();
@@ -186,33 +182,33 @@ class JsonLdTest extends TestCase
         $string = $this->serialiser->serialise(
             $this->graph,
             'jsonld',
-            array('compact' => true, 'expand_native_types' => true, 'context' => $ctx)
+            ['compact' => true, 'expand_native_types' => true, 'context' => $ctx]
         );
         $decoded = json_decode($string, true);
 
         $this->assertArrayHasKey('@graph', $decoded);
-        $this->assertSame('59', $decoded['@graph'][4]["foaf:age"]['@value']);
-        $this->assertSame('xmls:integer', $decoded['@graph'][4]["foaf:age"]['@type']);
+        $this->assertSame('59', $decoded['@graph'][4]['foaf:age']['@value']);
+        $this->assertSame('xmls:integer', $decoded['@graph'][4]['foaf:age']['@type']);
 
         // Framing
         // Maybe the context and original data could be packed in a fixture
-        $frame = (object) array(
-            '@context' => (object) array(
+        $frame = (object) [
+            '@context' => (object) [
                 'dc' => 'http://purl.org/dc/elements/1.1/',
-                'ex' => 'http://example.org/vocab#'
-            ),
+                'ex' => 'http://example.org/vocab#',
+            ],
             '@type' => 'ex:Library',
-            'ex:contains' => (object) array(
+            'ex:contains' => (object) [
                 '@type' => 'ex:Book',
-                'ex:contains' => (object) array(
-                    '@type' => 'ex:Chapter'
-                )
-            )
-        );
+                'ex:contains' => (object) [
+                    '@type' => 'ex:Chapter',
+                ],
+            ],
+        ];
         $string = $this->serialiser->serialise(
             $this->graph,
             'jsonld',
-            array('compact' => false, 'frame' => $frame)
+            ['compact' => false, 'frame' => $frame]
         );
         $decoded = json_decode($string, true);
         $this->assertArrayHasKey('@graph', $decoded);
@@ -233,7 +229,7 @@ class JsonLdTest extends TestCase
         $string = $this->serialiser->serialise(
             $this->graph,
             'jsonld',
-            array('expand' => true)
+            ['expand' => true]
         );
         $decoded = json_decode($string, true);
         $this->assertArrayNotHasKey('@graph', $decoded);

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Literal;
 /**
  * Class that represents an RDF Literal of datatype xsd:boolean
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#boolean
+ * @see       http://www.w3.org/TR/xmlschema-2/#boolean
+ *
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -51,13 +52,13 @@ class Boolean extends Literal
      *
      * If the value is not a string, then it will be converted to 'true' or 'false'.
      *
-     * @param  mixed  $value    The value of the literal
-     * @param  string $lang     Should be null (literals with a datatype can't have a language)
-     * @param  string $datatype Optional datatype (default 'xsd:boolean')
+     * @param mixed  $value    The value of the literal
+     * @param string $lang     Should be null (literals with a datatype can't have a language)
+     * @param string $datatype Optional datatype (default 'xsd:boolean')
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             $value = $value ? 'true' : 'false';
         }
         parent::__construct($value, null, $datatype);
@@ -71,7 +72,7 @@ class Boolean extends Literal
      */
     public function getValue()
     {
-        return strtolower($this->value) === 'true' or $this->value === '1';
+        return 'true' === strtolower($this->value) || '1' === $this->value;
     }
 
     /** Return true if the value of the literal is 'true' or '1'
@@ -80,7 +81,7 @@ class Boolean extends Literal
      */
     public function isTrue()
     {
-        return strtolower($this->value) === 'true' or $this->value === '1';
+        return 'true' === strtolower($this->value) || '1' === $this->value;
     }
 
     /** Return true if the value of the literal is 'false' or '0'
@@ -89,6 +90,6 @@ class Boolean extends Literal
      */
     public function isFalse()
     {
-        return strtolower($this->value) === 'false' or $this->value === '0';
+        return 'false' === strtolower($this->value) || '0' === $this->value;
     }
 }

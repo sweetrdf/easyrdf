@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -42,7 +42,6 @@ namespace EasyRdf;
  * Based on rdf-isomorphic.rb by Ben Lavender:
  * https://github.com/ruby-rdf/rdf-isomorphic
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -56,14 +55,14 @@ class Isomorphic
      *    $graphB = EasyRdf\Graph::newAndLoad('http://example.com/b.ttl');
      *    if (EasyRdf\Isomorphic::isomorphic($graphA, $graphB)) print "Equal!";
      *
-     * @param  Graph  $graphA  The first graph to be compared
-     * @param  Graph  $graphB  The second graph to be compared
+     * @param Graph $graphA The first graph to be compared
+     * @param Graph $graphB The second graph to be compared
      *
-     * @return boolean True if the two graphs are isomorphic
+     * @return bool True if the two graphs are isomorphic
      */
     public static function isomorphic($graphA, $graphB)
     {
-        return is_array(self::bijectionBetween($graphA, $graphB));
+        return \is_array(self::bijectionBetween($graphA, $graphB));
     }
 
     /**
@@ -71,17 +70,17 @@ class Isomorphic
      * bijection of one EasyRdf\Graph to another EasyRdf\Graph's blank nodes or
      * null if a bijection cannot be found.
      *
-     * @param  Graph  $graphA  The first graph to be compared
-     * @param  Graph  $graphB  The second graph to be compared
+     * @param Graph $graphA The first graph to be compared
+     * @param Graph $graphB The second graph to be compared
      *
-     * @return array|null  bnode mapping from $graphA to $graphB
+     * @return array|null bnode mapping from $graphA to $graphB
      */
     public static function bijectionBetween($graphA, $graphB)
     {
-        $bnodesA = array();
-        $bnodesB = array();
-        $statementsA = array();
-        $statementsB = array();
+        $bnodesA = [];
+        $bnodesB = [];
+        $statementsA = [];
+        $statementsB = [];
 
         // Quick initial check: are there differing numbers of subjects?
         if (self::countSubjects($graphA) != self::countSubjects($graphB)) {
@@ -96,29 +95,31 @@ class Isomorphic
             $groundedStatementsMatch = self::groundedStatementsMatch($graphB, $graphA, $bnodesB, $statementsB);
         }
 
-        if ($groundedStatementsMatch === false) {
+        if (false === $groundedStatementsMatch) {
             // The grounded statements do not match
             return null;
-        } elseif (count($bnodesA) > 0 or count($bnodesB) > 0) {
+        } elseif (\count($bnodesA) > 0 || \count($bnodesB) > 0) {
             // There are blank nodes - build a bi-jection
             return self::buildBijectionTo($statementsA, $bnodesA, $statementsB, $bnodesB);
         } else {
             // No bnodes and the grounded statements match
-            return array();
+            return [];
         }
     }
 
     /**
      * Count the number of subjects in a graph
+     *
      * @ignore
      */
     private static function countSubjects($graph)
     {
-        return count($graph->toRdfPhp());
+        return \count($graph->toRdfPhp());
     }
 
     /**
      * Check if all the statements in $graphA also appear in $graphB
+     *
      * @ignore
      */
     private static function groundedStatementsMatch($graphA, $graphB, &$bnodes, &$anonStatements)
@@ -126,8 +127,8 @@ class Isomorphic
         $groundedStatementsMatch = true;
 
         foreach ($graphA->toRdfPhp() as $subject => $properties) {
-            if (substr($subject, 0, 2) == '_:') {
-                array_push($bnodes, $subject);
+            if ('_:' == substr($subject, 0, 2)) {
+                $bnodes[] = $subject;
                 $subjectIsBnode = true;
             } else {
                 $subjectIsBnode = false;
@@ -135,29 +136,29 @@ class Isomorphic
 
             foreach ($properties as $property => $values) {
                 foreach ($values as $value) {
-                    if ($value['type'] == 'uri' and substr($value['value'], 0, 2) == '_:') {
-                        array_push($bnodes, $value['value']);
+                    if ('uri' == $value['type'] && '_:' == substr($value['value'], 0, 2)) {
+                        $bnodes[] = $value['value'];
                         $objectIsBnode = true;
                     } else {
                         $objectIsBnode = false;
                     }
 
-                    if ($groundedStatementsMatch and
-                        $subjectIsBnode === false and
-                        $objectIsBnode === false and
-                        $graphB->hasProperty($subject, $property, $value) === false
+                    if ($groundedStatementsMatch &&
+                        false === $subjectIsBnode &&
+                        false === $objectIsBnode &&
+                        false === $graphB->hasProperty($subject, $property, $value)
                     ) {
                         $groundedStatementsMatch = false;
                     }
 
-                    if ($subjectIsBnode or $objectIsBnode) {
+                    if ($subjectIsBnode || $objectIsBnode) {
                         array_push(
                             $anonStatements,
-                            array(
-                                array('type' => $subjectIsBnode ? 'bnode' : 'uri', 'value' => $subject),
-                                array('type' => 'uri', 'value' => $property),
-                                $value
-                            )
+                            [
+                                ['type' => $subjectIsBnode ? 'bnode' : 'uri', 'value' => $subject],
+                                ['type' => 'uri', 'value' => $property],
+                                $value,
+                            ]
                         );
                     }
                 }
@@ -181,10 +182,9 @@ class Isomorphic
         $nodesA,
         $statementsB,
         $nodesB,
-        $groundedHashesA = array(),
-        $groundedHashesB = array()
+        $groundedHashesA = [],
+        $groundedHashesB = []
     ) {
-
         // Create a hash signature of every node, based on the signature of
         // statements it exists in.
         // We also save hashes of nodes that cannot be reliably known; we will use
@@ -201,12 +201,12 @@ class Isomorphic
         // middle of the method, and probably slows down isomorphic checks,  but
         // prevents almost-isomorphic cases from getting nutty.
         foreach ($hashesA as $hashA) {
-            if (!in_array($hashA, $hashesB)) {
+            if (!\in_array($hashA, $hashesB)) {
                 return null;
             }
         }
         foreach ($hashesB as $hashB) {
-            if (!in_array($hashB, $hashesA)) {
+            if (!\in_array($hashB, $hashesA)) {
                 return null;
             }
         }
@@ -214,7 +214,7 @@ class Isomorphic
         // Using the created hashes, map nodes to other_nodes
         // Ungrounded hashes will also be equal, but we keep the distinction
         // around for when we recurse later (we only recurse on ungrounded nodes)
-        $bijection = array();
+        $bijection = [];
         foreach ($nodesA as $nodeA) {
             $foundNode = null;
             foreach ($ungroundedHashesB as $nodeB => $hashB) {
@@ -243,7 +243,7 @@ class Isomorphic
         sort($nodesA);
         sort($bijectionB);
         sort($nodesB);
-        if ($bijectionA != $nodesA or $bijectionB != $nodesB) {
+        if ($bijectionA != $nodesA || $bijectionB != $nodesB) {
             $bijection = null;
 
             foreach ($nodesA as $nodeA) {
@@ -297,14 +297,14 @@ class Isomorphic
     private static function hashNodes($statements, $nodes, $groundedHahes)
     {
         $hashes = $groundedHahes;
-        $ungroundedHashes = array();
+        $ungroundedHashes = [];
         $hashNeeded = true;
 
         // We may have to go over the list multiple times.  If a node is marked as
         // grounded, other nodes can then use it to decide their own state of
         // grounded.
         while ($hashNeeded) {
-            $startingGroundedNodes = count($hashes);
+            $startingGroundedNodes = \count($hashes);
             foreach ($nodes as $node) {
                 if (!isset($hashes[$node])) {
                     $hash = self::nodeHashFor($node, $statements, $hashes);
@@ -317,7 +317,7 @@ class Isomorphic
 
             // after going over the list, any nodes with a unique hash can be marked
             // as grounded, even if we have not tied them back to a root yet.
-            $uniques = array();
+            $uniques = [];
             foreach ($ungroundedHashes as $node => $hash) {
                 $uniques[$hash] = isset($uniques[$hash]) ? false : $node;
             }
@@ -326,10 +326,10 @@ class Isomorphic
                     $hashes[$node] = $hash;
                 }
             }
-            $hashNeeded = ($startingGroundedNodes != count($hashes));
+            $hashNeeded = ($startingGroundedNodes != \count($hashes));
         }
 
-        return array($hashes, $ungroundedHashes);
+        return [$hashes, $ungroundedHashes];
     }
 
     /**
@@ -350,14 +350,13 @@ class Isomorphic
      */
     private static function nodeHashFor($node, $statements, $hashes)
     {
-        $statement_signatures = array();
+        $statement_signatures = [];
         foreach ($statements as $statement) {
             foreach ($statement as $n) {
-                if ($n['type'] != 'literal' and $n['value'] == $node) {
-                    array_push(
-                        $statement_signatures,
+                if ('literal' != $n['type'] && $n['value'] == $node) {
+                    $statement_signatures[] =
                         self::hashStringFor($statement, $hashes, $node)
-                    );
+                    ;
                 }
             }
         }
@@ -381,10 +380,10 @@ class Isomorphic
     {
         $grounded = true;
         foreach ($statements as $statement) {
-            if (in_array($node, $statement)) {
+            if (\in_array($node, $statement)) {
                 foreach ($statement as $resource) {
-                    if ($node['type'] != 'bnode' or
-                        isset($hashes[$node['value']]) or
+                    if ('bnode' != $node['type'] ||
+                        isset($hashes[$node['value']]) ||
                         $resource == $node
                     ) {
                         $grounded = false;
@@ -392,6 +391,7 @@ class Isomorphic
                 }
             }
         }
+
         return $grounded;
     }
 
@@ -403,10 +403,11 @@ class Isomorphic
      */
     private static function hashStringFor($statement, $hashes, $node)
     {
-        $str = "";
+        $str = '';
         foreach ($statement as $r) {
             $str .= self::stringForNode($r, $hashes, $node);
         }
+
         return $str;
     }
 
@@ -419,18 +420,19 @@ class Isomorphic
      */
     private static function stringForNode($node, $hashes, $target)
     {
-        if (is_null($node)) {
-            return "";
-        } elseif ($node['type'] == 'bnode') {
+        if (null === $node) {
+            return '';
+        } elseif ('bnode' == $node['type']) {
             if ($node['value'] == $target) {
-                return "itself";
+                return 'itself';
             } elseif (isset($hashes[$node['value']])) {
                 return $hashes[$node['value']];
             } else {
-                return "a blank node";
+                return 'a blank node';
             }
         } else {
             $s = new Serialiser\Ntriples();
+
             return $s->serialiseValue($node);
         }
     }

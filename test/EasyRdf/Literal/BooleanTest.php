@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,8 +39,7 @@ namespace EasyRdf\Literal;
 
 use EasyRdf\TestCase;
 
-require_once realpath(__DIR__ . '/../../') . '/TestHelper.php';
-
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class BooleanTest extends TestCase
 {
@@ -48,8 +48,8 @@ class BooleanTest extends TestCase
         $literal = new Boolean('true');
         $this->assertStringEquals('true', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(true, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertTrue($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
@@ -58,8 +58,8 @@ class BooleanTest extends TestCase
         $literal = new Boolean('false');
         $this->assertStringEquals('false', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(false, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertFalse($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
@@ -68,8 +68,8 @@ class BooleanTest extends TestCase
         $literal = new Boolean('1');
         $this->assertStringEquals('1', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(true, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertTrue($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
@@ -78,8 +78,8 @@ class BooleanTest extends TestCase
         $literal = new Boolean('0');
         $this->assertStringEquals('0', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(false, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertFalse($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
@@ -88,8 +88,8 @@ class BooleanTest extends TestCase
         $literal = new Boolean(true);
         $this->assertStringEquals('true', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(true, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertTrue($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
@@ -98,8 +98,8 @@ class BooleanTest extends TestCase
         $literal = new Boolean(false);
         $this->assertStringEquals('false', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(false, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertFalse($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
@@ -108,8 +108,8 @@ class BooleanTest extends TestCase
         $literal = new Boolean(1);
         $this->assertStringEquals('true', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(true, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertTrue($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
@@ -118,26 +118,26 @@ class BooleanTest extends TestCase
         $literal = new Boolean(0);
         $this->assertStringEquals('false', $literal);
         $this->assertInternalType('bool', $literal->getValue());
-        $this->assertSame(false, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertFalse($literal->getValue());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
     }
 
     public function testIsTrue()
     {
         $true = new Boolean(true);
-        $this->assertSame(true, $true->isTrue());
+        $this->assertTrue($true->isTrue());
 
         $false = new Boolean(false);
-        $this->assertSame(false, $false->isTrue());
+        $this->assertFalse($false->isTrue());
     }
 
     public function testIsFalse()
     {
         $false = new Boolean(false);
-        $this->assertSame(true, $false->isFalse());
+        $this->assertTrue($false->isFalse());
 
         $true = new Boolean(true);
-        $this->assertSame(false, $true->isFalse());
+        $this->assertFalse($true->isFalse());
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class ConverterTest extends \EasyRdf\TestCase
 {
@@ -54,9 +53,8 @@ class ConverterTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'converter.php',
-            array(
-                'data' =>
-                    '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"'.
+            [
+                'data' => '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"'.
                     '         xmlns:dc="http://purl.org/dc/elements/1.1/">'.
                     ' <rdf:Description rdf:about="http://www.w3.org/">'.
                     '  <dc:title>World Wide Web Consortium</dc:title>'.
@@ -64,8 +62,8 @@ class ConverterTest extends \EasyRdf\TestCase
                     '</rdf:RDF>',
                 'uri' => 'http://example.com/',
                 'input_format' => 'guess',
-                'output_format' => 'ntriples'
-            )
+                'output_format' => 'ntriples',
+            ]
         );
 
         $this->assertContains('<title>EasyRdf Converter</title>', $output);
@@ -82,11 +80,11 @@ class ConverterTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'converter.php',
-            array(
+            [
                 'uri' => 'http://www.w3.org/TR/turtle/examples/example1.ttl',
                 'input_format' => 'guess',
-                'output_format' => 'ntriples'
-            )
+                'output_format' => 'ntriples',
+            ]
         );
 
         $this->assertContains('<title>EasyRdf Converter</title>', $output);
@@ -118,16 +116,16 @@ class ConverterTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'converter.php',
-            array(
+            [
                 'uri' => 'http://www.w3.org/TR/turtle/examples/example1.ttl',
                 'input_format' => 'guess',
                 'output_format' => 'ntriples',
-                'raw' => 1
-            )
+                'raw' => 1,
+            ]
         );
 
         $this->assertSame(
-            "<http://www.w3.org/TR/rdf-syntax-grammar> <http://purl.org/dc/elements/1.1/title> ".
+            '<http://www.w3.org/TR/rdf-syntax-grammar> <http://purl.org/dc/elements/1.1/title> '.
             "\"RDF/XML Syntax Specification (Revised)\" .\n".
             "<http://www.w3.org/TR/rdf-syntax-grammar> <http://example.org/stuff/1.0/editor> _:genid1 .\n".
             "_:genid1 <http://example.org/stuff/1.0/fullname> \"Dave Beckett\" .\n".

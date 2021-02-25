@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2015 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -39,14 +39,13 @@ namespace EasyRdf;
 /**
  * Parent class for the EasyRdf parsers
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2015 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 abstract class Parser
 {
     /** Mapping from source to graph bnode identifiers */
-    private $bnodeMap = array();
+    private $bnodeMap = [];
 
     /** The current graph to insert triples into */
     /** @var Graph */
@@ -58,13 +57,13 @@ abstract class Parser
     /** The base URI for the document currently being parsed */
     protected $baseUri = null;
 
-
     protected $tripleCount = 0;
 
     /**
      * Create a new, unique bnode identifier from a source identifier.
      * If the source identifier has previously been seen, the
      * same new bnode identifier is returned.
+     *
      * @ignore
      */
     protected function remapBnode($name)
@@ -72,52 +71,47 @@ abstract class Parser
         if (!isset($this->bnodeMap[$name])) {
             $this->bnodeMap[$name] = $this->graph->newBNodeId();
         }
+
         return $this->bnodeMap[$name];
     }
 
     /**
      * Delete the bnode mapping - to be called at the start of a new parse
+     *
      * @ignore
      */
     protected function resetBnodeMap()
     {
-        $this->bnodeMap = array();
+        $this->bnodeMap = [];
     }
 
     /**
      * Check, cleanup parameters and prepare for parsing
+     *
      * @ignore
      */
     protected function checkParseParams($graph, $data, $format, $baseUri)
     {
-        if ($graph == null or !is_object($graph) or
+        if (null == $graph || !\is_object($graph) ||
             !($graph instanceof Graph)) {
-            throw new \InvalidArgumentException(
-                '$graph should be an EasyRdf\Graph object and cannot be null'
-            );
+            throw new \InvalidArgumentException('$graph should be an EasyRdf\Graph object and cannot be null');
         } else {
             $this->graph = $graph;
         }
 
-        if ($format == null or $format == '') {
-            throw new \InvalidArgumentException(
-                "\$format cannot be null or empty"
-            );
-        } elseif (is_object($format) and $format instanceof Format) {
+        if (null == $format || '' == $format) {
+            throw new \InvalidArgumentException('$format cannot be null or empty');
+        } elseif (\is_object($format) && $format instanceof Format) {
             $this->format = $format = $format->getName();
-        } elseif (!is_string($format)) {
-            throw new \InvalidArgumentException(
-                '$format should be a string or an EasyRdf\Format object'
-            );
+        } elseif (!\is_string($format)) {
+            throw new \InvalidArgumentException('$format should be a string or an EasyRdf\Format object');
         } else {
             $this->format = $format;
         }
 
         if ($baseUri) {
-            if (!is_string($baseUri)) {
-                throw new \InvalidArgumentException(
-                    "\$baseUri should be a string"
-                );
+            if (!\is_string($baseUri)) {
+                throw new \InvalidArgumentException('$baseUri should be a string');
             } else {
                 $this->baseUri = new ParsedUri($baseUri);
             }
@@ -132,23 +126,24 @@ abstract class Parser
 
     /**
      * Sub-classes must follow this protocol
+     *
      * @ignore
      */
     public function parse($graph, $data, $format, $baseUri)
     {
-        throw new Exception(
-            "This method should be overridden by sub-classes."
-        );
+        throw new Exception('This method should be overridden by sub-classes.');
     }
 
     /**
      * Add a triple to the current graph, and keep count of the number of triples
+     *
      * @ignore
      */
     protected function addTriple($resource, $property, $value)
     {
         $count = $this->graph->add($resource, $property, $value);
         $this->tripleCount += $count;
+
         return $count;
     }
 }

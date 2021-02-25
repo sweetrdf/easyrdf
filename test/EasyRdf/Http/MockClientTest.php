@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Http;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,16 +39,15 @@ namespace EasyRdf\Http;
 
 use EasyRdf\TestCase;
 
-require_once realpath(__DIR__ . '/../../') . '/TestHelper.php';
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 require_once __DIR__.'/MockClient.php';
-
 
 class MockClientTest extends TestCase
 {
     /** @var MockClient */
     private $client;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->client = new MockClient();
     }
@@ -55,6 +55,7 @@ class MockClientTest extends TestCase
     protected function get($uri)
     {
         $this->client->setUri($uri);
+
         return $this->client->request('GET');
     }
 
@@ -142,24 +143,24 @@ class MockClientTest extends TestCase
 
     public function testSetStatus()
     {
-        $this->client->addMock('GET', '/test', 'x', array('status' => 404));
+        $this->client->addMock('GET', '/test', 'x', ['status' => 404]);
         $response = $this->get('http://example.com/test');
         $this->assertSame(404, $response->getStatus());
     }
 
     public function testSetHeaders()
     {
-        $h = array('Content-Type' => 'text/html');
-        $this->client->addMock('GET', '/test', 'x', array('headers' => $h));
+        $h = ['Content-Type' => 'text/html'];
+        $this->client->addMock('GET', '/test', 'x', ['headers' => $h]);
         $response = $this->get('http://example.com/test');
         $this->assertSame('text/html', $response->getHeader('Content-Type'));
     }
 
     public function testSetResponse()
     {
-        $response = new Response(234, array('Foo' => 'bar'), 'x');
+        $response = new Response(234, ['Foo' => 'bar'], 'x');
         $this->client->addMock('GET', '/test', $response);
-        $r = $this->get('http://example.com/test', array('throw' => false));
+        $r = $this->get('http://example.com/test', ['throw' => false]);
         $this->assertSame(234, $r->getStatus());
         $this->assertSame('bar', $r->getHeader('Foo'));
         $this->assertSame('x', $r->getBody());
@@ -167,7 +168,7 @@ class MockClientTest extends TestCase
 
     public function testOnce()
     {
-        $this->client->addMock('GET', '/test', '10', array('once' => true));
+        $this->client->addMock('GET', '/test', '10', ['once' => true]);
         $this->client->addMockOnce('GET', '/test', '20');
         $this->client->addMock('GET', '/test', '30');
         $r = $this->get('http://example.com/test');
@@ -200,8 +201,8 @@ class MockClientTest extends TestCase
 
     public function testCallbackWithoutArgs()
     {
-        $alwaysTrue = array('callback' => array($this, 'alwaysTrue'));
-        $alwaysFalse = array('callback' => array($this, 'alwaysFalse'));
+        $alwaysTrue = ['callback' => [$this, 'alwaysTrue']];
+        $alwaysFalse = ['callback' => [$this, 'alwaysFalse']];
 
         $this->client->addMock('GET', '/test1', '10', $alwaysTrue);
         $r = $this->get('http://example.com/test1');
@@ -226,10 +227,10 @@ class MockClientTest extends TestCase
 
     public function testCallbackWithArgs()
     {
-        $echoTrue = array('callback' => array($this, 'echoValue'),
-                          'callbackArgs' => array(true));
-        $echoFalse = array('callback' => array($this, 'echoValue'),
-                           'callbackArgs' => array(false));
+        $echoTrue = ['callback' => [$this, 'echoValue'],
+                          'callbackArgs' => [true], ];
+        $echoFalse = ['callback' => [$this, 'echoValue'],
+                           'callbackArgs' => [false], ];
 
         $this->client->addMock('GET', '/test1', '10', $echoTrue);
         $r = $this->get('http://example.com/test1');
@@ -249,7 +250,7 @@ class MockClientTest extends TestCase
 
     public function testCallbackWithMockHttp()
     {
-        $isMockHttp = array('callback' => array($this, 'isMockHttp'));
+        $isMockHttp = ['callback' => [$this, 'isMockHttp']];
         $this->client->addMock('GET', '/test1', '10', $isMockHttp);
         $r = $this->get('http://example.com/test1');
         $this->assertSame('10', $r->getBody());
@@ -257,7 +258,7 @@ class MockClientTest extends TestCase
 
     public function isMockHttp($value)
     {
-        return ($value instanceof MockClient);
+        return $value instanceof MockClient;
     }
 
     public function testGuessJsonContentType()

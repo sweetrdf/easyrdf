@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Literal;
 /**
  * Class that represents an RDF Literal of datatype xsd:date
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#date
+ * @see       http://www.w3.org/TR/xmlschema-2/#date
+ *
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -54,14 +55,14 @@ class Date extends Literal
      *
      * @see \DateTime
      *
-     * @param  mixed  $value     The value of the literal
-     * @param  string $lang      Should be null (literals with a datatype can't have a language)
-     * @param  string $datatype  Optional datatype (default 'xsd:date')
+     * @param mixed  $value    The value of the literal
+     * @param string $lang     Should be null (literals with a datatype can't have a language)
+     * @param string $datatype Optional datatype (default 'xsd:date')
      */
     public function __construct($value = null, $lang = null, $datatype = null)
     {
         // If $value is null, use today's date
-        if (is_null($value)) {
+        if (null === $value) {
             $value = new \DateTime('today');
         }
 
@@ -79,6 +80,7 @@ class Date extends Literal
      *   $date = EasyRdf\Literal\Date::parse('1 January 2011');
      *
      * @see DateTime
+     *
      * @param string $value The date to parse
      *
      * @return self
@@ -86,12 +88,14 @@ class Date extends Literal
     public static function parse($value)
     {
         $value = new \DateTime($value);
+
         return new self($value);
     }
 
     /** Returns the date as a PHP DateTime object
      *
      * @see DateTime::format
+     *
      * @return string
      */
     public function getValue()
@@ -102,6 +106,7 @@ class Date extends Literal
     /** Returns date formatted according to given format
      *
      * @see DateTime::format
+     *
      * @param string $format
      *
      * @return string
@@ -113,28 +118,28 @@ class Date extends Literal
 
     /** A full integer representation of the year, 4 digits
      *
-     * @return integer
+     * @return int
      */
     public function year()
     {
-        return (int)$this->format('Y');
+        return (int) $this->format('Y');
     }
 
     /** Integer representation of the month
      *
-     * @return integer
+     * @return int
      */
     public function month()
     {
-        return (int)$this->format('m');
+        return (int) $this->format('m');
     }
 
     /** Integer representation of the day of the month
      *
-     * @return integer
+     * @return int
      */
     public function day()
     {
-        return (int)$this->format('d');
+        return (int) $this->format('d');
     }
 }

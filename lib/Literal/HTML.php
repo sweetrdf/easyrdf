@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Literal;
 /**
  * Class that represents an RDF Literal of datatype rdf:HTML
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/rdf11-concepts/#section-html
+ * @see       http://www.w3.org/TR/rdf11-concepts/#section-html
+ *
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -49,9 +50,9 @@ class HTML extends Literal
 {
     /** Constructor for creating a new rdf:HTML literal
      *
-     * @param  mixed  $value     The HTML fragment
-     * @param  string $lang      Should be null (literals with a datatype can't have a language)
-     * @param  string $datatype  Optional datatype (default 'rdf:HTML')
+     * @param mixed  $value    The HTML fragment
+     * @param string $lang     Should be null (literals with a datatype can't have a language)
+     * @param string $datatype Optional datatype (default 'rdf:HTML')
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
@@ -60,8 +61,9 @@ class HTML extends Literal
 
     /** Strip the HTML tags from the literal
      *
-     * @link   http://php.net/manual/en/function.strip-tags.php
-     * @param  string $allowableTags  Optional allowed tag, not be be removed
+     * @see   http://php.net/manual/en/function.strip-tags.php
+     *
+     * @param string $allowableTags Optional allowed tag, not be be removed
      *
      * @return string The literal as plain text
      */

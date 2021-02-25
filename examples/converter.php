@@ -1,4 +1,5 @@
 <?php
+
     /**
      * Convert RDF from one format to another
      *
@@ -12,16 +13,14 @@
      * The input data is loaded or parsed into an EasyRdf\Graph.
      * That graph is than outputted again in the desired output format.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+    require_once __DIR__.'/html_tag_helpers.php';
 
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
-    require_once __DIR__."/html_tag_helpers.php";
-
-    $input_format_options = array('Guess' => 'guess');
-    $output_format_options = array();
+    $input_format_options = ['Guess' => 'guess'];
+    $output_format_options = [];
     foreach (\EasyRdf\Format::getFormats() as $format) {
         if ($format->getSerialiserClass()) {
             $output_format_options[$format->getLabel()] = $format->getName();
@@ -41,24 +40,24 @@
 
     // Display the form, if raw option isn't set
     if (!isset($_REQUEST['raw'])) {
-        print "<html>\n";
-        print "<head><title>EasyRdf Converter</title></head>\n";
-        print "<body>\n";
-        print "<h1>EasyRdf Converter</h1>\n";
+        echo "<html>\n";
+        echo "<head><title>EasyRdf Converter</title></head>\n";
+        echo "<body>\n";
+        echo "<h1>EasyRdf Converter</h1>\n";
 
-        print "<div style='margin: 10px'>\n";
-        print form_tag();
-        print label_tag('data', 'Input Data: ').'<br />'.text_area_tag('data', '', array('cols'=>80, 'rows'=>10)) . "<br />\n";
-        print label_tag('uri', 'or Uri: ').text_field_tag('uri', 'http://danbri.org/foaf.rdf#danbri', array('size'=>80)) . "<br />\n";
-        print label_tag('input_format', 'Input Format: ').select_tag('input_format', $input_format_options) . "<br />\n";
-        print label_tag('output_format', 'Output Format: ').select_tag('output_format', $output_format_options) . "<br />\n";
-        print label_tag('raw', 'Raw Output: ').check_box_tag('raw') . "<br />\n";
-        print reset_tag() . submit_tag();
-        print form_end_tag();
-        print "</div>\n";
+        echo "<div style='margin: 10px'>\n";
+        echo form_tag();
+        echo label_tag('data', 'Input Data: ').'<br />'.text_area_tag('data', '', ['cols' => 80, 'rows' => 10])."<br />\n";
+        echo label_tag('uri', 'or Uri: ').text_field_tag('uri', 'http://danbri.org/foaf.rdf#danbri', ['size' => 80])."<br />\n";
+        echo label_tag('input_format', 'Input Format: ').select_tag('input_format', $input_format_options)."<br />\n";
+        echo label_tag('output_format', 'Output Format: ').select_tag('output_format', $output_format_options)."<br />\n";
+        echo label_tag('raw', 'Raw Output: ').check_box_tag('raw')."<br />\n";
+        echo reset_tag().submit_tag();
+        echo form_end_tag();
+        echo "</div>\n";
     }
 
-    if (isset($_REQUEST['uri']) or isset($_REQUEST['data'])) {
+    if (isset($_REQUEST['uri']) || isset($_REQUEST['data'])) {
         // Parse the input
         $graph = new \EasyRdf\Graph($_REQUEST['uri']);
         if (empty($_REQUEST['data'])) {
@@ -79,13 +78,13 @@
         // Send the output back to the client
         if (isset($_REQUEST['raw'])) {
             header('Content-Type: '.$format->getDefaultMimeType());
-            print $output;
+            echo $output;
         } else {
-            print '<pre>'.htmlspecialchars($output).'</pre>';
+            echo '<pre>'.htmlspecialchars($output).'</pre>';
         }
     }
 
     if (!isset($_REQUEST['raw'])) {
-        print "</body>\n";
-        print "</html>\n";
+        echo "</body>\n";
+        echo "</html>\n";
     }

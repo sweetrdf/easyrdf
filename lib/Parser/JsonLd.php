@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -42,7 +43,6 @@ use ML\JsonLD as LD;
 /**
  * Class to parse JSON-LD to an EasyRdf\Graph
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2014 Markus Lanthaler
  * @author     Markus Lanthaler <mail@markus-lanthaler.com>
  * @license    https://www.opensource.org/licenses/bsd-license.php
@@ -63,20 +63,19 @@ class JsonLd extends Parser
      *
      * @throws Exception
      * @throws \EasyRdf\Exception
-     * @return integer             The number of triples added to the graph
+     *
+     * @return int The number of triples added to the graph
      */
     public function parse($graph, $data, $format, $baseUri)
     {
         parent::checkParseParams($graph, $data, $format, $baseUri);
 
-        if ($format != 'jsonld') {
-            throw new \EasyRdf\Exception(
-                "EasyRdf\\Parser\\JsonLd does not support {$format}"
-            );
+        if ('jsonld' != $format) {
+            throw new \EasyRdf\Exception("EasyRdf\\Parser\\JsonLd does not support {$format}");
         }
 
         try {
-            $quads = LD\JsonLD::toRdf($data, array('base' => $baseUri));
+            $quads = LD\JsonLD::toRdf($data, ['base' => $baseUri]);
         } catch (LD\Exception\JsonLdException $e) {
             throw new Exception($e->getMessage());
         }
@@ -95,22 +94,22 @@ class JsonLd extends Parser
             $predicate = (string) $quad->getProperty();
 
             if ($quad->getObject() instanceof \ML\IRI\IRI) {
-                $object = array(
+                $object = [
                     'type' => 'uri',
-                    'value' => (string) $quad->getObject()
-                );
+                    'value' => (string) $quad->getObject(),
+                ];
 
                 if ('_:' === substr($object['value'], 0, 2)) {
-                    $object = array(
+                    $object = [
                         'type' => 'bnode',
-                        'value' => $this->remapBnode($object['value'])
-                    );
+                        'value' => $this->remapBnode($object['value']),
+                    ];
                 }
             } else {
-                $object = array(
+                $object = [
                     'type' => 'literal',
-                    'value' => $quad->getObject()->getValue()
-                );
+                    'value' => $quad->getObject()->getValue(),
+                ];
 
                 if ($quad->getObject() instanceof LD\LanguageTaggedString) {
                     $object['lang'] = $quad->getObject()->getLanguage();

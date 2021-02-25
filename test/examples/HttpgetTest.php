@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class HttpgetTest extends \EasyRdf\TestCase
 {
@@ -63,10 +62,10 @@ class HttpgetTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'httpget.php',
-            array(
+            [
                 'uri' => 'http://tomheath.com/id/me',
-                'accept' => 'text/html'
-            )
+                'accept' => 'text/html',
+            ]
         );
         $this->assertContains('<title>Test EasyRdf HTTP Client Get</title>', $output);
         $this->assertContains('<h1>Test EasyRdf HTTP Client Get</h1>', $output);
@@ -78,10 +77,10 @@ class HttpgetTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'httpget.php',
-            array(
+            [
                 'uri' => 'http://tomheath.com/id/me',
-                'accept' => 'application/rdf+xml'
-            )
+                'accept' => 'application/rdf+xml',
+            ]
         );
         $this->assertContains('<title>Test EasyRdf HTTP Client Get</title>', $output);
         $this->assertContains('<h1>Test EasyRdf HTTP Client Get</h1>', $output);

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Parser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class RdfXmlTest extends TestCase
 {
@@ -50,7 +51,7 @@ class RdfXmlTest extends TestCase
     protected $graph = null;
     protected $rdf_data = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->parser = new RdfXml();
@@ -77,7 +78,7 @@ class RdfXmlTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertStringEquals('Joe Bloggs', $name);
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
 
         $foaf = $this->graph->resource('http://www.example.com/joe/foaf.rdf');
         $this->assertNotNull($foaf);
@@ -130,7 +131,7 @@ class RdfXmlTest extends TestCase
             "  <rdf:Description rdf:about='http://example.org/foo'>\n".
             "    <rdf:foo>Hello World\n".
             "  </rdf:Description>\n".
-            "</rdf:RDF>",
+            '</rdf:RDF>',
             'rdfxml',
             'http://example.org/'
         );
@@ -161,10 +162,10 @@ class RdfXmlTest extends TestCase
         $large = "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n";
         $large .= "         xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n";
         $large .= "         xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\">\n";
-        for ($i = 1; $i < 25000; $i++) {
+        for ($i = 1; $i < 25000; ++$i) {
             $large .= "<owl:Thing rdf:about=\"http://www.example.com/resource$i\">\n";
             $large .= "  <rdfs:label>This is item $i</rdfs:label>\n";
-            $large .= "  <rdfs:comment>";
+            $large .= '  <rdfs:comment>';
             $large .= str_repeat('This is a long piece of text. ', 20);
             $large .= "  </rdfs:comment>\n";
             $large .= "</owl:Thing>\n";
@@ -172,7 +173,7 @@ class RdfXmlTest extends TestCase
         $large .= "</rdf:RDF>\n";
 
         // Check it is more than 10Mb
-        $this->assertGreaterThan(10485760, strlen($large));
+        $this->assertGreaterThan(10485760, \strlen($large));
 
         // Now parse it into a graph
         $count = $this->parser->parse(
@@ -182,7 +183,7 @@ class RdfXmlTest extends TestCase
             null
         );
 
-        $this->assertEquals(25000, count($this->graph->resources()));
+        $this->assertEquals(25000, \count($this->graph->resources()));
     }
 
     /**
@@ -203,7 +204,7 @@ class RdfXmlTest extends TestCase
 
         foreach ($graph->resources() as $resource) {
             /** @var \EasyRdf\Resource $resource */
-            if ($resource->isBnode() and $resource->hasProperty('rdfs:comment')) {
+            if ($resource->isBnode() && $resource->hasProperty('rdfs:comment')) {
                 $comment = trim($resource->getLiteral('rdfs:comment'));
                 $this->assertStringStartsWith('<pre><code>', $comment);
             }

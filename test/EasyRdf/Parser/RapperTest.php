@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Parser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class RapperTest extends TestCase
 {
@@ -50,16 +51,16 @@ class RapperTest extends TestCase
     protected $graph = null;
     protected $rdf_data = null;
 
-    public function setUp()
+    protected function setUp()
     {
         exec('rapper --version 2>/dev/null', $output, $retval);
-        if ($retval == 0) {
+        if (0 == $retval) {
             $this->parser = new Rapper();
             $this->graph = new Graph();
             $this->rdf_data = readFixture('foaf.rdf');
         } else {
             $this->markTestSkipped(
-                "The rapper command is not available on this system."
+                'The rapper command is not available on this system.'
             );
         }
     }
@@ -77,7 +78,7 @@ class RapperTest extends TestCase
     {
         $this->setExpectedException(
             'EasyRdf\Exception',
-            "Version 1.4.17 or higher of rapper is required."
+            'Version 1.4.17 or higher of rapper is required.'
         );
         new Rapper('echo 1.0.0');
     }
@@ -102,7 +103,7 @@ class RapperTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertStringEquals('Joe Bloggs', $name);
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
 
         $foaf = $this->graph->resource('http://www.example.com/joe/foaf.rdf');
         $this->assertNotNull($foaf);

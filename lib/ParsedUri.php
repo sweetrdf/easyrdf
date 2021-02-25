@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,19 +32,17 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-
 /**
  * A RFC3986 compliant URI parser
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
- * @link       http://www.ietf.org/rfc/rfc3986.txt
+ *
+ * @see       http://www.ietf.org/rfc/rfc3986.txt
  */
 class ParsedUri
 {
@@ -64,11 +63,11 @@ class ParsedUri
      * associative array with the following keys:
      * scheme, authority, path, query, fragment
      *
-     * @param  mixed $uri  The URI as a string or an array
+     * @param mixed $uri The URI as a string or an array
      */
     public function __construct($uri = null)
     {
-        if (is_string($uri)) {
+        if (\is_string($uri)) {
             if (preg_match(self::URI_REGEX, $uri, $matches)) {
                 if (!empty($matches[1])) {
                     $this->scheme = isset($matches[2]) ? $matches[2] : '';
@@ -84,7 +83,7 @@ class ParsedUri
                     $this->fragment = isset($matches[9]) ? $matches[9] : '';
                 }
             }
-        } elseif (is_array($uri)) {
+        } elseif (\is_array($uri)) {
             $this->scheme = isset($uri['scheme']) ? $uri['scheme'] : null;
             $this->authority = isset($uri['authority']) ? $uri['authority'] : null;
             $this->path = isset($uri['path']) ? $uri['path'] : null;
@@ -93,21 +92,20 @@ class ParsedUri
         }
     }
 
-
     /** Returns true if this is an absolute (complete) URI
-     * @return boolean
+     * @return bool
      */
     public function isAbsolute()
     {
-        return $this->scheme !== null;
+        return null !== $this->scheme;
     }
 
     /** Returns true if this is an relative (partial) URI
-     * @return boolean
+     * @return bool
      */
     public function isRelative()
     {
-        return $this->scheme === null;
+        return null === $this->scheme;
     }
 
     /** Returns the scheme of the URI (e.g. http)
@@ -190,7 +188,6 @@ class ParsedUri
         $this->fragment = $fragment;
     }
 
-
     /**
      * Normalises the path of this URI if it has one.
      *
@@ -206,38 +203,38 @@ class ParsedUri
         }
 
         // Remove ./ from the start
-        if (substr($this->path, 0, 2) == './') {
+        if ('./' == substr($this->path, 0, 2)) {
             // Remove both characters
             $this->path = substr($this->path, 2);
         }
 
         // Remove /. from the end
-        if (substr($this->path, -2) == '/.') {
+        if ('/.' == substr($this->path, -2)) {
             // Remove only the last dot, not the slash!
             $this->path = substr($this->path, 0, -1);
         }
 
-        if (substr($this->path, -3) == '/..') {
+        if ('/..' == substr($this->path, -3)) {
             $this->path .= '/';
         }
 
         // Split the path into its segments
         $segments = explode('/', $this->path);
-        $newSegments = array();
+        $newSegments = [];
 
         // Remove all unnecessary '.' and '..' segments
         foreach ($segments as $segment) {
-            if ($segment == '..') {
+            if ('..' == $segment) {
                 // Remove the previous part of the path
-                $count = count($newSegments);
-                if ($count > 0 && $newSegments[$count-1]) {
+                $count = \count($newSegments);
+                if ($count > 0 && $newSegments[$count - 1]) {
                     array_pop($newSegments);
                 }
-            } elseif ($segment == '.') {
+            } elseif ('.' == $segment) {
                 // Ignore
                 continue;
             } else {
-                array_push($newSegments, $segment);
+                $newSegments[] = $segment;
             }
         }
 
@@ -254,7 +251,7 @@ class ParsedUri
     public function resolve($relUri)
     {
         // If it is a string, then convert it to a parsed object
-        if (is_string($relUri)) {
+        if (\is_string($relUri)) {
             $relUri = new self($relUri);
         }
 
@@ -279,18 +276,18 @@ class ParsedUri
                         $target->query = $this->query;
                     }
                 } else {
-                    if (substr($relUri->path, 0, 1) == '/') {
+                    if ('/' == substr($relUri->path, 0, 1)) {
                         $target->path = $relUri->path;
                     } else {
                         $path = $this->path;
                         $lastSlash = strrpos($path, '/');
-                        if ($lastSlash !== false) {
+                        if (false !== $lastSlash) {
                             $path = substr($path, 0, $lastSlash + 1);
                         } else {
                             $path = '/';
                         }
 
-                        $target->path .= $path . $relUri->path;
+                        $target->path .= $path.$relUri->path;
                     }
                     $target->query = $relUri->query;
                 }
@@ -313,19 +310,20 @@ class ParsedUri
     public function toString()
     {
         $str = '';
-        if ($this->scheme !== null) {
-            $str .= $this->scheme . ':';
+        if (null !== $this->scheme) {
+            $str .= $this->scheme.':';
         }
-        if ($this->authority !== null) {
-            $str .= '//' . $this->authority;
+        if (null !== $this->authority) {
+            $str .= '//'.$this->authority;
         }
         $str .= $this->path;
-        if ($this->query !== null) {
-            $str .= '?' . $this->query;
+        if (null !== $this->query) {
+            $str .= '?'.$this->query;
         }
-        if ($this->fragment !== null) {
-            $str .= '#' . $this->fragment;
+        if (null !== $this->fragment) {
+            $str .= '#'.$this->fragment;
         }
+
         return $str;
     }
 

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Parser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class NtriplesTest extends TestCase
 {
@@ -50,7 +51,7 @@ class NtriplesTest extends TestCase
     protected $graph = null;
     protected $nt_data = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->parser = new Ntriples();
@@ -72,7 +73,7 @@ class NtriplesTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joe Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
     }
 
     public function testParseBnode()
@@ -88,12 +89,12 @@ class NtriplesTest extends TestCase
 
         $bnode1 = $this->graph->resource('_:genid1');
         $this->assertNotNull($bnode1);
-        $this->assertSame(true, $bnode1->isBNode());
+        $this->assertTrue($bnode1->isBNode());
         $this->assertStringEquals('c', $bnode1->get('<http://example.com/b>'));
 
         $bnode2 = $this->graph->resource('_:genid2');
         $this->assertNotNull($bnode2);
-        $this->assertSame(true, $bnode2->isBNode());
+        $this->assertTrue($bnode2->isBNode());
         $this->assertSame($bnode1, $bnode2->get('<http://example.com/e>'));
     }
 
@@ -109,11 +110,11 @@ class NtriplesTest extends TestCase
         $this->assertSame(2, $count);
 
         $bnode1 = $this->graph->resource('_:genid1');
-        $this->assertSame(true, $bnode1->isBNode());
+        $this->assertTrue($bnode1->isBNode());
         $this->assertStringEquals('_:genid2', $bnode1->get('<http://example.com/a>'));
 
         $bnode2 = $this->graph->resource('_:genid3');
-        $this->assertSame(true, $bnode2->isBNode());
+        $this->assertTrue($bnode2->isBNode());
         $this->assertStringEquals('_:genid4', $bnode2->get('<http://example.com/b>'));
     }
 
@@ -131,7 +132,7 @@ class NtriplesTest extends TestCase
         $this->assertNotNull($int);
         $this->assertSame('English', $int->getValue());
         $this->assertSame('en-gb', $int->getLang());
-        $this->assertSame(null, $int->getDatatype());
+        $this->assertNull($int->getDatatype());
     }
 
     public function testParseDatatype()
@@ -147,7 +148,7 @@ class NtriplesTest extends TestCase
         $int = $this->graph->get('http://example.com/a', '<http://example.com/b>');
         $this->assertNotNull($int);
         $this->assertSame(1, $int->getValue());
-        $this->assertSame(null, $int->getLang());
+        $this->assertNull($int->getLang());
         $this->assertSame('xsd:integer', $int->getDatatype());
     }
 
@@ -196,7 +197,7 @@ class NtriplesTest extends TestCase
 
         $a = $this->graph->resource('http://example.com/a');
         $b = $a->get('<http://example.com/b>');
-        $this->assertSame("http://example.com/Iván", $b->getUri());
+        $this->assertSame('http://example.com/Iván', $b->getUri());
     }
 
     public function testParseUnicodeSubjectUri()
@@ -225,7 +226,7 @@ class NtriplesTest extends TestCase
 
         $a = $this->graph->resource('http://example.com/a');
         $b = $a->get('<http://example.com/b>');
-        $this->assertSame("Iván", $b->getValue());
+        $this->assertSame('Iván', $b->getValue());
     }
 
     public function testParseUnicode3()
@@ -240,7 +241,7 @@ class NtriplesTest extends TestCase
 
         $a = $this->graph->resource('http://example.com/a');
         $b = $a->get('<http://example.com/b>');
-        $this->assertSame("Δ", $b->getValue());
+        $this->assertSame('Δ', $b->getValue());
     }
 
     public function testParseUnicode4()
@@ -255,7 +256,7 @@ class NtriplesTest extends TestCase
 
         $a = $this->graph->resource('http://example.com/a');
         $b = $a->get('<http://example.com/b>');
-        $this->assertSame("☃", $b->getValue());
+        $this->assertSame('☃', $b->getValue());
     }
 
     public function testParseUnicode5()
@@ -270,7 +271,7 @@ class NtriplesTest extends TestCase
 
         $a = $this->graph->resource('http://example.com/a');
         $b = $a->get('<http://example.com/b>');
-        $this->assertSame("😀", $b->getValue());
+        $this->assertSame('😀', $b->getValue());
     }
 
     public function testParseUnicode6()
@@ -285,7 +286,7 @@ class NtriplesTest extends TestCase
 
         $a = $this->graph->resource('http://example.com/a');
         $b = $a->get('<http://example.com/b>');
-        $this->assertSame("", $b->getValue());
+        $this->assertSame('', $b->getValue());
     }
 
     public function testParseComment()
@@ -312,7 +313,7 @@ class NtriplesTest extends TestCase
             "  \r\n".
             "\r\n".
             "<http://example.com/c> <http://example.com/c> \"Test 2\" .\n".
-            "    ",
+            '    ',
             'ntriples',
             null
         );

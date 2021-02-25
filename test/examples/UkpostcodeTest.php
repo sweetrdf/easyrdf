@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class UkpostcodeTest extends \EasyRdf\TestCase
 {
@@ -51,7 +50,7 @@ class UkpostcodeTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'uk_postcode.php',
-            array('postcode' => 'W1A 1AA')
+            ['postcode' => 'W1A 1AA']
         );
         $this->assertContains('<tr><th>Longitude:</th><td>-0.143799</td></tr>', $output);
         $this->assertContains('<tr><th>Latitude:</th><td>51.518561</td></tr>', $output);

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -42,7 +43,6 @@ use EasyRdf\Graph;
  *
  * https://www.easyrdf.org/docs/rdf-formats-json
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -55,7 +55,7 @@ class Json extends RdfPhp
      */
     public function __construct()
     {
-        $this->jsonLastErrorExists = function_exists('json_last_error');
+        $this->jsonLastErrorExists = \function_exists('json_last_error');
     }
 
     /** Return the last JSON parser error as a string
@@ -68,23 +68,23 @@ class Json extends RdfPhp
     {
         if ($this->jsonLastErrorExists) {
             switch (json_last_error()) {
-                case JSON_ERROR_NONE:
+                case \JSON_ERROR_NONE:
                     return null;
-                case JSON_ERROR_DEPTH:
-                    return "JSON Parse error: the maximum stack depth has been exceeded";
-                case JSON_ERROR_STATE_MISMATCH:
-                    return "JSON Parse error: invalid or malformed JSON";
-                case JSON_ERROR_CTRL_CHAR:
-                    return "JSON Parse error: control character error, possibly incorrectly encoded";
-                case JSON_ERROR_SYNTAX:
-                    return "JSON Parse syntax error";
-                case JSON_ERROR_UTF8:
-                    return "JSON Parse error: malformed UTF-8 characters, possibly incorrectly encoded";
+                case \JSON_ERROR_DEPTH:
+                    return 'JSON Parse error: the maximum stack depth has been exceeded';
+                case \JSON_ERROR_STATE_MISMATCH:
+                    return 'JSON Parse error: invalid or malformed JSON';
+                case \JSON_ERROR_CTRL_CHAR:
+                    return 'JSON Parse error: control character error, possibly incorrectly encoded';
+                case \JSON_ERROR_SYNTAX:
+                    return 'JSON Parse syntax error';
+                case \JSON_ERROR_UTF8:
+                    return 'JSON Parse error: malformed UTF-8 characters, possibly incorrectly encoded';
                 default:
-                    return "JSON Parse error: unknown";
+                    return 'JSON Parse error: unknown';
             }
         } else {
-            return "JSON Parse error";
+            return 'JSON Parse error';
         }
     }
 
@@ -97,7 +97,7 @@ class Json extends RdfPhp
     protected function parseJsonTriples($data, $baseUri)
     {
         foreach ($data['triples'] as $triple) {
-            if ($triple['subject']['type'] == 'bnode') {
+            if ('bnode' == $triple['subject']['type']) {
                 $subject = $this->remapBnode($triple['subject']['value']);
             } else {
                 $subject = $triple['subject']['value'];
@@ -105,11 +105,11 @@ class Json extends RdfPhp
 
             $predicate = $triple['predicate']['value'];
 
-            if ($triple['object']['type'] == 'bnode') {
-                $object = array(
+            if ('bnode' == $triple['object']['type']) {
+                $object = [
                     'type' => 'bnode',
-                    'value' => $this->remapBnode($triple['object']['value'])
-                );
+                    'value' => $this->remapBnode($triple['object']['value']),
+                ];
             } else {
                 $object = $triple['object'];
             }
@@ -130,26 +130,23 @@ class Json extends RdfPhp
      *
      * @throws Exception
      * @throws \EasyRdf\Exception
-     * @return integer             The number of triples added to the graph
+     *
+     * @return int The number of triples added to the graph
      */
     public function parse($graph, $data, $format, $baseUri)
     {
         $this->checkParseParams($graph, $data, $format, $baseUri);
 
-        if ($format != 'json') {
-            throw new \EasyRdf\Exception(
-                "EasyRdf\\Parser\\Json does not support: {$format}"
-            );
+        if ('json' != $format) {
+            throw new \EasyRdf\Exception("EasyRdf\\Parser\\Json does not support: {$format}");
         }
 
-        $decoded = @json_decode(strval($data), true);
-        if ($decoded === null) {
-            throw new Exception(
-                $this->jsonLastErrorString()
-            );
+        $decoded = @json_decode((string) $data, true);
+        if (null === $decoded) {
+            throw new Exception($this->jsonLastErrorString());
         }
 
-        if (array_key_exists('triples', $decoded)) {
+        if (\array_key_exists('triples', $decoded)) {
             return $this->parseJsonTriples($decoded, $baseUri);
         } else {
             return parent::parse($graph, $decoded, 'php', $baseUri);

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -41,8 +42,8 @@ use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(dirname(__FILE__))).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class TurtleTest extends TestCase
 {
@@ -51,13 +52,13 @@ class TurtleTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->serialiser = new Turtle();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         RdfNamespace::reset();
         RdfNamespace::resetNamespaces();
@@ -305,7 +306,7 @@ class TurtleTest extends TestCase
     public function testSerialiseAnonymousSubject()
     {
         $this->graph->resource('http://example.com/joe#me');
-        $anon =  $this->graph->newBnode();
+        $anon = $this->graph->newBnode();
         $anon->addLiteral('foaf:name', 'Anon');
 
         $turtle = $this->serialiser->serialise($this->graph, 'turtle');
@@ -321,7 +322,7 @@ class TurtleTest extends TestCase
     {
         $joe = $this->graph->resource('http://example.com/joe#me');
         $alice = $this->graph->resource('http://example.com/alice#me');
-        $project =  $this->graph->newBnode();
+        $project = $this->graph->newBnode();
         $project->add('foaf:name', 'Amazing Project');
         $joe->add('foaf:currentProject', $project);
         $alice->add('foaf:currentProject', $project);
@@ -339,7 +340,7 @@ class TurtleTest extends TestCase
     public function testSerialiseNestedBnode1()
     {
         $joe = $this->graph->resource('http://example.com/joe#me');
-        $amy =  $this->graph->newBnode();
+        $amy = $this->graph->newBnode();
         $amy->addLiteral('foaf:name', 'Amy');
         $joe->add('foaf:knows', $amy);
 
@@ -400,8 +401,8 @@ class TurtleTest extends TestCase
 
     public function testSerialiseNestedBnode4()
     {
-        $joe =  $this->graph->newBnode();
-        $alice =  $this->graph->newBnode();
+        $joe = $this->graph->newBnode();
+        $alice = $this->graph->newBnode();
         $joe->add('foaf:name', 'Joe');
         $alice->add('foaf:name', 'Alice');
         $joe->add('foaf:knows', $alice);
@@ -422,8 +423,8 @@ class TurtleTest extends TestCase
 
     public function testSerialiseCollection()
     {
-        $joe =  $this->graph->resource('http://example.com/joe');
-        $pets =  $this->graph->newBnode('rdf:List');
+        $joe = $this->graph->resource('http://example.com/joe');
+        $pets = $this->graph->newBnode('rdf:List');
         $pets->append('Rat');
         $pets->append('Cat');
         $pets->append('Goat');
@@ -443,8 +444,8 @@ class TurtleTest extends TestCase
 
     public function testSerialiseCollectionSingle()
     {
-        $joe =  $this->graph->resource('http://example.com/joe');
-        $pets =  $this->graph->newBnode('rdf:List');
+        $joe = $this->graph->resource('http://example.com/joe');
+        $pets = $this->graph->newBnode('rdf:List');
         $pets->append('Rat');
         $joe->add('foaf:pets', $pets);
 
@@ -458,8 +459,8 @@ class TurtleTest extends TestCase
 
     public function testSerialiseCollectionEmpty()
     {
-        $joe =  $this->graph->resource('http://example.com/joe');
-        $pets =  $this->graph->newBnode('rdf:List');
+        $joe = $this->graph->resource('http://example.com/joe');
+        $pets = $this->graph->newBnode('rdf:List');
         $joe->add('foaf:pets', $pets);
 
         $turtle = $this->serialiser->serialise($this->graph, 'turtle');
@@ -647,7 +648,7 @@ class TurtleTest extends TestCase
 
     public function testSerialiseShortenableResource()
     {
-        RdfNamespace::set("example", 'http://example.com/');
+        RdfNamespace::set('example', 'http://example.com/');
         $joe = $this->graph->resource('http://example.com/joe#me');
         $joe->add('rdf:type', 'foaf:Person');
 
@@ -682,7 +683,7 @@ class TurtleTest extends TestCase
 
         $turtle = $this->serialiser->serialise($this->graph, 'turtle');
         $this->assertContains(
-            "@prefix ns0: <http://example.com/ns/> .",
+            '@prefix ns0: <http://example.com/ns/> .',
             $turtle
         );
         $this->assertSame(

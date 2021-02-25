@@ -1,17 +1,17 @@
 <?php
 
-require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
+require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
 
-$parsers = array(
+$parsers = [
     'Arc',
     'Json',
     'Ntriples',
     'RdfXml',
     'Rapper',
     'Turtle',
-);
+];
 
-$documents = array(
+$documents = [
     'foaf.rdf' => 'rdfxml',
     'foaf.ttl' => 'turtle',
     'foaf.nt' => 'ntriples',
@@ -24,23 +24,23 @@ $documents = array(
     'london.ttl' => 'turtle',
     'london.nt' => 'ntriples',
     'london.json' => 'json',
-);
+];
 
 foreach ($documents as $filename => $type) {
-    print "Input file: $filename\n";
-    $filepath = dirname(__FILE__) . "/performance/$filename";
+    echo "Input file: $filename\n";
+    $filepath = __DIR__."/performance/$filename";
     if (!file_exists($filepath)) {
-        print "Error: File does not exist.\n";
+        echo "Error: File does not exist.\n";
         continue;
     }
 
     $url = "http://www.example.com/$filename";
     $data = file_get_contents($filepath);
-    print "File size: ".strlen($data)." bytes\n";
+    echo 'File size: '.strlen($data)." bytes\n";
 
     foreach ($parsers as $parser_name) {
         $class = "EasyRdf\\Parser\\{$parser_name}";
-        print "  Parsing using: {$class}\n";
+        echo "  Parsing using: {$class}\n";
 
         try {
             $parser = new $class();
@@ -49,12 +49,12 @@ foreach ($documents as $filename => $type) {
             $start = microtime(true);
             $parser->parse($graph, $data, $type, $url);
             $duration = microtime(true) - $start;
-            print "  Parse time: $duration seconds\n";
-            print "  Triple count: ".$graph->countTriples()."\n";
+            echo "  Parse time: $duration seconds\n";
+            echo '  Triple count: '.$graph->countTriples()."\n";
         } catch (Exception $e) {
-            print 'Parsing failed: '.$e->getMessage()."\n";
+            echo 'Parsing failed: '.$e->getMessage()."\n";
         }
-        print "\n";
+        echo "\n";
 
         unset($graph);
     }

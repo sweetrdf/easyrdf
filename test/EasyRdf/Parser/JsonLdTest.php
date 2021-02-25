@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,13 +41,12 @@ use EasyRdf\Format;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 /**
  * JSON-LD parsing tests
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2014 Markus Lanthaler
  * @author     Markus Lanthaler <mail@markus-lanthaler.com>
  * @license    https://www.opensource.org/licenses/bsd-license.php
@@ -59,7 +59,7 @@ class JsonLdTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->parser = new JsonLd();
@@ -81,7 +81,7 @@ class JsonLdTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joe Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
 
         $project = $joe->get('foaf:currentProject');
         $this->assertNotNull($project);

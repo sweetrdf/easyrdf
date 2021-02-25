@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,8 +39,7 @@ namespace EasyRdf\Literal;
 
 use EasyRdf\TestCase;
 
-require_once realpath(__DIR__ . '/../../') . '/TestHelper.php';
-
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class HTMLTest extends TestCase
 {
@@ -50,7 +50,7 @@ class HTMLTest extends TestCase
         $this->assertStringEquals('<p>Hello World</p>', $literal);
         $this->assertInternalType('string', $literal->getValue());
         $this->assertSame('<p>Hello World</p>', $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertNull($literal->getLang());
         $this->assertSame('rdf:HTML', $literal->getDatatype());
     }
 

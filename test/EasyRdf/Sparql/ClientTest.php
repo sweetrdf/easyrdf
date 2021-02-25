@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Sparql;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -42,18 +43,17 @@ use EasyRdf\Literal;
 use EasyRdf\Resource;
 use EasyRdf\TestCase;
 
-require_once realpath(__DIR__ . '/../../') . '/TestHelper.php';
-
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class ClientTest extends TestCase
 {
-    /** @var  MockClient */
+    /** @var MockClient */
     private $client;
 
-    /** @var  Client */
+    /** @var Client */
     private $sparql;
 
-    public function setUp()
+    protected function setUp()
     {
         Http::setDefaultHttpClient(
             $this->client = new MockClient()
@@ -61,7 +61,7 @@ class ClientTest extends TestCase
         $this->sparql = new Client('http://localhost:8080/sparql');
     }
 
-    # FIXME: this is deprecated
+    // FIXME: this is deprecated
     public function testGetUri()
     {
         $this->assertSame(
@@ -108,11 +108,11 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('sparql_select_all.xml'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+xml')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+xml'],
+            ]
         );
-        $result = $this->sparql->query("SELECT * WHERE {?s ?p ?o}");
+        $result = $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
         $this->assertCount(14, $result);
         $this->assertEquals(
             new Resource('_:genid1'),
@@ -134,14 +134,14 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('sparql_select_all.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+json; charset=utf-8')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+json; charset=utf-8'],
+            ]
         );
-        $result = $this->sparql->query("SELECT * WHERE {?s ?p ?o}");
+        $result = $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
         $this->assertCount(14, $result);
         $this->assertSame(3, $result->numFields());
-        $this->assertSame(array('s','p','o'), $result->getFields());
+        $this->assertSame(['s', 'p', 'o'], $result->getFields());
         $this->assertEquals(
             new Literal("Joe's Current Project"),
             $result[0]->o
@@ -154,21 +154,22 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('sparql_select_all.json'),
-            array(
-                'headers' => array('Content-Type' => 'unsupported/format')
-            )
+            [
+                'headers' => ['Content-Type' => 'unsupported/format'],
+            ]
         );
         $this->setExpectedException(
             'EasyRdf\Exception',
             'Format is not recognised: unsupported/format'
         );
-        $this->sparql->query("SELECT * WHERE {?s ?p ?o}");
+        $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
     }
 
     public function checkHugeQuerySelect($client)
     {
         $this->assertRegExp('/^query=/', $client->getRawData());
-        $this->assertSame("application/x-www-form-urlencoded", $client->getHeader('Content-Type'));
+        $this->assertSame('application/x-www-form-urlencoded', $client->getHeader('Content-Type'));
+
         return true;
     }
 
@@ -178,10 +179,10 @@ class ClientTest extends TestCase
             'POST',
             '/sparql',
             readFixture('sparql_select_all.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+json'),
-                'callback' => array($this, 'checkHugeQuerySelect')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+json'],
+                'callback' => [$this, 'checkHugeQuerySelect'],
+            ]
         );
 
         // Add extra 2k+ of comment to start of query
@@ -198,11 +199,11 @@ class ClientTest extends TestCase
             '1999%2F02%2F22-rdf-syntax-ns%23%3E%0ASELECT+%3Ft+WHERE+'.
             '%7B%3Fs+rdf%3Atype+%3Ft%7D',
             readFixture('sparql_select_all_types.xml'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+xml')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+xml'],
+            ]
         );
-        $result = $this->sparql->query("SELECT ?t WHERE {?s rdf:type ?t}");
+        $result = $this->sparql->query('SELECT ?t WHERE {?s rdf:type ?t}');
         $this->assertCount(3, $result);
         $this->assertEquals(
             new Resource('http://xmlns.com/foaf/0.1/Project'),
@@ -224,12 +225,12 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=ASK+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('sparql_ask_true.xml'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+xml')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+xml'],
+            ]
         );
-        $result = $this->sparql->query("ASK WHERE {?s ?p ?o}");
-        $this->assertSame(true, $result->getBoolean());
+        $result = $this->sparql->query('ASK WHERE {?s ?p ?o}');
+        $this->assertTrue($result->getBoolean());
     }
 
     public function testQueryAskFalse()
@@ -238,12 +239,12 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=ASK+WHERE+%7B%3Fs+%3Fp+%3Cfalse%3E%7D',
             readFixture('sparql_ask_false.xml'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+xml')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+xml'],
+            ]
         );
-        $result = $this->sparql->query("ASK WHERE {?s ?p <false>}");
-        $this->assertSame(false, $result->getBoolean());
+        $result = $this->sparql->query('ASK WHERE {?s ?p <false>}');
+        $this->assertFalse($result->getBoolean());
     }
 
     public function testQueryConstructJson()
@@ -252,11 +253,11 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=CONSTRUCT+%7B%3Fs+%3Fp+%3Fo%7D+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('foaf.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/json')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+            ]
         );
-        $graph = $this->sparql->query("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
+        $graph = $this->sparql->query('CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}');
         $this->assertClass('EasyRdf\Graph', $graph);
         $name = $graph->get('http://www.example.com/joe#me', 'foaf:name');
         $this->assertStringEquals('Joe Bloggs', $name);
@@ -268,11 +269,11 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=CONSTRUCT+%7B%3Fs+%3Fp+%3Fo%7D+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('foaf.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/json; charset=utf-8')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/json; charset=utf-8'],
+            ]
         );
-        $graph = $this->sparql->query("CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}");
+        $graph = $this->sparql->query('CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}');
         $this->assertClass('EasyRdf\Graph', $graph);
         $name = $graph->get('http://www.example.com/joe#me', 'foaf:name');
         $this->assertStringEquals('Joe Bloggs', $name);
@@ -286,14 +287,14 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=FOOBAR',
             $body,
-            array(
+            [
                 'status' => 500,
-                'headers' => array('Content-Type' => 'text/plain')
-            )
+                'headers' => ['Content-Type' => 'text/plain'],
+            ]
         );
 
         try {
-            $this->sparql->query("FOOBAR");
+            $this->sparql->query('FOOBAR');
             $this->fail('Invalid query should have resulted in an exception');
         } catch (Http\Exception $e) {
             $this->assertEquals('HTTP request for SPARQL query failed', $e->getMessage());
@@ -307,9 +308,9 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=SELECT+%28COUNT%28%2A%29+AS+%3Fcount%29+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('sparql_select_count.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+json; charset=utf-8')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+json; charset=utf-8'],
+            ]
         );
         $count = $this->sparql->countTriples();
         $this->assertSame(143, $count);
@@ -322,9 +323,9 @@ class ClientTest extends TestCase
             '/sparql?query=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2F%3E%0A'.
             'SELECT+%28COUNT%28%2A%29+AS+%3Fcount%29+%7B%3Fs+a+foaf%3APerson%7D',
             readFixture('sparql_select_count_zero.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+json; charset=utf-8')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+json; charset=utf-8'],
+            ]
         );
         $count = $this->sparql->countTriples('?s a foaf:Person');
         $this->assertSame(0, $count);
@@ -336,9 +337,9 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=SELECT+DISTINCT+%3Fg+WHERE+%7BGRAPH+%3Fg+%7B%3Fs+%3Fp+%3Fo%7D%7D',
             readFixture('sparql_select_named_graphs.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+json; charset=utf-8')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+json; charset=utf-8'],
+            ]
         );
         $list = $this->sparql->listNamedGraphs();
         $this->assertCount(3, $list);
@@ -353,9 +354,9 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?query=SELECT+DISTINCT+%3Fg+WHERE+%7BGRAPH+%3Fg+%7B%3Fs+%3Fp+%3Fo%7D%7D+LIMIT+10',
             readFixture('sparql_select_named_graphs.json'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+json; charset=utf-8')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+json; charset=utf-8'],
+            ]
         );
         $list = $this->sparql->listNamedGraphs(10);
         $this->assertCount(3, $list);
@@ -367,7 +368,8 @@ class ClientTest extends TestCase
     public function checkUpdate(Http\Client $client)
     {
         $this->assertSame('INSERT DATA { <a> <p> <b> }', $client->getRawData());
-        $this->assertSame("application/sparql-update", $client->getHeader('Content-Type'));
+        $this->assertSame('application/sparql-update', $client->getHeader('Content-Type'));
+
         return true;
     }
 
@@ -377,10 +379,10 @@ class ClientTest extends TestCase
             'POST',
             '/sparql',
             '',
-            array(
+            [
                 'status' => 204,
-                'callback' => array($this, 'checkUpdate')
-            )
+                'callback' => [$this, 'checkUpdate'],
+            ]
         );
 
         $result = $this->sparql->update('INSERT DATA { <a> <p> <b> }');
@@ -395,11 +397,11 @@ class ClientTest extends TestCase
             'GET',
             '/sparql?a=b&query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
             readFixture('sparql_select_all.xml'),
-            array(
-                'headers' => array('Content-Type' => 'application/sparql-results+xml')
-            )
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+xml'],
+            ]
         );
-        $result = $this->sparql->query("SELECT * WHERE {?s ?p ?o}");
+        $result = $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
         $this->assertCount(14, $result);
         $this->assertEquals(
             new Resource('_:genid1'),
@@ -418,6 +420,7 @@ class ClientTest extends TestCase
     /**
      * Make sure, that different queries have different Accept headers
      * This is important for compatibility with real-world triplestores
+     *
      * @see https://github.com/easyrdf/easyrdf/issues/226
      * @see https://github.com/easyrdf/easyrdf/issues/231
      */
@@ -539,11 +542,11 @@ class ClientTest extends TestCase
 
     private static function parseAcceptHeader($accept_str)
     {
-        $types = array();
+        $types = [];
 
         $pieces = explode(',', $accept_str);
         foreach ($pieces as $piece) {
-            list($type,) = explode(';', $piece, 2);
+            list($type) = explode(';', $piece, 2);
             $types[] = $type;
         }
 

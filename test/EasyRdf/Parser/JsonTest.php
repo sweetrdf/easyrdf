@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Format;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class JsonTest extends TestCase
 {
@@ -50,7 +51,7 @@ class JsonTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->parser = new Json();
@@ -72,7 +73,7 @@ class JsonTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joe Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
 
         $project = $joe->get('foaf:currentProject');
         $this->assertNotNull($project);
@@ -96,7 +97,7 @@ class JsonTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joe Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
 
         $project = $joe->get('foaf:currentProject');
         $this->assertNotNull($project);
@@ -117,7 +118,7 @@ class JsonTest extends TestCase
 
     public function testParseBadJson()
     {
-        # Test parsing JSON with 'bad' bnode identifiers
+        // Test parsing JSON with 'bad' bnode identifiers
         $data = readFixture('foaf.bad-json');
         $count = $this->parser->parse($this->graph, $data, 'json', 'http://www.bbc.co.uk/');
         $this->assertSame(14, $count);
@@ -130,7 +131,7 @@ class JsonTest extends TestCase
         $this->assertTrue($project->isBNode());
         $this->assertStringEquals("Joe's Current Project", $project->label());
 
-        # Test going the other way
+        // Test going the other way
         $project2 = $this->graph->resource('foaf:Project')->get('^rdf:type');
         $this->assertNotNull($project2);
         $this->assertTrue($project2->isBNode());

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,12 +41,11 @@ use EasyRdf\Format;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once realpath(__DIR__ . '/../../') . '/TestHelper.php';
-
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class HexBinaryTest extends TestCase
 {
-    public function setup()
+    protected function setup()
     {
         // Reset to built-in parsers
         Format::registerParser('ntriples', 'EasyRdf\Parser\Ntriples');
@@ -59,7 +59,7 @@ class HexBinaryTest extends TestCase
         $this->assertStringEquals('48656C6C6F', $literal);
         $this->assertInternalType('string', $literal->getValue());
         $this->assertSame('48656C6C6F', $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:hexBinary', $literal->getDatatype());
         $this->assertSame('Hello', $literal->toBinary());
     }
@@ -97,11 +97,11 @@ class HexBinaryTest extends TestCase
     {
         $literal = new HexBinary('48656C6C6F');
         $this->assertSame(
-            array(
+            [
                 'type' => 'literal',
                 'value' => '48656C6C6F',
-                'datatype' => 'http://www.w3.org/2001/XMLSchema#hexBinary'
-            ),
+                'datatype' => 'http://www.w3.org/2001/XMLSchema#hexBinary',
+            ],
             $literal->toRdfPhp()
         );
     }
@@ -133,7 +133,7 @@ class HexBinaryTest extends TestCase
             $modulus
         );
         $this->assertInternalType('string', $modulus->getValue());
-        $this->assertSame(null, $modulus->getLang());
+        $this->assertNull($modulus->getLang());
         $this->assertSame('xsd:hexBinary', $modulus->getDatatype());
     }
 }

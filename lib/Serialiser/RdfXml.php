@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-    /**
+    /*
  * EasyRdf
  *
  * LICENSE
@@ -47,47 +48,47 @@ use EasyRdf\Serialiser;
  * Class to serialise an EasyRdf\Graph to RDF/XML
  * with no external dependencies.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class RdfXml extends Serialiser
 {
-    private $outputtedResources = array();
+    private $outputtedResources = [];
 
     /** A constant for the RDF Type property URI */
     const RDF_XML_LITERAL = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral';
 
     /**
      * Protected method to serialise an object node into an XML object
+     *
      * @ignore
      */
     protected function rdfxmlObject($property, $obj, $depth)
     {
         $indent = str_repeat('  ', $depth);
 
-        if ($property[0] === ':') {
+        if (':' === $property[0]) {
             $property = substr($property, 1);
         }
 
-        if (is_object($obj) and $obj instanceof Resource) {
-            $pcount = count($obj->propertyUris());
+        if (\is_object($obj) && $obj instanceof Resource) {
+            $pcount = \count($obj->propertyUris());
             $rpcount = $this->reversePropertyCount($obj);
             $alreadyOutput = isset($this->outputtedResources[$obj->getUri()]);
 
             $tag = "{$indent}<{$property}";
             if ($obj->isBNode()) {
-                if ($alreadyOutput or $rpcount > 1 or $pcount == 0) {
-                    $tag .= " rdf:nodeID=\"".htmlspecialchars($obj->getBNodeId()).'"';
+                if ($alreadyOutput || $rpcount > 1 || 0 == $pcount) {
+                    $tag .= ' rdf:nodeID="'.htmlspecialchars($obj->getBNodeId()).'"';
                 }
             } else {
-                if ($alreadyOutput or $rpcount != 1 or $pcount == 0) {
-                    $tag .= " rdf:resource=\"".htmlspecialchars($obj->getURI()).'"';
+                if ($alreadyOutput || 1 != $rpcount || 0 == $pcount) {
+                    $tag .= ' rdf:resource="'.htmlspecialchars($obj->getURI()).'"';
                 }
             }
 
-            if ($alreadyOutput == false and $rpcount == 1 and $pcount > 0) {
-                $xml = $this->rdfxmlResource($obj, false, $depth+1);
+            if (false == $alreadyOutput && 1 == $rpcount && $pcount > 0) {
+                $xml = $this->rdfxmlResource($obj, false, $depth + 1);
                 if ($xml) {
                     return "$tag>$xml$indent</$property>\n\n";
                 } else {
@@ -96,13 +97,13 @@ class RdfXml extends Serialiser
             } else {
                 return $tag."/>\n";
             }
-        } elseif (is_object($obj) and $obj instanceof Literal) {
-            $atrributes = "";
+        } elseif (\is_object($obj) && $obj instanceof Literal) {
+            $atrributes = '';
             $datatype = $obj->getDatatypeUri();
             if ($datatype) {
-                if ($datatype == self::RDF_XML_LITERAL) {
-                    $atrributes .= " rdf:parseType=\"Literal\"";
-                    $value = strval($obj);
+                if (self::RDF_XML_LITERAL == $datatype) {
+                    $atrributes .= ' rdf:parseType="Literal"';
+                    $value = (string) $obj;
                 } else {
                     $datatype = htmlspecialchars($datatype);
                     $atrributes .= " rdf:datatype=\"$datatype\"";
@@ -114,19 +115,18 @@ class RdfXml extends Serialiser
 
             // Escape the value
             if (!isset($value)) {
-                $value = htmlspecialchars(strval($obj));
+                $value = htmlspecialchars((string) $obj);
             }
 
             return "{$indent}<{$property}{$atrributes}>{$value}</{$property}>\n";
         } else {
-            throw new Exception(
-                "Unable to serialise object to xml: ".getType($obj)
-            );
+            throw new Exception('Unable to serialise object to xml: '.\gettype($obj));
         }
     }
 
     /**
      * Protected method to serialise a whole resource and its properties
+     *
      * @ignore
      */
     protected function rdfxmlResource($res, $showNodeId, $depth = 1)
@@ -140,7 +140,7 @@ class RdfXml extends Serialiser
 
         // If the resource has no properties - don't serialise it
         $properties = $res->propertyUris();
-        if (count($properties) == 0) {
+        if (0 == \count($properties)) {
             return '';
         }
 
@@ -164,7 +164,7 @@ class RdfXml extends Serialiser
 
         if ($res instanceof Container) {
             foreach ($res as $item) {
-                $xml .= $this->rdfxmlObject('rdf:li', $item, $depth+1);
+                $xml .= $this->rdfxmlObject('rdf:li', $item, $depth + 1);
             }
         } else {
             foreach ($properties as $property) {
@@ -172,17 +172,14 @@ class RdfXml extends Serialiser
                 if ($short) {
                     $this->addPrefix($short);
                     $objects = $res->all("<$property>");
-                    if ($short == 'rdf:type' && $type != 'rdf:Description') {
+                    if ('rdf:type' == $short && 'rdf:Description' != $type) {
                         array_shift($objects);
                     }
                     foreach ($objects as $object) {
-                        $xml .= $this->rdfxmlObject($short, $object, $depth+1);
+                        $xml .= $this->rdfxmlObject($short, $object, $depth + 1);
                     }
                 } else {
-                    throw new Exception(
-                        "It is not possible to serialse the property ".
-                        "'$property' to RDF/XML."
-                    );
+                    throw new Exception('It is not possible to serialse the property '."'$property' to RDF/XML.");
                 }
             }
         }
@@ -191,32 +188,29 @@ class RdfXml extends Serialiser
         return $xml;
     }
 
-
     /**
      * Method to serialise an EasyRdf\Graph to RDF/XML
      *
-     * @param Graph  $graph  An EasyRdf\Graph object.
-     * @param string $format The name of the format to convert to.
-     * @param array  $options
+     * @param Graph  $graph  an EasyRdf\Graph object
+     * @param string $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
+     *
      * @throws Exception
      */
-    public function serialise(Graph $graph, $format, array $options = array())
+    public function serialise(Graph $graph, $format, array $options = [])
     {
         parent::checkSerialiseParams($format);
 
-        if ($format != 'rdfxml') {
-            throw new Exception(
-                "EasyRdf\\Serialiser\\RdfXml does not support: {$format}"
-            );
+        if ('rdfxml' != $format) {
+            throw new Exception("EasyRdf\\Serialiser\\RdfXml does not support: {$format}");
         }
 
         // store of namespaces to be appended to the rdf:RDF tag
-        $this->prefixes = array('rdf' => true);
+        $this->prefixes = ['rdf' => true];
 
         // store of the resource URIs we have serialised
-        $this->outputtedResources = array();
+        $this->outputtedResources = [];
 
         $xml = '';
 
@@ -239,11 +233,11 @@ class RdfXml extends Serialiser
         foreach ($this->prefixes as $prefix => $count) {
             $url = RdfNamespace::get($prefix);
 
-            if (strlen($namespaceStr)) {
+            if (\strlen($namespaceStr)) {
                 $namespaceStr .= "\n        ";
             }
 
-            if (strlen($prefix) === 0) {
+            if (0 === \strlen($prefix)) {
                 $namespaceStr .= ' xmlns="'.htmlspecialchars($url).'"';
             } else {
                 $namespaceStr .= ' xmlns:'.$prefix.'="'.htmlspecialchars($url).'"';
@@ -251,6 +245,6 @@ class RdfXml extends Serialiser
         }
 
         return "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n".
-               "<rdf:RDF". $namespaceStr . ">\n" . $xml . "\n</rdf:RDF>\n";
+               '<rdf:RDF'.$namespaceStr.">\n".$xml."\n</rdf:RDF>\n";
     }
 }

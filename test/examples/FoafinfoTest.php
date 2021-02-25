@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class FoafinfoTest extends \EasyRdf\TestCase
 {
@@ -55,22 +54,22 @@ class FoafinfoTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'foafinfo.php',
-            array('uri' => 'http://njh.me/foaf.rdf')
+            ['uri' => 'http://njh.me/foaf.rdf']
         );
 
         $this->assertContains('<title>EasyRdf FOAF Info Example</title>', $output);
         $this->assertContains('<h1>EasyRdf FOAF Info Example</h1>', $output);
-        $this->assertContains("<dt>Name:</dt><dd>Nicholas J Humfrey</dd>", $output);
+        $this->assertContains('<dt>Name:</dt><dd>Nicholas J Humfrey</dd>', $output);
         $this->assertContains(
-            "<dt>Homepage:</dt><dd><a href=\"http://www.aelius.com/njh/\">http://www.aelius.com/njh/</a></dd>",
+            '<dt>Homepage:</dt><dd><a href="http://www.aelius.com/njh/">http://www.aelius.com/njh/</a></dd>',
             $output
         );
 
-        $this->assertContains("<h2>Known Persons</h2>", $output);
-        $this->assertContains(">Patrick Sinclair</a></li>", $output);
-        $this->assertContains(">Yves Raimond</a></li>", $output);
+        $this->assertContains('<h2>Known Persons</h2>', $output);
+        $this->assertContains('>Patrick Sinclair</a></li>', $output);
+        $this->assertContains('>Yves Raimond</a></li>', $output);
 
-        $this->assertContains("<h2>Interests</h2>", $output);
-        $this->assertContains(">RDF</a></li>", $output);
+        $this->assertContains('<h2>Interests</h2>', $output);
+        $this->assertContains('>RDF</a></li>', $output);
     }
 }

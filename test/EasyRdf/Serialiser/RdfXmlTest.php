@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,12 +39,12 @@ namespace EasyRdf\Serialiser;
 
 use EasyRdf\Graph;
 use EasyRdf\Literal;
-use EasyRdf\Resource;
 use EasyRdf\RdfNamespace;
+use EasyRdf\Resource;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(dirname(__FILE__))).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class RdfXmlTest extends TestCase
 {
@@ -58,13 +59,13 @@ class RdfXmlTest extends TestCase
         RdfNamespace::reset();
     }
 
-    public function setUp()
+    protected function setUp()
     {
         $this->graph = new Graph();
         $this->serialiser = new RdfXml();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
         RdfNamespace::resetNamespaces();
         RdfNamespace::reset();
@@ -200,7 +201,7 @@ class RdfXmlTest extends TestCase
     {
         $joe = $this->graph->resource(
             'http://www.example.com/joe#me',
-            array('foaf:Person', 'foaf:Mammal')
+            ['foaf:Person', 'foaf:Mammal']
         );
         $joe->set('foaf:name', 'Joe Bloggs');
 
@@ -285,7 +286,7 @@ class RdfXmlTest extends TestCase
 
         $xml = $this->serialiser->serialise($this->graph, 'rdfxml');
         $this->assertContains(
-            "<foaf:age rdf:datatype=\"http://www.w3.org/2001/XMLSchema#int\">59</foaf:age>",
+            '<foaf:age rdf:datatype="http://www.w3.org/2001/XMLSchema#int">59</foaf:age>',
             $xml
         );
     }
@@ -299,8 +300,8 @@ class RdfXmlTest extends TestCase
         );
 
         $xml = $this->serialiser->serialise($this->graph, 'rdfxml');
-        $this->assertContains("<ns0:foo>bar</ns0:foo>", $xml);
-        $this->assertContains("xmlns:ns0=\"http://www.example.com/ns/\"", $xml);
+        $this->assertContains('<ns0:foo>bar</ns0:foo>', $xml);
+        $this->assertContains('xmlns:ns0="http://www.example.com/ns/"', $xml);
     }
 
     public function testSerialiseRdfXmlWithUnshortenableProperty()
@@ -323,12 +324,12 @@ class RdfXmlTest extends TestCase
         $this->graph->add(
             'http://www.example.com/joe#me',
             'foaf:bio',
-            Literal::create("<b>html</b>", null, 'rdf:XMLLiteral')
+            Literal::create('<b>html</b>', null, 'rdf:XMLLiteral')
         );
 
         $xml = $this->serialiser->serialise($this->graph, 'rdfxml');
         $this->assertContains(
-            "<foaf:bio rdf:parseType=\"Literal\"><b>html</b></foaf:bio>",
+            '<foaf:bio rdf:parseType="Literal"><b>html</b></foaf:bio>',
             $xml
         );
     }
@@ -358,7 +359,7 @@ class RdfXmlTest extends TestCase
             "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n".
             "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n".
             "         xmlns:foaf=\"http://xmlns.com/foaf/0.1/\"\n".
-            "         xmlns:dc=\"http://purl.org/dc/terms/\">\n\n" .
+            "         xmlns:dc=\"http://purl.org/dc/terms/\">\n\n".
             "  <foaf:Person rdf:about=\"http://www.example.com/joe#me\">\n".
             "    <dc:creator>Max Bloggs</dc:creator>\n".
             "  </foaf:Person>\n\n".
@@ -395,8 +396,8 @@ class RdfXmlTest extends TestCase
 
     public function testSerialiseContainer()
     {
-        $joe =  $this->graph->resource('http://example.com/joe', 'foaf:Person');
-        $pets =  $this->graph->newBnode('rdf:Seq');
+        $joe = $this->graph->resource('http://example.com/joe', 'foaf:Person');
+        $pets = $this->graph->newBnode('rdf:Seq');
         $pets->append('Rat');
         $pets->append('Cat');
         $pets->append('Goat');
@@ -504,7 +505,7 @@ class RdfXmlTest extends TestCase
         $g2 = new Graph('http://example.com/', $xml, 'rdfxml');
         $types = $g2->resource('http://example.com/resource')->typesAsResources();
 
-        $expected = array('http://example.com/TypeA', 'http://xmlns.com/foaf/0.1/Person');
+        $expected = ['http://example.com/TypeA', 'http://xmlns.com/foaf/0.1/Person'];
 
         $this->assertCount(2, $types);
         $this->assertContains($types[0]->getUri(), $expected);

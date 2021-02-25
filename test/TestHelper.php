@@ -30,7 +30,6 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -38,7 +37,7 @@
 /*
  * Set error reporting to the level to be stricter.
  */
-error_reporting(E_ALL | E_STRICT);
+error_reporting(\E_ALL | \E_STRICT);
 
 // Set time zone to UTC for running tests
 date_default_timezone_set('UTC');
@@ -46,29 +45,27 @@ date_default_timezone_set('UTC');
 /*
  * Determine the root, lib, and test directories
  */
-$easyrdfRoot      = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
-$easyrdfLibDir    = $easyrdfRoot . DIRECTORY_SEPARATOR . 'lib';
-$easyrdfTestDir   = $easyrdfRoot . DIRECTORY_SEPARATOR . 'test';
+$easyrdfRoot = realpath(__DIR__.\DIRECTORY_SEPARATOR.'..');
+$easyrdfLibDir = $easyrdfRoot.\DIRECTORY_SEPARATOR.'lib';
+$easyrdfTestDir = $easyrdfRoot.\DIRECTORY_SEPARATOR.'test';
 
 /*
  * Prepend the lib and test directories to the  include_path.
  */
-$path = array(
+$path = [
     $easyrdfLibDir,
     $easyrdfTestDir,
-    get_include_path()
-);
-set_include_path(implode(PATH_SEPARATOR, $path));
+    get_include_path(),
+];
+set_include_path(implode(\PATH_SEPARATOR, $path));
 
 /*
  * Unset global variables that are no longer needed.
  */
 unset($easyrdfRoot, $easyrdfLibDir, $easyrdfTestDir, $path);
 
-
 require_once __DIR__.'/EasyRdf/TestCase.php';
 require_once __DIR__.'/EasyRdf/Http/MockClient.php';
-
 
 /**
  * Helper function: get path to a fixture file
@@ -79,7 +76,7 @@ require_once __DIR__.'/EasyRdf/Http/MockClient.php';
  */
 function fixturePath($name)
 {
-    return __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . $name;
+    return __DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.$name;
 }
 
 /**
@@ -101,16 +98,16 @@ function readFixture($name)
  *
  * @param string $filename the filename to check
  *
- * @return boolean Returns true if the file exists
+ * @return bool Returns true if the file exists
  */
 function requireExists($filename)
 {
-    $paths = explode(PATH_SEPARATOR, get_include_path());
+    $paths = explode(\PATH_SEPARATOR, get_include_path());
     foreach ($paths as $path) {
-        if (substr($path, -1) == DIRECTORY_SEPARATOR) {
+        if (\DIRECTORY_SEPARATOR == substr($path, -1)) {
             $fullpath = $path.$filename;
         } else {
-            $fullpath = $path.DIRECTORY_SEPARATOR.$filename;
+            $fullpath = $path.\DIRECTORY_SEPARATOR.$filename;
         }
         if (file_exists($fullpath)) {
             return true;
@@ -133,9 +130,10 @@ function requireExists($filename)
  * @param array  $params query string parameters to pass to the script
  *
  * @throws Exception
+ *
  * @return string The resulting webpage (everything printed to STDOUT)
  */
-function executeExample($name, array $params = array())
+function executeExample($name, array $params = [])
 {
     $phpBin = getenv('PHP');
     if (!$phpBin) {
@@ -143,19 +141,19 @@ function executeExample($name, array $params = array())
     }
 
     // We use a wrapper to setup the environment
-    $wrapper = __DIR__ . DIRECTORY_SEPARATOR . 'cli_example_wrapper.php';
+    $wrapper = __DIR__.\DIRECTORY_SEPARATOR.'cli_example_wrapper.php';
 
     // Open a pipe to the new PHP process
-    $descriptorspec = array(
-        0 => array("pipe", "r"),
-        1 => array("pipe", "w"),
-        2 => array("pipe", "w")
-    );
+    $descriptorspec = [
+        0 => ['pipe', 'r'],
+        1 => ['pipe', 'w'],
+        2 => ['pipe', 'w'],
+    ];
 
     $process = proc_open(
-        escapeshellcmd($phpBin)." ".
-        escapeshellcmd($wrapper)." ".
-        escapeshellcmd($name)." ".
+        escapeshellcmd($phpBin).' '.
+        escapeshellcmd($wrapper).' '.
+        escapeshellcmd($name).' '.
         escapeshellcmd(http_build_query($params)),
         $descriptorspec,
         $pipes
@@ -175,15 +173,11 @@ function executeExample($name, array $params = array())
         // It is important that you close any pipes before calling
         // proc_close in order to avoid a deadlock
         $returnValue = proc_close($process);
-        if ($returnValue or $stderr) {
-            throw new Exception(
-                "Failed to run script ($returnValue): ".$stderr.$stdout
-            );
+        if ($returnValue || $stderr) {
+            throw new Exception("Failed to run script ($returnValue): ".$stderr.$stdout);
         }
     } else {
-        throw new Exception(
-            "Failed to execute new php process: $phpBin"
-        );
+        throw new Exception("Failed to execute new php process: $phpBin");
     }
 
     return $stdout;

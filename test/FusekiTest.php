@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once __DIR__.\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class FusekiTest extends \EasyRdf\TestCase
 {
@@ -49,19 +48,19 @@ class FusekiTest extends \EasyRdf\TestCase
     // Starting up Fuseki is slow - we re-use the same instance for every test
     public static function setUpBeforeClass()
     {
-        $descriptorspec = array(
-            0 => array('pipe', 'r'),
-            1 => array('pipe', 'w'),
-            2 => array('pipe', 'w')
-        );
+        $descriptorspec = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
 
-        # Start fuseki on a random port number
+        // Start fuseki on a random port number
         self::$port = rand(10000, 60000);
-        $cmd = "fuseki-server --port=".self::$port." --update --mem /ds";
+        $cmd = 'fuseki-server --port='.self::$port.' --update --mem /ds';
         $dir = sys_get_temp_dir();
         self::$proc = proc_open($cmd, $descriptorspec, $pipes, $dir);
 
-        # FIXME: timeout
+        // FIXME: timeout
         while ($line = fgets($pipes[1])) {
             if (preg_match('/Started (.+) on port (\d+)/', $line, $matches)) {
                 break;
@@ -83,9 +82,9 @@ class FusekiTest extends \EasyRdf\TestCase
         }
     }
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->gs = new \EasyRdf\GraphStore("http://localhost:".self::$port."/ds/data");
+        $this->gs = new \EasyRdf\GraphStore('http://localhost:'.self::$port.'/ds/data');
     }
 
     public function testGraphStoreReplace()
@@ -101,7 +100,7 @@ class FusekiTest extends \EasyRdf\TestCase
 
         $graph2 = $this->gs->get('easyrdf-graphstore-test.rdf');
         $this->assertEquals(
-            array(new \EasyRdf\Literal('Test 1')),
+            [new \EasyRdf\Literal('Test 1')],
             $graph2->all('http://example.com/test', 'rdfs:label')
         );
     }
@@ -121,10 +120,10 @@ class FusekiTest extends \EasyRdf\TestCase
         $labels = $graph2->all('http://example.com/test', 'rdfs:label');
         sort($labels);
         $this->assertEquals(
-            array(
+            [
                 new \EasyRdf\Literal('Test 2'),
-                new \EasyRdf\Literal('Test 3')
-            ),
+                new \EasyRdf\Literal('Test 3'),
+            ],
             $labels
         );
     }

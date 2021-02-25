@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Literal;
 /**
  * Class that represents an RDF Literal of datatype xsd:decimal
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#decimal
+ * @see       http://www.w3.org/TR/xmlschema-2/#decimal
+ *
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -54,19 +55,19 @@ class Decimal extends Literal
 
     /** Constructor for creating a new decimal literal
      *
-     * @param  double|int|string $value    The value of the literal
-     * @param  string            $lang     Should be null (literals with a datatype can't have a language)
-     * @param  string            $datatype Optional datatype (default 'xsd:decimal')
+     * @param float|int|string $value    The value of the literal
+     * @param string           $lang     Should be null (literals with a datatype can't have a language)
+     * @param string           $datatype Optional datatype (default 'xsd:decimal')
      *
      * @throws \UnexpectedValueException
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
-        if (is_string($value)) {
+        if (\is_string($value)) {
             self::validate($value);
-        } elseif (is_double($value) or is_int($value)) {
+        } elseif (\is_float($value) || \is_int($value)) {
             $locale_data = localeconv();
-            $value = str_replace($locale_data['decimal_point'], '.', strval($value));
+            $value = str_replace($locale_data['decimal_point'], '.', (string) $value);
         } else {
             throw new \UnexpectedValueException('EasyRdf\Literal\Decimal expects int/float/string as value');
         }
@@ -82,7 +83,7 @@ class Decimal extends Literal
      */
     public function getValue()
     {
-        return strval($this->value);
+        return (string) ($this->value);
     }
 
     /**
@@ -107,11 +108,11 @@ class Decimal extends Literal
      */
     public static function canonicalise($value)
     {
-        $pieces = array();
+        $pieces = [];
         mb_ereg(self::DECIMAL_REGEX, $value, $pieces);
 
-        $sign       = $pieces[1] === '-' ? '-' : '';  // '+' is not allowed
-        $integer    = ltrim(($pieces[4] !== false) ? $pieces[4] : $pieces[7], '0');
+        $sign = '-' === $pieces[1] ? '-' : '';  // '+' is not allowed
+        $integer = ltrim((false !== $pieces[4]) ? $pieces[4] : $pieces[7], '0');
         $fractional = rtrim($pieces[5], '0');
 
         if (empty($integer)) {

@@ -9,12 +9,10 @@
      * Note that you will need a graph store, for example RedStore,
      * running on your local machine in order to test this example.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
-
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
 ?>
 <html>
 <head>
@@ -34,7 +32,7 @@
 
   // Get the graph back out of the graph store and display it
   $graph2 = $gs->get('time.rdf');
-  print $graph2->dump();
+  echo $graph2->dump();
 ?>
 
 </body>

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Parser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 require_once realpath(__DIR__.'/..').'/Serialiser/NtriplesArray.php';
 
@@ -53,7 +54,7 @@ class TurtleTest extends TestCase
 
     protected $baseUri;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->turtleParser = new Turtle();
         $this->ntriplesParser = new Ntriples();
@@ -81,7 +82,7 @@ class TurtleTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertStringEquals('Joe Bloggs', $name);
         $this->assertSame('en', $name->getLang());
-        $this->assertSame(null, $name->getDatatype());
+        $this->assertNull($name->getDatatype());
 
         $foaf = $graph->resource('http://www.example.com/joe/foaf.rdf');
         $this->assertNotNull($foaf);
@@ -99,14 +100,14 @@ class TurtleTest extends TestCase
         );
         $this->assertSame(9, $count);
 
-        $array = array();
+        $array = [];
         $collection = $graph->resource('http://example.com/s')->get('<http://example.com/p>');
         foreach ($collection as $item) {
-            $array[] = strval($item);
+            $array[] = (string) $item;
         }
 
         $this->assertEquals(
-            array('A', 'B', 'C', 'D'),
+            ['A', 'B', 'C', 'D'],
             $array
         );
     }
@@ -137,8 +138,9 @@ class TurtleTest extends TestCase
             $graph,
             readFixture($filename),
             'turtle',
-            $this->baseUri . basename($filename)
+            $this->baseUri.basename($filename)
         );
+
         return $graph->serialise('ntriples-array');
     }
 
@@ -149,8 +151,9 @@ class TurtleTest extends TestCase
             $graph,
             readFixture($filename),
             'ntriples',
-            $this->baseUri . basename($filename)
+            $this->baseUri.basename($filename)
         );
+
         return $graph->serialise('ntriples-array');
     }
 
@@ -164,85 +167,85 @@ class TurtleTest extends TestCase
 
     public function testCase00()
     {
-        # Blank subject
+        // Blank subject
         $this->turtleTestCase('test-00');
     }
 
     public function testCase01()
     {
-        # @prefix and qnames
+        // @prefix and qnames
         $this->turtleTestCase('test-01');
     }
 
     public function testCase02()
     {
-        # , operator
+        // , operator
         $this->turtleTestCase('test-02');
     }
 
     public function testCase03()
     {
-        # ; operator
+        // ; operator
         $this->turtleTestCase('test-03');
     }
 
     public function testCase04()
     {
-        # empty [] as subject and object
+        // empty [] as subject and object
         $this->turtleTestCase('test-04');
     }
 
     public function testCase05()
     {
-        # non-empty [] as subject and object
+        // non-empty [] as subject and object
         $this->turtleTestCase('test-05');
     }
 
     public function testCase06()
     {
-        # 'a' as predicate
+        // 'a' as predicate
         $this->turtleTestCase('test-06');
     }
 
     public function testCase07()
     {
-        # simple collection
+        // simple collection
         $this->turtleTestCase('test-07');
     }
 
     public function testCase08()
     {
-        # empty collection
+        // empty collection
         $this->turtleTestCase('test-08');
     }
 
     public function testCase09()
     {
-        # integer datatyped literal
+        // integer datatyped literal
         $this->turtleTestCase('test-09');
     }
 
     public function testCase10()
     {
-        # decimal integer canonicalization
+        // decimal integer canonicalization
         $this->turtleTestCase('test-10');
     }
 
     public function testCase11()
     {
-        # - and _ in names and qnames
+        // - and _ in names and qnames
         $this->turtleTestCase('test-11');
     }
 
     public function testCase12()
     {
-        # tests for rdf:_<numbers> and other qnames starting with _
+        // tests for rdf:_<numbers> and other qnames starting with _
         $this->turtleTestCase('test-12');
     }
 
     public function testCase13()
     {
-        # bare : allowed
+        // bare : allowed
         $this->turtleTestCase('test-13');
     }
 
@@ -250,67 +253,67 @@ class TurtleTest extends TestCase
 
     public function testCase17()
     {
-        # simple long literal
+        // simple long literal
         $this->turtleTestCase('test-17');
     }
 
     public function testCase18()
     {
-        # long literals with escapes
+        // long literals with escapes
         $this->turtleTestCase('test-18');
     }
 
     public function testCase19()
     {
-        # floating point number
+        // floating point number
         $this->turtleTestCase('test-19');
     }
 
     public function testCase20()
     {
-        # empty literals, normal and long variant
+        // empty literals, normal and long variant
         $this->turtleTestCase('test-20');
     }
 
     public function testCase21()
     {
-        # positive integer, decimal and doubles
+        // positive integer, decimal and doubles
         $this->turtleTestCase('test-21');
     }
 
     public function testCase22()
     {
-        # negative integer, decimal and doubles
+        // negative integer, decimal and doubles
         $this->turtleTestCase('test-22');
     }
 
     public function testCase23()
     {
-        # long literal ending in double quote
+        // long literal ending in double quote
         $this->turtleTestCase('test-23');
     }
 
     public function testCase24()
     {
-        # boolean literals
+        // boolean literals
         $this->turtleTestCase('test-24');
     }
 
     public function testCase25()
     {
-        # comments
+        // comments
         $this->turtleTestCase('test-25');
     }
 
     public function testCase26()
     {
-        # no final newline
+        // no final newline
         $this->turtleTestCase('test-26');
     }
 
     public function testCase27()
     {
-        # duplicate prefix
+        // duplicate prefix
         $this->turtleTestCase('test-27');
     }
 
@@ -331,7 +334,7 @@ class TurtleTest extends TestCase
 
     public function testBase1()
     {
-        # Resolution of a relative URI against an absolute base.
+        // Resolution of a relative URI against an absolute base.
         $this->turtleTestCase('base1');
     }
 
@@ -347,152 +350,152 @@ class TurtleTest extends TestCase
 
     public function testBad00()
     {
-        # prefix name must end in a :
+        // prefix name must end in a :
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected ':', found '<' on line 2, column 12"
         );
-        $this->parseTurtle("turtle/bad-00.ttl");
+        $this->parseTurtle('turtle/bad-00.ttl');
     }
 
     public function testBad01()
     {
-        # Forbidden by RDF - predicate cannot be blank
+        // Forbidden by RDF - predicate cannot be blank
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected an RDF value here, found '[' on line 3, column 4"
         );
-        $this->parseTurtle("turtle/bad-01.ttl");
+        $this->parseTurtle('turtle/bad-01.ttl');
     }
 
     public function testBad02()
     {
-        # Forbidden by RDF - predicate cannot be blank
+        // Forbidden by RDF - predicate cannot be blank
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected an RDF value here, found '[' on line 3, column 4"
         );
-        $this->parseTurtle("turtle/bad-02.ttl");
+        $this->parseTurtle('turtle/bad-02.ttl');
     }
 
     public function testBad03()
     {
-        # 'a' only allowed as a predicate
+        // 'a' only allowed as a predicate
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected ':', found ' ' on line 3, column 3"
         );
-        $this->parseTurtle("turtle/bad-03.ttl");
+        $this->parseTurtle('turtle/bad-03.ttl');
     }
 
     public function testBad04()
     {
-        # No comma is allowed in collections
+        // No comma is allowed in collections
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected an RDF value here, found ',' on line 3, column 16"
         );
-        $this->parseTurtle("turtle/bad-04.ttl");
+        $this->parseTurtle('turtle/bad-04.ttl');
     }
 
     public function testBad05()
     {
-        # N3 {}s are not in Turtle
+        // N3 {}s are not in Turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected an RDF value here, found '{' on line 3, column 1"
         );
-        $this->parseTurtle("turtle/bad-05.ttl");
+        $this->parseTurtle('turtle/bad-05.ttl');
     }
 
     public function testBad06()
     {
-        # is and of are not in turtle
+        // is and of are not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected ':', found ' ' on line 3, column 7"
         );
-        $this->parseTurtle("turtle/bad-06.ttl");
+        $this->parseTurtle('turtle/bad-06.ttl');
     }
 
     public function testBad07()
     {
-        # paths are not in turtle
+        // paths are not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
-            "Turtle Parse Error: object for statement missing on line 3, column 5"
+            'Turtle Parse Error: object for statement missing on line 3, column 5'
         );
-        $this->parseTurtle("turtle/bad-07.ttl");
+        $this->parseTurtle('turtle/bad-07.ttl');
     }
 
     public function testBad08()
     {
-        # @keywords is not in turtle
+        // @keywords is not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             'Turtle Parse Error: unknown directive "@keywords" on line 1, column 10'
         );
-        $this->parseTurtle("turtle/bad-08.ttl");
+        $this->parseTurtle('turtle/bad-08.ttl');
     }
 
     public function testBad09()
     {
-        # implies is not in turtle
+        // implies is not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected an RDF value here, found '=' on line 3, column 4"
         );
-        $this->parseTurtle("turtle/bad-09.ttl");
+        $this->parseTurtle('turtle/bad-09.ttl');
     }
 
     public function testBad10()
     {
-        # equivalence is not in turtle
+        // equivalence is not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
             "Turtle Parse Error: expected an RDF value here, found '=' on line 3, column 4"
         );
-        $this->parseTurtle("turtle/bad-10.ttl");
+        $this->parseTurtle('turtle/bad-10.ttl');
     }
 
     public function testBad11()
     {
-        # @forAll is not in turtle
+        // @forAll is not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
-            "Turtle Parse Error: unknown directive \"@forall\" on line 3, column 8"
+            'Turtle Parse Error: unknown directive "@forall" on line 3, column 8'
         );
-        $this->parseTurtle("turtle/bad-11.ttl");
+        $this->parseTurtle('turtle/bad-11.ttl');
     }
 
     public function testBad12()
     {
-        # @forSome is not in turtle
+        // @forSome is not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
-            "Turtle Parse Error: unknown directive \"@forsome\" on line 3, column 9"
+            'Turtle Parse Error: unknown directive "@forsome" on line 3, column 9'
         );
-        $this->parseTurtle("turtle/bad-12.ttl");
+        $this->parseTurtle('turtle/bad-12.ttl');
     }
 
     public function testBad13()
     {
-        # <= is not in turtle
+        // <= is not in turtle
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
-            "Turtle Parse Error: unexpected end of file while reading URI on line 4, column 1"
+            'Turtle Parse Error: unexpected end of file while reading URI on line 4, column 1'
         );
-        $this->parseTurtle("turtle/bad-13.ttl");
+        $this->parseTurtle('turtle/bad-13.ttl');
     }
 
     public function testBad14()
     {
-        # Test long literals with missing end
+        // Test long literals with missing end
         $this->setExpectedException(
             'EasyRdf\Parser\Exception',
-            "Turtle Parse Error: unexpected end of file while reading long string on line 7, column 1"
+            'Turtle Parse Error: unexpected end of file while reading long string on line 7, column 1'
         );
-        $this->parseTurtle("turtle/bad-14.ttl");
+        $this->parseTurtle('turtle/bad-14.ttl');
     }
 
     /**
@@ -507,7 +510,7 @@ class TurtleTest extends TestCase
             $graph,
             readFixture($filename),
             'turtle',
-            $this->baseUri . basename($filename)
+            $this->baseUri.basename($filename)
         );
 
         $this->assertEquals(1, $triple_count);
@@ -525,7 +528,7 @@ class TurtleTest extends TestCase
             $graph,
             readFixture($filename),
             'turtle',
-            $this->baseUri . basename($filename)
+            $this->baseUri.basename($filename)
         );
 
         $this->assertEquals(1, $triple_count);
@@ -556,7 +559,7 @@ class TurtleTest extends TestCase
             $graph,
             readFixture($filename),
             'turtle',
-            $this->baseUri . basename($filename)
+            $this->baseUri.basename($filename)
         );
 
         $this->assertEquals(14, $triple_count);

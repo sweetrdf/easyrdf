@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Serialiser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(dirname(__FILE__))).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class ArcTest extends TestCase
 {
@@ -49,7 +50,7 @@ class ArcTest extends TestCase
     /** @var Arc */
     private $serialiser;
 
-    public function setUp()
+    protected function setUp()
     {
         if (class_exists('ARC2')) {
             $this->graph = new Graph();
@@ -57,7 +58,7 @@ class ArcTest extends TestCase
             parent::setUp();
         } else {
             $this->markTestSkipped(
-                "ARC2 library is not available."
+                'ARC2 library is not available.'
             );
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class SparqlqueryformTest extends \EasyRdf\TestCase
 {
@@ -52,17 +51,16 @@ class SparqlqueryformTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'sparql_queryform.php',
-            array(
+            [
                 'endpoint' => 'http://dbpedia.org/sparql',
-                'query' =>
-                    'PREFIX dbo: <http://dbpedia.org/ontology/> '.
+                'query' => 'PREFIX dbo: <http://dbpedia.org/ontology/> '.
                     'SELECT * WHERE {'.
                     '  ?country rdf:type dbo:Country . '.
                     '  ?country rdfs:label ?label .'.
                     '  ?country dct:subject dbc:Member_states_of_the_United_Nations .'.
                     '  FILTER ( lang(?label) = "en" ) '.
-                    '} ORDER BY ?label LIMIT 100'
-            )
+                    '} ORDER BY ?label LIMIT 100',
+            ]
         );
         $this->assertContains('>http://dbpedia.org/resource/China</a>', $output);
         $this->assertContains('>&quot;China&quot;@en</span>', $output);
@@ -72,18 +70,17 @@ class SparqlqueryformTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'sparql_queryform.php',
-            array(
+            [
                 'endpoint' => 'http://dbpedia.org/sparql',
-                'query' =>
-                    'PREFIX dbo: <http://dbpedia.org/ontology/> '.
+                'query' => 'PREFIX dbo: <http://dbpedia.org/ontology/> '.
                     'SELECT * WHERE {'.
                     '  ?country rdf:type dbo:Country . '.
                     '  ?country rdfs:label ?label .'.
                     '  ?country dct:subject dbc:Member_states_of_the_United_Nations .'.
                     '  FILTER ( lang(?label) = "en" ) '.
                     '} ORDER BY ?label LIMIT 100',
-                'text' => 1
-            )
+                'text' => 1,
+            ]
         );
 
         $this->assertContains('| http://dbpedia.org/resource/China', $output);

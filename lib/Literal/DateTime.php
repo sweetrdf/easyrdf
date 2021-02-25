@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Literal;
 /**
  * Class that represents an RDF Literal of datatype xsd:dateTime
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#date
+ * @see       http://www.w3.org/TR/xmlschema-2/#date
+ *
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -54,14 +55,14 @@ class DateTime extends Date
      *
      * @see \DateTime
      *
-     * @param  mixed  $value     The value of the literal
-     * @param  string $lang      Should be null (literals with a datatype can't have a language)
-     * @param  string $datatype  Optional datatype (default 'xsd:dateTime')
+     * @param mixed  $value    The value of the literal
+     * @param string $lang     Should be null (literals with a datatype can't have a language)
+     * @param string $datatype Optional datatype (default 'xsd:dateTime')
      */
     public function __construct($value = null, $lang = null, $datatype = null)
     {
         // If $value is null, use 'now'
-        if (is_null($value)) {
+        if (null === $value) {
             $value = new \DateTime('now');
         }
 
@@ -80,6 +81,7 @@ class DateTime extends Date
      *   $dt = EasyRdf\Literal\DateTime::parse('Mon 18 Jul 2011 18:45:43 BST');
      *
      * @see DateTime
+     *
      * @param string $value The date and time to parse
      *
      * @return self
@@ -87,33 +89,34 @@ class DateTime extends Date
     public static function parse($value)
     {
         $value = new \DateTime($value);
+
         return new self($value);
     }
 
     /** 24-hour format of the hour as an integer
      *
-     * @return integer
+     * @return int
      */
     public function hour()
     {
-        return (int)$this->format('H');
+        return (int) $this->format('H');
     }
 
     /** The minutes pasts the hour as an integer
      *
-     * @return integer
+     * @return int
      */
     public function min()
     {
-        return (int)$this->format('i');
+        return (int) $this->format('i');
     }
 
     /** The seconds pasts the minute as an integer
      *
-     * @return integer
+     * @return int
      */
     public function sec()
     {
-        return (int)$this->format('s');
+        return (int) $this->format('s');
     }
 }

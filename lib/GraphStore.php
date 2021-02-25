@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -40,7 +40,6 @@ namespace EasyRdf;
  * A class for fetching, saving and deleting graphs to a Graph Store.
  * Implementation of the SPARQL 1.1 Graph Store HTTP Protocol.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -54,7 +53,6 @@ class GraphStore
     /** The address of the GraphStore endpoint */
     private $uri = null;
     private $parsedUri = null;
-
 
     /** Create a new SPARQL Graph Store client
      *
@@ -86,7 +84,7 @@ class GraphStore
      */
     public function get($uriRef)
     {
-        if ($uriRef === self::DEFAULT_GRAPH) {
+        if (self::DEFAULT_GRAPH === $uriRef) {
             $dataUrl = $this->urlForGraph(self::DEFAULT_GRAPH);
             $graph = new Graph();
         } else {
@@ -103,6 +101,7 @@ class GraphStore
 
     /**
      * Fetch default graph from the graph store
+     *
      * @return Graph
      */
     public function getDefault()
@@ -118,8 +117,8 @@ class GraphStore
      */
     protected function sendGraph($method, $graph, $uriRef, $format)
     {
-        if (is_object($graph) and $graph instanceof Graph) {
-            if ($uriRef === null) {
+        if (\is_object($graph) && $graph instanceof Graph) {
+            if (null === $uriRef) {
                 $uriRef = $graph->getUri();
             }
             $data = $graph->serialise($format);
@@ -127,14 +126,14 @@ class GraphStore
             $data = $graph;
         }
 
-        if ($uriRef === null) {
+        if (null === $uriRef) {
             throw new \InvalidArgumentException('Graph IRI is not specified');
         }
 
         $formatObj = Format::getFormat($format);
         $mimeType = $formatObj->getDefaultMimeType();
 
-        if ($uriRef === self::DEFAULT_GRAPH) {
+        if (self::DEFAULT_GRAPH === $uriRef) {
             $dataUrl = $this->urlForGraph(self::DEFAULT_GRAPH);
         } else {
             $graphUri = $this->parsedUri->resolve($uriRef)->toString();
@@ -151,9 +150,7 @@ class GraphStore
         $response = $client->request();
 
         if (!$response->isSuccessful()) {
-            throw new Exception(
-                "HTTP request for {$dataUrl} failed: ".$response->getMessage()
-            );
+            throw new Exception("HTTP request for {$dataUrl} failed: ".$response->getMessage());
         }
 
         return $response;
@@ -211,11 +208,11 @@ class GraphStore
      * The $format parameter can be given to specify the serialisation
      * used to send the graph data to the graph store.
      *
-     * @param Graph|string  $graph  Data
-     * @param string        $uriRef The URI of graph to be added to
-     * @param string        $format The format of the data to send to the graph store
+     * @param Graph|string $graph  Data
+     * @param string       $uriRef The URI of graph to be added to
+     * @param string       $format The format of the data to send to the graph store
      *
-     * @return Http\Response  The response from the graph store
+     * @return Http\Response The response from the graph store
      */
     public function insert($graph, $uriRef = null, $format = 'ntriples')
     {
@@ -231,10 +228,10 @@ class GraphStore
      * The $format parameter can be given to specify the serialisation
      * used to send the graph data to the graph store.
      *
-     * @param Graph|string  $graph  Data
-     * @param string        $format The format of the data to send to the graph store
+     * @param Graph|string $graph  Data
+     * @param string       $format The format of the data to send to the graph store
      *
-     * @return Http\Response  The response from the graph store
+     * @return Http\Response The response from the graph store
      */
     public function insertIntoDefault($graph, $format = 'ntriples')
     {
@@ -249,11 +246,12 @@ class GraphStore
      * @param string $uriRef The URI of graph to be added to
      *
      * @throws Exception
+     *
      * @return Http\Response The response from the graph store
      */
     public function delete($uriRef)
     {
-        if ($uriRef === self::DEFAULT_GRAPH) {
+        if (self::DEFAULT_GRAPH === $uriRef) {
             $dataUrl = $this->urlForGraph(self::DEFAULT_GRAPH);
         } else {
             $graphUri = $this->parsedUri->resolve($uriRef)->toString();
@@ -267,9 +265,7 @@ class GraphStore
         $response = $client->request();
 
         if (!$response->isSuccessful()) {
-            throw new Exception(
-                "HTTP request to delete {$dataUrl} failed: ".$response->getMessage()
-            );
+            throw new Exception("HTTP request to delete {$dataUrl} failed: ".$response->getMessage());
         }
 
         return $response;
@@ -279,6 +275,7 @@ class GraphStore
      * Delete default graph content from the graph store
      *
      * @return Http\Response
+     *
      * @throws Exception
      */
     public function deleteDefault()
@@ -288,14 +285,15 @@ class GraphStore
 
     /** Work out the full URL for a graph store request.
      *  by checking if if it is a direct or indirect request.
+     *
      *  @ignore
      */
     protected function urlForGraph($url)
     {
-        if ($url === self::DEFAULT_GRAPH) {
+        if (self::DEFAULT_GRAPH === $url) {
             $url = $this->uri.'?default';
-        } elseif (strpos($url, $this->uri) === false) {
-            $url = $this->uri."?graph=".urlencode($url);
+        } elseif (false === strpos($url, $this->uri)) {
+            $url = $this->uri.'?graph='.urlencode($url);
         }
 
         return $url;

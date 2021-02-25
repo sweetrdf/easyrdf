@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -43,7 +44,6 @@ use EasyRdf\Parser;
  *
  * https://www.easyrdf.org/docs/rdf-formats-php
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -59,69 +59,62 @@ class RdfPhp extends Parser
     /**
      * Parse RDF/PHP into an EasyRdf\Graph
      *
-     * @param Graph  $graph   the graph to load the data into
-     * @param array[] $data   the RDF document data
-     * @param string $format  the format of the input data
-     * @param string $baseUri the base URI of the data being parsed
+     * @param Graph   $graph   the graph to load the data into
+     * @param array[] $data    the RDF document data
+     * @param string  $format  the format of the input data
+     * @param string  $baseUri the base URI of the data being parsed
      *
      * @throws \EasyRdf\Exception
-     * @return integer        The number of triples added to the graph
+     *
+     * @return int The number of triples added to the graph
      */
     public function parse($graph, $data, $format, $baseUri)
     {
         $this->checkParseParams($graph, $data, $format, $baseUri);
 
-        if ($format != 'php') {
-            throw new \EasyRdf\Exception(
-                "EasyRdf\\Parser\\RdfPhp does not support: $format"
-            );
+        if ('php' != $format) {
+            throw new \EasyRdf\Exception("EasyRdf\\Parser\\RdfPhp does not support: $format");
         }
 
-        if (!is_array($data)) {
-            throw new Exception('expected array, got '.gettype($data));
+        if (!\is_array($data)) {
+            throw new Exception('expected array, got '.\gettype($data));
         }
 
         foreach ($data as $orig_subject => $properties) {
-            if (is_int($orig_subject)) {
+            if (\is_int($orig_subject)) {
                 throw new Exception('expected array indexed by IRIs, got list');
             }
 
-            if (substr($orig_subject, 0, 2) === '_:') {
+            if ('_:' === substr($orig_subject, 0, 2)) {
                 $subject = $this->remapBnode($orig_subject);
             } elseif (preg_match('/^\w+$/', $orig_subject)) {
-                # Cope with invalid RDF/JSON serialisations that
-                # put the node name in, without the _: prefix
-                # (such as net.fortytwo.sesametools.rdfjson)
+                // Cope with invalid RDF/JSON serialisations that
+                // put the node name in, without the _: prefix
+                // (such as net.fortytwo.sesametools.rdfjson)
                 $subject = $this->remapBnode($orig_subject);
             } else {
                 $subject = $orig_subject;
             }
 
-            if (!is_array($properties)) {
-                throw new Exception("expected array as value of '{$orig_subject}' key, got ".gettype($properties));
+            if (!\is_array($properties)) {
+                throw new Exception("expected array as value of '{$orig_subject}' key, got ".\gettype($properties));
             }
 
             foreach ($properties as $property => $objects) {
-                if (is_int($property)) {
+                if (\is_int($property)) {
                     throw new Exception("expected 'array indexed by IRIs' as value of '{$orig_subject}' key, got list");
                 }
 
-                if (!is_array($objects)) {
-                    throw new Exception(
-                        "expected list of objects as value of '{$orig_subject}' -> '{$property}' node, got ".
-                        gettype($objects)
-                    );
+                if (!\is_array($objects)) {
+                    throw new Exception("expected list of objects as value of '{$orig_subject}' -> '{$property}' node, got ".\gettype($objects));
                 }
 
                 foreach ($objects as $i => $object) {
-                    if (!is_array($object) or !isset($object['type']) or !isset($object['value'])) {
-                        throw new Exception(
-                            "expected array with 'type' and 'value' keys as value of ".
-                            "'{$orig_subject}' -> '{$property}' -> '{$i}' node"
-                        );
+                    if (!\is_array($object) || !isset($object['type']) || !isset($object['value'])) {
+                        throw new Exception("expected array with 'type' and 'value' keys as value of "."'{$orig_subject}' -> '{$property}' -> '{$i}' node");
                     }
 
-                    if ($object['type'] === 'bnode') {
+                    if ('bnode' === $object['type']) {
                         $object['value'] = $this->remapBnode($object['value']);
                     }
                     $this->addTriple($subject, $property, $object);

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -43,16 +44,15 @@ if (!class_exists('\PHPUnit\Framework\Error\Error', true)) {
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-
     public static function assertStringEquals($str1, $str2, $message = null)
     {
-        self::assertSame(strval($str1), strval($str2), (string) $message);
+        self::assertSame((string) $str1, (string) $str2, (string) $message);
     }
 
     // Note: this differs from assertInstanceOf because it disallows subclasses
     public static function assertClass($class, $object)
     {
-        self::assertSame($class, get_class($object));
+        self::assertSame($class, \get_class($object));
     }
 
     // Forward compatibility layer for PHPUnit 6/7

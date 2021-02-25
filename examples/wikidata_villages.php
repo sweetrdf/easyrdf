@@ -9,13 +9,11 @@
      * RDF from Wikidata for that village. It then parses the result and
      * displays a page about that village with a title, synopsis and Open Street Map.
      *
-     * @package    EasyRdf
      * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
      * @license    http://unlicense.org/
      */
-
-    require_once realpath(__DIR__.'/..')."/vendor/autoload.php";
-    require_once __DIR__."/html_tag_helpers.php";
+    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+    require_once __DIR__.'/html_tag_helpers.php';
 
     // Setup some additional prefixes for Wikidata
     \EasyRdf\RdfNamespace::set('wd', 'http://www.wikidata.org/entity/');
@@ -52,41 +50,41 @@
         $village = $graph->resource("wd:$id");
 
         if ($village->get($WIKIDATA_IMAGE)) {
-            print image_tag(
+            echo image_tag(
                 $village->get($WIKIDATA_IMAGE),
-                array('style'=>'max-width:400px;max-height:250px;margin:10px;float:right')
+                ['style' => 'max-width:400px;max-height:250px;margin:10px;float:right']
             );
         }
-        print content_tag('h2',$village->label('en'));
-        print content_tag('p', $village->get('schema:description', null, 'en'));
+        echo content_tag('h2', $village->label('en'));
+        echo content_tag('p', $village->get('schema:description', null, 'en'));
 
         if (preg_match("/Point\((\S+) (\S+)\)/", $village->get($WIKIDATA_POINT), $matches)) {
             $long = $matches[1];
             $lat = $matches[2];
-            print "<iframe width='420' height='350' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='http://www.openlinkmap.org/small.php?lat=$lat&lon=$long&zoom=14' style='border: 1px solid black'></iframe>";
+            echo "<iframe width='420' height='350' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='http://www.openlinkmap.org/small.php?lat=$lat&lon=$long&zoom=14' style='border: 1px solid black'></iframe>";
         }
 
-        print content_tag('h3', "Pages about " . $village->label('en'));
-        print "<ul>\n";
-        foreach ($graph->all($village, "^schema:about") as $doc) {
-            print '<li>'.link_to($doc)."</li>\n";
+        echo content_tag('h3', 'Pages about '.$village->label('en'));
+        echo "<ul>\n";
+        foreach ($graph->all($village, '^schema:about') as $doc) {
+            echo '<li>'.link_to($doc)."</li>\n";
         }
-        print "</ul>\n";
+        echo "</ul>\n";
 
-        echo "<br /><br />";
+        echo '<br /><br />';
         echo $village->dump();
     } else {
-        print "<p>List of villages in Fife.</p>";
+        echo '<p>List of villages in Fife.</p>';
         $sparql = new \EasyRdf\Sparql\Client($SPARQL_ENDPOINT);
         $results = $sparql->query($SPARQL_QUERY);
 
-        print "<ul>\n";
+        echo "<ul>\n";
         foreach ($results as $row) {
-          if (preg_match("|/(Q\d+)|", $row->item, $matches)) {
-            print '<li>'.link_to_self($row->itemLabel, "id=".$matches[1])."</li>\n";
-          }
+            if (preg_match("|/(Q\d+)|", $row->item, $matches)) {
+                echo '<li>'.link_to_self($row->itemLabel, 'id='.$matches[1])."</li>\n";
+            }
         }
-        print "</ul>\n";
+        echo "</ul>\n";
     }
 ?>
 </body>

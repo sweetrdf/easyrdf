@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -43,8 +43,8 @@ namespace EasyRdf;
  *
  * Note that items are numbered from 1 (not 0) for consistency with RDF Containers.
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#date
+ * @see       http://www.w3.org/TR/xmlschema-2/#date
+ *
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -68,27 +68,23 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      *
      * The first item is postion 1
      *
-     * @param  integer  $position     The position in the container to seek to
+     * @param int $position The position in the container to seek to
      *
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
     public function seek($position)
     {
-        if (is_int($position) and $position > 0) {
+        if (\is_int($position) && $position > 0) {
             list($node, $actual) = $this->getCollectionNode($position);
             if ($actual === $position) {
                 $this->position = $actual;
                 $this->current = $node;
             } else {
-                throw new \OutOfBoundsException(
-                    "Unable to seek to position $position in the collection"
-                );
+                throw new \OutOfBoundsException("Unable to seek to position $position in the collection");
             }
         } else {
-            throw new \InvalidArgumentException(
-                "Collection position must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Collection position must be a positive integer');
         }
     }
 
@@ -107,7 +103,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      */
     public function current()
     {
-        if ($this->position === 1) {
+        if (1 === $this->position) {
             return $this->get('rdf:first');
         } elseif ($this->current) {
             return $this->current->get('rdf:first');
@@ -130,12 +126,12 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      */
     public function next()
     {
-        if ($this->position === 1) {
+        if (1 === $this->position) {
             $this->current = $this->get('rdf:rest');
         } elseif ($this->current) {
             $this->current = $this->current->get('rdf:rest');
         }
-        $this->position++;
+        ++$this->position;
     }
 
     /** Checks if current position is valid
@@ -144,9 +140,9 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      */
     public function valid()
     {
-        if ($this->position === 1 and $this->hasProperty('rdf:first')) {
+        if (1 === $this->position && $this->hasProperty('rdf:first')) {
             return true;
-        } elseif ($this->current !== null and $this->current->hasProperty('rdf:first')) {
+        } elseif (null !== $this->current && $this->current->hasProperty('rdf:first')) {
             return true;
         } else {
             return false;
@@ -162,20 +158,21 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      * If the offset is null, then the last node in the
      * collection (before rdf:nil) will be returned.
      *
-     * @param  integer $offset          The offset into the collection (or null)
+     * @param int $offset The offset into the collection (or null)
      *
-     * @return array   $node, $postion  The node object and postion of the node
+     * @return array $node, $postion  The node object and postion of the node
      */
     public function getCollectionNode($offset)
     {
         $position = 1;
         $node = $this;
         $nil = $this->graph->resource('rdf:nil');
-        while (($rest = $node->get('rdf:rest')) and $rest !== $nil and (is_null($offset) or ($position < $offset))) {
+        while (($rest = $node->get('rdf:rest')) && $rest !== $nil && (null === $offset || ($position < $offset))) {
             $node = $rest;
-            $position++;
+            ++$position;
         }
-        return array($node, $position);
+
+        return [$node, $position];
     }
 
     /** Counts the number of items in the collection
@@ -183,7 +180,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      * Note that this is an slow method - it is more efficient to use
      * the iterator interface, if you can.
      *
-     * @return integer The number of items in the collection
+     * @return int The number of items in the collection
      */
     public function count()
     {
@@ -198,17 +195,17 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
 
     /** Append an item to the end of the collection
      *
-     * @param  mixed $value      The value to append
+     * @param mixed $value The value to append
      *
-     * @return integer           The number of values appended (1 or 0)
+     * @return int The number of values appended (1 or 0)
      */
     public function append($value)
     {
         // Find the end of the collection
-        list($node, ) = $this->getCollectionNode(null);
+        list($node) = $this->getCollectionNode(null);
         $rest = $node->get('rdf:rest');
 
-        if ($node === $this and is_null($rest)) {
+        if ($node === $this && null === $rest) {
             $node->set('rdf:first', $value);
             $node->addResource('rdf:rest', 'rdf:nil');
         } else {
@@ -227,13 +224,12 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      */
     public function offsetExists($offset)
     {
-        if (is_int($offset) and $offset > 0) {
+        if (\is_int($offset) && $offset > 0) {
             list($node, $position) = $this->getCollectionNode($offset);
-            return ($node and $position === $offset and $node->hasProperty('rdf:first'));
+
+            return $node && $position === $offset && $node->hasProperty('rdf:first');
         } else {
-            throw new \InvalidArgumentException(
-                "Collection offset must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Collection offset must be a positive integer');
         }
     }
 
@@ -243,15 +239,13 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      */
     public function offsetGet($offset)
     {
-        if (is_int($offset) and $offset > 0) {
+        if (\is_int($offset) && $offset > 0) {
             list($node, $position) = $this->getCollectionNode($offset);
-            if ($node and $position === $offset) {
+            if ($node && $position === $offset) {
                 return $node->get('rdf:first');
             }
         } else {
-            throw new \InvalidArgumentException(
-                "Collection offset must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Collection offset must be a positive integer');
         }
     }
 
@@ -262,10 +256,10 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      */
     public function offsetSet($offset, $value)
     {
-        if (is_null($offset)) {
+        if (null === $offset) {
             // No offset - append to end of collection
             $this->append($value);
-        } elseif (is_int($offset) and $offset > 0) {
+        } elseif (\is_int($offset) && $offset > 0) {
             list($node, $position) = $this->getCollectionNode($offset);
 
             // Create nodes, if they are missing
@@ -274,7 +268,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
                 $node->set('rdf:rest', $new);
                 $new->addResource('rdf:rest', 'rdf:nil');
                 $node = $new;
-                $position++;
+                ++$position;
             }
 
             // Terminate the list
@@ -284,9 +278,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
 
             return $node->set('rdf:first', $value);
         } else {
-            throw new \InvalidArgumentException(
-                "Collection offset must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Collection offset must be a positive integer');
         }
     }
 
@@ -297,20 +289,18 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      */
     public function offsetUnset($offset)
     {
-        if (is_int($offset) and $offset > 0) {
+        if (\is_int($offset) && $offset > 0) {
             list($node, $position) = $this->getCollectionNode($offset);
         } else {
-            throw new \InvalidArgumentException(
-                "Collection offset must be a positive integer"
-            );
+            throw new \InvalidArgumentException('Collection offset must be a positive integer');
         }
 
         // Does the item exist?
-        if ($node and $position === $offset) {
+        if ($node && $position === $offset) {
             $nil = $this->graph->resource('rdf:nil');
-            if ($position === 1) {
+            if (1 === $position) {
                 $rest = $node->get('rdf:rest');
-                if ($rest and $rest !== $nil) {
+                if ($rest && $rest !== $nil) {
                     // Move second value, so we can keep the head of list
                     $node->set('rdf:first', $rest->get('rdf:first'));
                     $node->set('rdf:rest', $rest->get('rdf:rest'));
@@ -326,7 +316,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
                 $node->delete('rdf:first');
                 $rest = $node->get('rdf:rest');
                 $previous = $node->get('^rdf:rest');
-                if (is_null($rest)) {
+                if (null === $rest) {
                     $rest = $nil;
                 }
                 if ($previous) {

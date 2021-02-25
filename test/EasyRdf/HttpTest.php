@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,7 +39,7 @@ namespace EasyRdf;
 
 use EasyRdf\Http\MockClient;
 
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class HttpTest extends TestCase
 {

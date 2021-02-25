@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Http;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,7 @@ namespace EasyRdf\Http;
 use EasyRdf\Resource;
 use EasyRdf\TestCase;
 
-require_once realpath(dirname(__FILE__) . '/../../') . '/TestHelper.php';
-
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class ClientTest extends TestCase
 {
@@ -53,9 +53,8 @@ class ClientTest extends TestCase
 
     /**
      * Set up the test suite before each test
-     *
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->client = new Client('http://www.example.com/');
     }
@@ -64,14 +63,13 @@ class ClientTest extends TestCase
     {
         $client = new Client(
             'http://www.example.com/',
-            array('foo' => 'bar')
+            ['foo' => 'bar']
         );
         $this->assertClass('EasyRdf\Http\Client', $client);
     }
 
     /**
      * Test we can SET and GET a URI as string
-     *
      */
     public function testSetGetUriString()
     {
@@ -86,9 +84,9 @@ class ClientTest extends TestCase
 
         $uri = $this->client->getUri(true);
         $this->assertTrue(
-            is_string($uri),
-            'Returned value expected to be a string, ' .
-            gettype($uri) . ' returned'
+            \is_string($uri),
+            'Returned value expected to be a string, '.
+            \gettype($uri).' returned'
         );
         $this->assertSame(
             $uri,
@@ -121,7 +119,6 @@ class ClientTest extends TestCase
 
     /**
      * Test we can SET and GET a URI as object
-     *
      */
     public function testSetGetUriObject()
     {
@@ -135,7 +132,7 @@ class ClientTest extends TestCase
 
     public function testSetConfig()
     {
-        $result = $this->client->setConfig(array('foo' => 'bar'));
+        $result = $this->client->setConfig(['foo' => 'bar']);
         $this->assertClass('EasyRdf\Http\Client', $result);
     }
 
@@ -159,7 +156,6 @@ class ClientTest extends TestCase
 
     /**
      * Test we can get already set headers
-     *
      */
     public function testGetHeader()
     {
@@ -228,7 +224,7 @@ class ClientTest extends TestCase
         $this->client->setParameterGet('key1', 'value1');
         $this->client->setParameterGet('key2', 'value2');
         $this->client->setParameterGet('key1', null);
-        $this->assertSame(null, $this->client->getParameterGet('key1'));
+        $this->assertNull($this->client->getParameterGet('key1'));
         $this->assertSame('value2', $this->client->getParameterGet('key2'));
     }
 
@@ -257,9 +253,9 @@ class ClientTest extends TestCase
         $this->client->setHeaders('Accept-Language', 'en');
         $this->client->resetParameters();
         $this->assertSame('GET', $this->client->getMethod());
-        $this->assertSame(null, $this->client->getRawData());
-        $this->assertSame(null, $this->client->getHeader('Content-Length'));
-        $this->assertSame(null, $this->client->getHeader('Content-Type'));
+        $this->assertNull($this->client->getRawData());
+        $this->assertNull($this->client->getHeader('Content-Length'));
+        $this->assertNull($this->client->getHeader('Content-Type'));
         $this->assertSame('en', $this->client->getHeader('Accept-Language'));
     }
 
@@ -272,10 +268,10 @@ class ClientTest extends TestCase
         $this->client->setHeaders('Accept-Language', 'en');
         $this->client->resetParameters(true);
         $this->assertSame('GET', $this->client->getMethod());
-        $this->assertSame(null, $this->client->getRawData());
-        $this->assertSame(null, $this->client->getHeader('Content-Length'));
-        $this->assertSame(null, $this->client->getHeader('Content-Type'));
-        $this->assertSame(null, $this->client->getHeader('Accept-Language'));
+        $this->assertNull($this->client->getRawData());
+        $this->assertNull($this->client->getHeader('Content-Length'));
+        $this->assertNull($this->client->getHeader('Content-Type'));
+        $this->assertNull($this->client->getHeader('Accept-Language'));
     }
 
     /**

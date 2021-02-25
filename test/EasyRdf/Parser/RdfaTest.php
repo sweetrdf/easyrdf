@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -39,8 +40,8 @@ namespace EasyRdf\Parser;
 use EasyRdf\Graph;
 use EasyRdf\TestCase;
 
-require_once dirname(dirname(__DIR__)).
-             DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__, 2).
+             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 require_once realpath(__DIR__.'/..').'/Serialiser/NtriplesArray.php';
 
@@ -53,13 +54,12 @@ class RdfaTest extends TestCase
     protected $baseUri;
     protected $graph = null;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->rdfaParser = new Rdfa();
         $this->ntriplesParser = new Ntriples();
         $this->baseUri = 'http://rdfa.info/test-suite/test-cases/rdfa1.1/xhtml5/';
     }
-
 
     protected function parseRdfa($filename)
     {
@@ -68,8 +68,9 @@ class RdfaTest extends TestCase
             $graph,
             readFixture($filename),
             'rdfa',
-            $this->baseUri . basename($filename)
+            $this->baseUri.basename($filename)
         );
+
         return $graph->serialise('ntriples-array');
     }
 
@@ -80,8 +81,9 @@ class RdfaTest extends TestCase
             $graph,
             readFixture($filename),
             'ntriples',
-            $this->baseUri . basename($filename)
+            $this->baseUri.basename($filename)
         );
+
         return $graph->serialise('ntriples-array');
     }
 
@@ -602,7 +604,7 @@ class RdfaTest extends TestCase
 
     public function testCase0224()
     {
-        $this->markTestIncomplete("FIXME: need to implement @inlist");
+        $this->markTestIncomplete('FIXME: need to implement @inlist');
         $this->rdfaTestCase('0224', '@inlist hanging @rel');
     }
 
@@ -647,7 +649,7 @@ class RdfaTest extends TestCase
 
     public function testCase0247()
     {
-        $this->markTestIncomplete("FIXME: Multiple incomplete triples, RDFa 1.1version");
+        $this->markTestIncomplete('FIXME: Multiple incomplete triples, RDFa 1.1version');
         $this->rdfaTestCase('0247', 'Multiple incomplete triples, RDFa 1.1version');
     }
 
@@ -909,7 +911,7 @@ class RdfaTest extends TestCase
 
     public function testCase0312()
     {
-        $this->markTestIncomplete("FIXME: Mute plain @rel if @property is present");
+        $this->markTestIncomplete('FIXME: Mute plain @rel if @property is present');
         $this->rdfaTestCase('0312', 'Mute plain @rel if @property is present');
     }
 
@@ -940,43 +942,43 @@ class RdfaTest extends TestCase
 
     public function testCase0321()
     {
-        $this->markTestIncomplete("FIXME: rdfa:copy to rdfa:Pattern");
+        $this->markTestIncomplete('FIXME: rdfa:copy to rdfa:Pattern');
         $this->rdfaTestCase('0321', 'rdfa:copy to rdfa:Pattern');
     }
 
     public function testCase0322()
     {
-        $this->markTestIncomplete("FIXME: rdfa:copy for additional property value");
+        $this->markTestIncomplete('FIXME: rdfa:copy for additional property value');
         $this->rdfaTestCase('0322', 'rdfa:copy for additional property value');
     }
 
     public function testCase0323()
     {
-        $this->markTestIncomplete("FIXME: Multiple references to rdfa:Pattern");
+        $this->markTestIncomplete('FIXME: Multiple references to rdfa:Pattern');
         $this->rdfaTestCase('0323', 'Multiple references to rdfa:Pattern');
     }
 
     public function testCase0324()
     {
-        $this->markTestIncomplete("FIXME: Multiple references to rdfa:Pattern");
+        $this->markTestIncomplete('FIXME: Multiple references to rdfa:Pattern');
         $this->rdfaTestCase('0324', 'Multiple references to rdfa:Pattern');
     }
 
     public function testCase0325()
     {
-        $this->markTestIncomplete("FIXME: Multiple references to rdfa:Pattern creating a resource");
+        $this->markTestIncomplete('FIXME: Multiple references to rdfa:Pattern creating a resource');
         $this->rdfaTestCase('0325', 'Multiple references to rdfa:Pattern creating a resource');
     }
 
     public function testCase0326()
     {
-        $this->markTestIncomplete("FIXME: rdfa:Pattern removed only if referenced");
+        $this->markTestIncomplete('FIXME: rdfa:Pattern removed only if referenced');
         $this->rdfaTestCase('0326', 'rdfa:Pattern removed only if referenced');
     }
 
     public function testCase0327()
     {
-        $this->markTestIncomplete("FIXME: rdfa:Pattern chaining");
+        $this->markTestIncomplete('FIXME: rdfa:Pattern chaining');
         $this->rdfaTestCase('0327', 'rdfa:Pattern chaining');
     }
 

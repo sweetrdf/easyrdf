@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -45,7 +46,6 @@ use EasyRdf\Utils;
  *
  * Note: the built-in N-Triples serialiser is used to pass data to Rapper.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -56,52 +56,49 @@ class Rapper extends Ntriples
     /**
      * Constructor
      *
-     * @param string $rapperCmd Optional path to the rapper command to use.
+     * @param string $rapperCmd optional path to the rapper command to use
      *
      * @throws \EasyRdf\Exception
      */
     public function __construct($rapperCmd = 'rapper')
     {
         exec("$rapperCmd --version 2>/dev/null", $output, $status);
-        if ($status != 0) {
-            throw new Exception(
-                "Failed to execute the command '$rapperCmd': " . join("\n", $output)
-            );
+        if (0 != $status) {
+            throw new Exception("Failed to execute the command '$rapperCmd': ".implode("\n", $output));
         } else {
             $this->rapperCmd = $rapperCmd;
         }
     }
 
-
     /**
      * Serialise an EasyRdf\Graph to the RDF format of choice.
      *
-     * @param \EasyRdf\Graph $graph  An EasyRdf\Graph object.
-     * @param string         $format The name of the format to convert to.
-     * @param array          $options
+     * @param \EasyRdf\Graph $graph  an EasyRdf\Graph object
+     * @param string         $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
+     *
      * @throws Exception
      */
-    public function serialise(Graph $graph, $format, array $options = array())
+    public function serialise(Graph $graph, $format, array $options = [])
     {
         parent::checkSerialiseParams($format);
 
         $ntriples = parent::serialise($graph, 'ntriples');
 
         // Hack to produce more concise RDF/XML
-        if ($format == 'rdfxml') {
+        if ('rdfxml' == $format) {
             $format = 'rdfxml-abbrev';
         }
 
         return Utils::execCommandPipe(
             $this->rapperCmd,
-            array(
+            [
                 '--quiet',
                 '--input', 'ntriples',
                 '--output', $format,
-                '-', 'unknown://'
-            ),
+                '-', 'unknown://',
+            ],
             $ntriples
         );
     }

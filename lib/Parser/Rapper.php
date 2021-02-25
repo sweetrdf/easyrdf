@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -41,7 +42,6 @@ use EasyRdf\Utils;
 /**
  * Class to parse RDF using the 'rapper' command line tool.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -54,50 +54,46 @@ class Rapper extends Json
     /**
      * Constructor
      *
-     * @param string $rapperCmd Optional path to the rapper command to use.
+     * @param string $rapperCmd optional path to the rapper command to use
      *
      * @throws \EasyRdf\Exception
      */
     public function __construct($rapperCmd = 'rapper')
     {
         exec("$rapperCmd --version 2>/dev/null", $output, $status);
-        if ($status != 0) {
-            throw new \EasyRdf\Exception(
-                "Failed to execute the command '$rapperCmd': " . join("\n", $output)
-            );
+        if (0 != $status) {
+            throw new \EasyRdf\Exception("Failed to execute the command '$rapperCmd': ".implode("\n", $output));
         } elseif (version_compare($output[0], self::MINIMUM_RAPPER_VERSION) < 0) {
-            throw new \EasyRdf\Exception(
-                "Version ".self::MINIMUM_RAPPER_VERSION." or higher of rapper is required."
-            );
+            throw new \EasyRdf\Exception('Version '.self::MINIMUM_RAPPER_VERSION.' or higher of rapper is required.');
         } else {
             $this->rapperCmd = $rapperCmd;
         }
     }
 
     /**
-      * Parse an RDF document into an EasyRdf\Graph
-      *
-      * @param Graph  $graph   the graph to load the data into
-      * @param string $data    the RDF document data
-      * @param string $format  the format of the input data
-      * @param string $baseUri the base URI of the data being parsed
-      *
-      * @return integer             The number of triples added to the graph
-      */
+     * Parse an RDF document into an EasyRdf\Graph
+     *
+     * @param Graph  $graph   the graph to load the data into
+     * @param string $data    the RDF document data
+     * @param string $format  the format of the input data
+     * @param string $baseUri the base URI of the data being parsed
+     *
+     * @return int The number of triples added to the graph
+     */
     public function parse($graph, $data, $format, $baseUri)
     {
         parent::checkParseParams($graph, $data, $format, $baseUri);
 
         $json = Utils::execCommandPipe(
             $this->rapperCmd,
-            array(
+            [
                 '--quiet',
                 '--input', $format,
                 '--output', 'json',
                 '--ignore-errors',
                 '--input-uri', $baseUri,
-                '--output-uri', '-', '-'
-            ),
+                '--output-uri', '-', '-',
+            ],
             $data
         );
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf\Examples;
 
 /**
@@ -31,14 +32,12 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
-require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class VillagesTest extends \EasyRdf\TestCase
+class WikidataVillagesTest extends \EasyRdf\TestCase
 {
     public function testIndex()
     {
@@ -53,7 +52,7 @@ class VillagesTest extends \EasyRdf\TestCase
     {
         $output = executeExample(
             'wikidata_villages.php',
-            array('id' => 'Q33980')
+            ['id' => 'Q33980']
         );
         $this->assertContains('<h2>Ceres</h2>', $output);
         $this->assertContains('<p>village in Fife, Scotland', $output);

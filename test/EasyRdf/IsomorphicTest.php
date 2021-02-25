@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,12 +32,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'TestHelper.php';
+require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class IsomorphicTest extends TestCase
 {
@@ -48,7 +47,7 @@ class IsomorphicTest extends TestCase
     /**
      * Set up the test suite before each test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->graphA = new Graph();
         $this->graphB = new Graph();
@@ -91,7 +90,7 @@ class IsomorphicTest extends TestCase
 
     public function testGood05()
     {
-        $this->markTestIncomplete("FIXME: Three triple chain with renamed bnodes is not implemented yet");
+        $this->markTestIncomplete('FIXME: Three triple chain with renamed bnodes is not implemented yet');
         // Three triple chain with renamed bnodes
         $this->checkTestCase('good-05');
     }

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Serialiser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -49,7 +50,6 @@ use EasyRdf\Utils;
  *
  * See http://www.graphviz.org/ for more information.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2012-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -58,20 +58,21 @@ class GraphViz extends Serialiser
     private $dotCommand = 'dot';
     private $useLabels = false;
     private $onlyLabelled = false;
-    private $attributes = array('charset' => 'utf-8');
+    private $attributes = ['charset' => 'utf-8'];
 
     /**
      * Set the path to the GraphViz 'dot' command
      *
      * Default is to search PATH for the command 'dot'.
      *
-     * @param string $cmd   The path to the 'dot' command.
+     * @param string $cmd the path to the 'dot' command
      *
      * @return self
      */
     public function setDotCommand($cmd)
     {
         $this->dotCommand = $cmd;
+
         return $this;
     }
 
@@ -80,7 +81,7 @@ class GraphViz extends Serialiser
      *
      * The default value is simply 'dot'
      *
-     * @return string The path to the 'dot' command.
+     * @return string the path to the 'dot' command
      */
     public function getDotCommand()
     {
@@ -97,13 +98,14 @@ class GraphViz extends Serialiser
      *
      * This option is turned off by default.
      *
-     * @param bool $useLabels   A boolean value to turn labels on and off
+     * @param bool $useLabels A boolean value to turn labels on and off
      *
      * @return GraphViz
      */
     public function setUseLabels($useLabels)
     {
         $this->useLabels = $useLabels;
+
         return $this;
     }
 
@@ -127,13 +129,14 @@ class GraphViz extends Serialiser
      *
      * This option is turned off by default.
      *
-     * @param bool $onlyLabelled   A boolean value to enable/display only labelled items
+     * @param bool $onlyLabelled A boolean value to enable/display only labelled items
      *
      * @return GraphViz
      */
     public function setOnlyLabelled($onlyLabelled)
     {
         $this->onlyLabelled = $onlyLabelled;
+
         return $this;
     }
 
@@ -156,21 +159,22 @@ class GraphViz extends Serialiser
      * See the GraphViz tool documentation for information about the
      * available attributes.
      *
-     * @param string $name    The name of the attribute
-     * @param string $value   The value for the attribute
+     * @param string $name  The name of the attribute
+     * @param string $value The value for the attribute
      *
      * @return GraphViz
      */
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;
+
         return $this;
     }
 
     /**
      * Get an attribute of the GraphViz graph
      *
-     * @param string $name    Attribute name
+     * @param string $name Attribute name
      *
      * @return string The value of the graph attribute
      */
@@ -188,12 +192,12 @@ class GraphViz extends Serialiser
     {
         if ($entity instanceof Resource) {
             if ($entity->isBNode()) {
-                return "B".$entity->getUri();
+                return 'B'.$entity->getUri();
             } else {
-                return "R".$entity->getUri();
+                return 'R'.$entity->getUri();
             }
         } else {
-            return "L".$entity;
+            return 'L'.$entity;
         }
     }
 
@@ -208,8 +212,8 @@ class GraphViz extends Serialiser
             return $input;
         } else {
             return '"'.str_replace(
-                array("\r\n", "\n", "\r", '"'),
-                array('\n',   '\n', '\n', '\"'),
+                ["\r\n", "\n", "\r", '"'],
+                ['\n',   '\n', '\n', '\"'],
                 $input
             ).'"';
         }
@@ -223,10 +227,11 @@ class GraphViz extends Serialiser
      */
     protected function escapeAttributes($array)
     {
-        $items = array();
+        $items = [];
         foreach ($array as $k => $v) {
             $items[] = $this->escape($k).'='.$this->escape($v);
         }
+
         return '['.implode(',', $items).']';
     }
 
@@ -235,15 +240,16 @@ class GraphViz extends Serialiser
      *
      * @ignore
      */
-    protected function serialiseRow($node1, $node2 = null, $attributes = array())
+    protected function serialiseRow($node1, $node2 = null, $attributes = [])
     {
         $result = '  '.$this->escape($node1);
         if ($node2) {
             $result .= ' -> '.$this->escape($node2);
         }
-        if (count($attributes)) {
+        if (\count($attributes)) {
             $result .= ' '.$this->escapeAttributes($attributes);
         }
+
         return $result.";\n";
     }
 
@@ -262,7 +268,7 @@ class GraphViz extends Serialiser
         }
 
         // Go through each of the properties and write the edges
-        $nodes = array();
+        $nodes = [];
         $result .= "\n  // Edges\n";
         foreach ($graph->resources() as $resource) {
             $name1 = $this->nodeName($resource);
@@ -271,8 +277,8 @@ class GraphViz extends Serialiser
                 if ($this->useLabels) {
                     $label = $graph->resource($property)->label();
                 }
-                if ($label === null) {
-                    if ($this->onlyLabelled == true) {
+                if (null === $label) {
+                    if (true == $this->onlyLabelled) {
                         continue;
                     } else {
                         $label = RdfNamespace::shorten($property);
@@ -285,7 +291,7 @@ class GraphViz extends Serialiser
                     $result .= $this->serialiseRow(
                         $name1,
                         $name2,
-                        array('label' => $label)
+                        ['label' => $label]
                     );
                 }
             }
@@ -297,7 +303,7 @@ class GraphViz extends Serialiser
         foreach ($nodes as $name => $node) {
             $type = substr($name, 0, 1);
             $label = '';
-            if ($type == 'R') {
+            if ('R' == $type) {
                 if ($this->useLabels) {
                     $label = $node->label();
                 }
@@ -310,34 +316,34 @@ class GraphViz extends Serialiser
                 $result .= $this->serialiseRow(
                     $name,
                     null,
-                    array(
-                        'URL'   => $node->getURI(),
+                    [
+                        'URL' => $node->getURI(),
                         'label' => $label,
                         'shape' => 'ellipse',
-                        'color' => 'blue'
-                    )
+                        'color' => 'blue',
+                    ]
                 );
-            } elseif ($type == 'B') {
+            } elseif ('B' == $type) {
                 if ($this->useLabels) {
                     $label = $node->label();
                 }
                 $result .= $this->serialiseRow(
                     $name,
                     null,
-                    array(
+                    [
                         'label' => $label,
                         'shape' => 'circle',
-                        'color' => 'green'
-                    )
+                        'color' => 'green',
+                    ]
                 );
             } else {
                 $result .= $this->serialiseRow(
                     $name,
                     null,
-                    array(
-                        'label' => strval($node),
+                    [
+                        'label' => (string) $node,
                         'shape' => 'record',
-                    )
+                    ]
                 );
             }
         }
@@ -358,25 +364,24 @@ class GraphViz extends Serialiser
 
         return Utils::execCommandPipe(
             $this->dotCommand,
-            array("-T$format"),
+            ["-T$format"],
             $dot
         );
     }
-
 
     /**
      * Serialise an EasyRdf\Graph into a GraphViz dot document.
      *
      * Supported output format names: dot, gif, png, svg
      *
-     * @param Graph  $graph  An EasyRdf\Graph object.
-     * @param string $format The name of the format to convert to.
-     * @param array  $options
+     * @param Graph  $graph  an EasyRdf\Graph object
+     * @param string $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
+     *
      * @throws Exception
      */
-    public function serialise(Graph $graph, $format, array $options = array())
+    public function serialise(Graph $graph, $format, array $options = [])
     {
         parent::checkSerialiseParams($format);
 
@@ -388,9 +393,7 @@ class GraphViz extends Serialiser
             case 'svg':
                 return $this->renderImage($graph, $format);
             default:
-                throw new Exception(
-                    "EasyRdf\\Serialiser\\GraphViz does not support: {$format}"
-                );
+                throw new Exception("EasyRdf\\Serialiser\\GraphViz does not support: {$format}");
         }
     }
 }

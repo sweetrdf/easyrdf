@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Sparql;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,7 @@ use EasyRdf\Literal;
 use EasyRdf\Resource;
 use EasyRdf\TestCase;
 
-require_once realpath(dirname(__FILE__) . '/../../') . '/TestHelper.php';
-
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class ResultTest extends TestCase
 {
@@ -53,11 +53,11 @@ class ResultTest extends TestCase
         );
 
         $this->assertSame(3, $result->numFields());
-        $this->assertSame(array('s','p','o'), $result->getFields());
+        $this->assertSame(['s', 'p', 'o'], $result->getFields());
 
         $this->assertCount(14, $result);
         $this->assertSame(14, $result->numRows());
-        $this->assertSame(14, count($result));
+        $this->assertSame(14, \count($result));
         $this->assertEquals(
             new Resource('_:genid1'),
             $result[0]->s
@@ -80,11 +80,11 @@ class ResultTest extends TestCase
         );
 
         $this->assertSame(3, $result->numFields());
-        $this->assertSame(array('s','p','o'), $result->getFields());
+        $this->assertSame(['s', 'p', 'o'], $result->getFields());
 
         $this->assertCount(14, $result);
         $this->assertSame(14, $result->numRows());
-        $this->assertSame(14, count($result));
+        $this->assertSame(14, \count($result));
         $this->assertEquals(
             new Resource('_:genid1'),
             $result[0]->s
@@ -107,11 +107,11 @@ class ResultTest extends TestCase
         );
 
         $this->assertSame(3, $result->numFields());
-        $this->assertSame(array('s','p','o'), $result->getFields());
+        $this->assertSame(['s', 'p', 'o'], $result->getFields());
 
         $this->assertCount(14, $result);
         $this->assertSame(14, $result->numRows());
-        $this->assertSame(14, count($result));
+        $this->assertSame(14, \count($result));
         $this->assertEquals(
             new Resource('_:genid1'),
             $result[0]->s
@@ -134,7 +134,7 @@ class ResultTest extends TestCase
         );
 
         $this->assertSame(3, $result->numFields());
-        $this->assertSame(array('s','p','o'), $result->getFields());
+        $this->assertSame(['s', 'p', 'o'], $result->getFields());
         $this->assertCount(0, $result);
     }
 
@@ -146,7 +146,7 @@ class ResultTest extends TestCase
         );
 
         $this->assertSame(3, $result->numFields());
-        $this->assertSame(array('s','p','o'), $result->getFields());
+        $this->assertSame(['s', 'p', 'o'], $result->getFields());
         $this->assertCount(0, $result);
     }
 
@@ -157,23 +157,23 @@ class ResultTest extends TestCase
             'application/sparql-results+xml'
         );
 
-        # 1st: Example using xml:lang="en"
+        // 1st: Example using xml:lang="en"
         $first = $result[0];
         $this->assertSame('London', $first->label->getValue());
         $this->assertSame('en', $first->label->getLang());
-        $this->assertSame(null, $first->label->getDatatype());
+        $this->assertNull($first->label->getDatatype());
 
-        # 2nd: Example using xml:lang="es"
+        // 2nd: Example using xml:lang="es"
         $second = $result[1];
         $this->assertSame('Londres', $second->label->getValue());
         $this->assertSame('es', $second->label->getLang());
-        $this->assertSame(null, $second->label->getDatatype());
+        $this->assertNull($second->label->getDatatype());
 
-        # 3rd: no lang
+        // 3rd: no lang
         $third = $result[2];
         $this->assertSame('London', $third->label->getValue());
-        $this->assertSame(null, $third->label->getLang());
-        $this->assertSame(null, $third->label->getDatatype());
+        $this->assertNull($third->label->getLang());
+        $this->assertNull($third->label->getDatatype());
     }
 
     public function testSelectLangLiteralJson()
@@ -183,23 +183,23 @@ class ResultTest extends TestCase
             'application/sparql-results+json'
         );
 
-        # 1st: Example using xml:lang="en"
+        // 1st: Example using xml:lang="en"
         $first = $result[0];
         $this->assertSame('London', $first->label->getValue());
         $this->assertSame('en', $first->label->getLang());
-        $this->assertSame(null, $first->label->getDatatype());
+        $this->assertNull($first->label->getDatatype());
 
-        # 2nd: Example using lang="es"
+        // 2nd: Example using lang="es"
         $second = $result[1];
         $this->assertSame('Londres', $second->label->getValue());
         $this->assertSame('es', $second->label->getLang());
-        $this->assertSame(null, $second->label->getDatatype());
+        $this->assertNull($second->label->getDatatype());
 
-        # 3rd: no lang
+        // 3rd: no lang
         $third = $result[2];
         $this->assertSame('London', $third->label->getValue());
-        $this->assertSame(null, $third->label->getLang());
-        $this->assertSame(null, $third->label->getDatatype());
+        $this->assertNull($third->label->getLang());
+        $this->assertNull($third->label->getDatatype());
     }
 
     public function testSelectTypedLiteralJson()
@@ -233,7 +233,7 @@ class ResultTest extends TestCase
         $huge = "<sparql xmlns=\"http://www.w3.org/2005/sparql-results#\">\n";
         $huge .= "<head><variable name=\"s\"/><variable name=\"p\"/><variable name=\"o\"/></head>\n";
         $huge .= "<results>\n";
-        for ($i = 0; $i < 50000; $i++) {
+        for ($i = 0; $i < 50000; ++$i) {
             $huge .= "<result>\n";
             $huge .= "<binding name=\"s\"><uri>http://www.example.com/person/$i</uri></binding>\n";
             $huge .= "<binding name=\"p\"><uri>http://www.w3.org/1999/02/22-rdf-syntax-ns#type</uri></binding>\n";
@@ -243,7 +243,7 @@ class ResultTest extends TestCase
         $huge .= "</results>\n</sparql>\n";
 
         // Check it is more than 10Mb
-        $this->assertGreaterThan(10485760, strlen($huge));
+        $this->assertGreaterThan(10485760, \strlen($huge));
 
         $result = new Result($huge, 'application/sparql-results+xml');
 
@@ -261,12 +261,12 @@ class ResultTest extends TestCase
         $this->assertSame('boolean', $result->getType());
         $this->assertFalse($result->isFalse());
         $this->assertTrue($result->isTrue());
-        $this->assertSame(true, $result->getBoolean());
+        $this->assertTrue($result->getBoolean());
         $this->assertStringEquals('true', $result);
 
         $this->assertSame(0, $result->numFields());
         $this->assertSame(0, $result->numRows());
-        $this->assertSame(0, count($result));
+        $this->assertSame(0, \count($result));
     }
 
     public function testAskFalseJson()
@@ -279,12 +279,12 @@ class ResultTest extends TestCase
         $this->assertSame('boolean', $result->getType());
         $this->assertTrue($result->isFalse());
         $this->assertFalse($result->isTrue());
-        $this->assertSame(false, $result->getBoolean());
+        $this->assertFalse($result->getBoolean());
         $this->assertStringEquals('false', $result);
 
         $this->assertSame(0, $result->numFields());
         $this->assertSame(0, $result->numRows());
-        $this->assertSame(0, count($result));
+        $this->assertSame(0, \count($result));
     }
 
     public function testAskTrueXml()
@@ -296,12 +296,12 @@ class ResultTest extends TestCase
         $this->assertSame('boolean', $result->getType());
         $this->assertFalse($result->isFalse());
         $this->assertTrue($result->isTrue());
-        $this->assertSame(true, $result->getBoolean());
+        $this->assertTrue($result->getBoolean());
         $this->assertStringEquals('true', $result);
 
         $this->assertSame(0, $result->numFields());
         $this->assertSame(0, $result->numRows());
-        $this->assertSame(0, count($result));
+        $this->assertSame(0, \count($result));
     }
 
     public function testAskFalseXml()
@@ -313,12 +313,12 @@ class ResultTest extends TestCase
         $this->assertSame('boolean', $result->getType());
         $this->assertTrue($result->isFalse());
         $this->assertFalse($result->isTrue());
-        $this->assertSame(false, $result->getBoolean());
+        $this->assertFalse($result->getBoolean());
         $this->assertStringEquals('false', $result);
 
         $this->assertSame(0, $result->numFields());
         $this->assertSame(0, $result->numRows());
-        $this->assertSame(0, count($result));
+        $this->assertSame(0, \count($result));
     }
 
     public function testInvalidXml()
@@ -390,14 +390,14 @@ class ResultTest extends TestCase
 
         $html = $result->dump('html');
         $this->assertContains("<table class='sparql-results'", $html);
-        $this->assertContains(">?s</th>", $html);
-        $this->assertContains(">?p</th>", $html);
-        $this->assertContains(">?o</th></tr>", $html);
+        $this->assertContains('>?s</th>', $html);
+        $this->assertContains('>?p</th>', $html);
+        $this->assertContains('>?o</th></tr>', $html);
 
-        $this->assertContains(">http://www.example.com/joe#me</a></td>", $html);
-        $this->assertContains(">foaf:name</a></td>", $html);
-        $this->assertContains(">&quot;Joe Bloggs&quot;@en</span></td>", $html);
-        $this->assertContains("</table>", $html);
+        $this->assertContains('>http://www.example.com/joe#me</a></td>', $html);
+        $this->assertContains('>foaf:name</a></td>', $html);
+        $this->assertContains('>&quot;Joe Bloggs&quot;@en</span></td>', $html);
+        $this->assertContains('</table>', $html);
     }
 
     public function testDumpSelectAllText()
@@ -427,9 +427,9 @@ class ResultTest extends TestCase
         );
 
         $html = $result->dump('html');
-        $this->assertContains(">?person</th>", $html);
-        $this->assertContains(">?name</th>", $html);
-        $this->assertContains(">?foo</th>", $html);
+        $this->assertContains('>?person</th>', $html);
+        $this->assertContains('>?name</th>', $html);
+        $this->assertContains('>?foo</th>', $html);
 
         $this->assertContains('>http://dbpedia.org/resource/Tim_Berners-Lee</a>', $html);
         $this->assertContains('>&quot;Tim Berners-Lee&quot;@en</span>', $html);
@@ -444,7 +444,7 @@ class ResultTest extends TestCase
         );
 
         $html = $result->dump('html');
-        $this->assertContains(">false</span>", $html);
+        $this->assertContains('>false</span>', $html);
     }
 
     public function testDumpAskFalseText()
@@ -455,7 +455,7 @@ class ResultTest extends TestCase
         );
 
         $text = $result->dump('text');
-        $this->assertSame("Result: false", $text);
+        $this->assertSame('Result: false', $text);
     }
 
     public function testDumpUnknownType()
@@ -489,7 +489,7 @@ class ResultTest extends TestCase
             'application/sparql-results+xml'
         );
 
-        $this->assertSame("true", strval($result));
+        $this->assertSame('true', (string) $result);
     }
 
     public function testToStringBooleanFalse()
@@ -499,7 +499,7 @@ class ResultTest extends TestCase
             'application/sparql-results+xml'
         );
 
-        $this->assertSame("false", strval($result));
+        $this->assertSame('false', (string) $result);
     }
 
     public function testToStringSelectAll()
@@ -509,7 +509,7 @@ class ResultTest extends TestCase
             'application/sparql-results+xml'
         );
 
-        $string = strval($result);
+        $string = (string) $result;
         $this->assertContains('+-------------------------------------+', $string);
         $this->assertContains('| http://www.example.com/joe#me       |', $string);
     }

@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Http;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -36,12 +37,12 @@ namespace EasyRdf\Http;
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-/**
+/*
  * Test helper
  */
 use EasyRdf\TestCase;
 
-require_once realpath(__DIR__ . '/../../') . '/TestHelper.php';
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class ResponseTest extends TestCase
 {
@@ -125,7 +126,7 @@ class ResponseTest extends TestCase
      * and trailer. Unfortunately some buggy servers (read: IIS) send those and
      * we need to support them.
      *
-     * @link http://framework.zend.com/issues/browse/ZF-6040
+     * @see http://framework.zend.com/issues/browse/ZF-6040
      */
     public function testNonStandardDeflateResponseZF6040()
     {
@@ -144,7 +145,7 @@ class ResponseTest extends TestCase
             readFixture('http_response_200_chunked')
         );
         $this->assertSame(
-            "Hello World",
+            'Hello World',
             $response->getBody()
         );
     }
@@ -317,12 +318,11 @@ class ResponseTest extends TestCase
             'Content-type header is not as expected'
         );
         $this->assertSame(
-            array('foo','bar'),
+            ['foo', 'bar'],
             $response->getHeader('X-Multiple'),
             'Header with multiple values is not as expected'
         );
     }
-
 
     public function testAsString()
     {
@@ -336,7 +336,7 @@ class ResponseTest extends TestCase
         );
         $this->assertSame(
             strtolower($responseStr),
-            strtolower((string)$response),
+            strtolower((string) $response),
             'Response convertion to string does not match original string'
         );
     }

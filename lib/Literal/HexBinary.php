@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -40,8 +41,8 @@ use EasyRdf\Literal;
 /**
  * Class that represents an RDF Literal of datatype xsd:hexBinary
  *
- * @package    EasyRdf
- * @link       http://www.w3.org/TR/xmlschema-2/#hexBinary
+ * @see       http://www.w3.org/TR/xmlschema-2/#hexBinary
+ *
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -49,9 +50,9 @@ class HexBinary extends Literal
 {
     /** Constructor for creating a new xsd:hexBinary literal
      *
-     * @param  mixed  $value     The value of the literal (already encoded as hexadecimal)
-     * @param  string $lang      Should be null (literals with a datatype can't have a language)
-     * @param  string $datatype  Optional datatype (default 'xsd:hexBinary')
+     * @param mixed  $value    The value of the literal (already encoded as hexadecimal)
+     * @param string $lang     Should be null (literals with a datatype can't have a language)
+     * @param string $datatype Optional datatype (default 'xsd:hexBinary')
      *
      * @throws \InvalidArgumentException
      */
@@ -63,9 +64,7 @@ class HexBinary extends Literal
 
         // Validate the data
         if (preg_match('/[^A-F0-9]/', $value)) {
-            throw new \InvalidArgumentException(
-                "Literal of type xsd:hexBinary contains non-hexadecimal characters"
-            );
+            throw new \InvalidArgumentException('Literal of type xsd:hexBinary contains non-hexadecimal characters');
         }
 
         parent::__construct(strtoupper($value), null, 'xsd:hexBinary');
@@ -73,7 +72,7 @@ class HexBinary extends Literal
 
     /** Constructor for creating a new literal object from a binary blob
      *
-     * @param  string $binary  The binary data
+     * @param string $binary The binary data
      *
      * @return self
      */
@@ -88,6 +87,6 @@ class HexBinary extends Literal
      */
     public function toBinary()
     {
-        return pack("H*", $this->value);
+        return pack('H*', $this->value);
     }
 }

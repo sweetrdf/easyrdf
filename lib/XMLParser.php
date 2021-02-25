@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -39,14 +39,13 @@ namespace EasyRdf;
 /**
  * Utility class for parsing XML documents
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 class XMLParser extends \XMLReader
 {
     /** Array containing list of element names for current path */
-    public $path = array();
+    public $path = [];
 
     /** Callback to call when a new element tag starts */
     public $startElementCallback = null;
@@ -60,21 +59,20 @@ class XMLParser extends \XMLReader
     /** Callback to call when significant whitespace is encountered */
     public $whitespaceCallback = null;
 
-
     /** Parse an XML string. Calls the callback methods
      *  when various nodes of an XML document are encountered
      */
     public function parse($xml)
     {
         $this->xml($xml);
-        $this->path = array();
+        $this->path = [];
 
         while ($this->read()) {
             switch ($this->nodeType) {
                 case \XMLReader::ELEMENT:
                     $this->path[] = $this->name;
                     if ($this->startElementCallback) {
-                        call_user_func($this->startElementCallback, $this);
+                        \call_user_func($this->startElementCallback, $this);
                     }
                     if ($this->isEmptyElement) {
                         array_pop($this->path);
@@ -83,7 +81,7 @@ class XMLParser extends \XMLReader
 
                 case \XMLReader::END_ELEMENT:
                     if ($this->endElementCallback) {
-                        call_user_func($this->endElementCallback, $this);
+                        \call_user_func($this->endElementCallback, $this);
                     }
                     array_pop($this->path);
                     break;
@@ -91,13 +89,13 @@ class XMLParser extends \XMLReader
                 case \XMLReader::TEXT:
                 case \XMLReader::CDATA:
                     if ($this->textCallback) {
-                        call_user_func($this->textCallback, $this);
+                        \call_user_func($this->textCallback, $this);
                     }
                     break;
 
                 case \XMLReader::SIGNIFICANT_WHITESPACE:
                     if ($this->whitespaceCallback) {
-                        call_user_func($this->whitespaceCallback);
+                        \call_user_func($this->whitespaceCallback);
                     }
                     break;
             }
@@ -117,6 +115,6 @@ class XMLParser extends \XMLReader
      */
     public function depth()
     {
-        return count($this->path);
+        return \count($this->path);
     }
 }

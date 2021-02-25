@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Parser;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -43,7 +44,6 @@ use EasyRdf\Parser;
 /**
  * A pure-php class to parse RDF/XML.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  *             Copyright (c) 2004-2010 Benjamin Nowack (based on ARC2_RDFXMLParser.php)
  * @license    https://www.opensource.org/licenses/bsd-license.php
@@ -75,8 +75,8 @@ class RdfXml extends Parser
         $this->xBase = new ParsedUri($base);
         $this->xml = 'http://www.w3.org/XML/1998/namespace';
         $this->rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
-        $this->nsp = array($this->xml => 'xml', $this->rdf => 'rdf');
-        $this->sStack = array();
+        $this->nsp = [$this->xml => 'xml', $this->rdf => 'rdf'];
+        $this->sStack = [];
         $this->sCount = 0;
     }
 
@@ -85,8 +85,8 @@ class RdfXml extends Parser
     {
         if (!isset($this->xmlParser)) {
             $parser = xml_parser_create_ns('UTF-8', '');
-            xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 0);
-            xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+            xml_parser_set_option($parser, \XML_OPTION_SKIP_WHITE, 0);
+            xml_parser_set_option($parser, \XML_OPTION_CASE_FOLDING, 0);
             xml_set_element_handler($parser, 'startElementHandler', 'endElementHandler');
             xml_set_character_data_handler($parser, 'cdataHandler');
             xml_set_start_namespace_decl_handler($parser, 'newNamespaceHandler');
@@ -100,15 +100,15 @@ class RdfXml extends Parser
     {
         $s['pos'] = $this->sCount;
         $this->sStack[$this->sCount] = $s;
-        $this->sCount++;
+        ++$this->sCount;
     }
 
     /** @ignore */
     protected function popS()
     {
-        $r = array();
-        $this->sCount--;
-        for ($i = 0, $iMax = $this->sCount; $i < $iMax; $i++) {
+        $r = [];
+        --$this->sCount;
+        for ($i = 0, $iMax = $this->sCount; $i < $iMax; ++$i) {
             $r[$i] = $this->sStack[$i];
         }
         $this->sStack = $r;
@@ -167,13 +167,14 @@ class RdfXml extends Parser
     {
         /* auto-splitting on / or # */
         if (preg_match('/^(.*[\/\#])([^\/\#]+)$/', $v, $m)) {
-            return array($m[1], $m[2]);
+            return [$m[1], $m[2]];
         }
         /* auto-splitting on last special char, e.g. urn:foo:bar */
         if (preg_match('/^(.*[\:\/])([^\:\/]+)$/', $v, $m)) {
-            return array($m[1], $m[2]);
+            return [$m[1], $m[2]];
         }
-        return array($v, '');
+
+        return [$v, ''];
     }
 
     /** @ignore */
@@ -182,12 +183,12 @@ class RdfXml extends Parser
         $this->addTriple(
             $s,
             $p,
-            array(
+            [
                 'type' => $oType,
                 'value' => $o,
                 'lang' => $oLang,
-                'datatype' => $oDatatype
-            )
+                'datatype' => $oDatatype,
+            ]
         );
     }
 
@@ -217,9 +218,7 @@ class RdfXml extends Parser
             case 6:
                 return $this->startState6($t, $a);
             default:
-                throw new Exception(
-                    'startElementHandler() called at state ' . $this->state . ' in '.$t
-                );
+                throw new Exception('startElementHandler() called at state '.$this->state.' in '.$t);
         }
     }
 
@@ -240,9 +239,7 @@ class RdfXml extends Parser
             case 6:
                 return $this->endState6($t);
             default:
-                throw new Exception(
-                    'endElementHandler() called at state ' . $this->state . ' in '.$t
-                );
+                throw new Exception('endElementHandler() called at state '.$this->state.' in '.$t);
         }
     }
 
@@ -281,11 +278,11 @@ class RdfXml extends Parser
     /** @ignore */
     protected function startState1($t, $a)
     {
-        $s = array(
+        $s = [
             'x_base' => $this->getParentXBase(),
             'x_lang' => $this->getParentXLang(),
             'li_count' => 0,
-        );
+        ];
 
         if (isset($a[$this->xml.'base'])) {
             $s['x_base'] = $this->xBase->resolve($a[$this->xml.'base']);
@@ -299,11 +296,11 @@ class RdfXml extends Parser
         if (isset($a[$this->rdf.'ID'])) {
             $s['type'] = 'uri';
             $s['value'] = $s['x_base']->resolve('#'.$a[$this->rdf.'ID']);
-            /* about */
+        /* about */
         } elseif (isset($a[$this->rdf.'about'])) {
             $s['type'] = 'uri';
             $s['value'] = $s['x_base']->resolve($a[$this->rdf.'about']);
-            /* bnode */
+        /* bnode */
         } else {
             $s['type'] = 'bnode';
             if (isset($a[$this->rdf.'nodeID'])) {
@@ -314,33 +311,33 @@ class RdfXml extends Parser
         }
 
         /* sub-node */
-        if ($this->state === 4) {
+        if (4 === $this->state) {
             $supS = $this->getParentS();
             /* new collection */
             if (isset($supS['o_is_coll']) && $supS['o_is_coll']) {
-                $coll = array(
+                $coll = [
                     'type' => 'bnode',
                     'value' => $this->graph->newBNodeId(),
                     'is_coll' => true,
                     'x_base' => $s['x_base'],
-                    'x_lang' => $s['x_lang']
-                );
+                    'x_lang' => $s['x_lang'],
+                ];
                 $this->add($supS['value'], $supS['p'], $coll['value'], $supS['type'], $coll['type']);
                 $this->add($coll['value'], $this->rdf.'first', $s['value'], $coll['type'], $s['type']);
                 $this->pushS($coll);
             } elseif (isset($supS['is_coll']) && $supS['is_coll']) {
                 /* new entry in existing coll */
-                $coll = array(
+                $coll = [
                 'type' => 'bnode',
                 'value' => $this->graph->newBNodeId(),
                 'is_coll' => true,
                 'x_base' => $s['x_base'],
-                'x_lang' => $s['x_lang']
-                );
+                'x_lang' => $s['x_lang'],
+                ];
                 $this->add($supS['value'], $this->rdf.'rest', $coll['value'], $supS['type'], $coll['type']);
                 $this->add($coll['value'], $this->rdf.'first', $s['value'], $coll['type'], $s['type']);
                 $this->pushS($coll);
-                /* normal sub-node */
+            /* normal sub-node */
             } elseif (isset($supS['p']) && $supS['p']) {
                 $this->add($supS['value'], $supS['p'], $s['value'], $supS['type'], $s['type']);
             }
@@ -362,7 +359,7 @@ class RdfXml extends Parser
 
         /* any other attrs (skip rdf and xml, except rdf:_, rdf:value, rdf:Seq) */
         foreach ($a as $k => $v) {
-            if (((strpos($k, $this->xml) === false) && (strpos($k, $this->rdf) === false)) ||
+            if (((false === strpos($k, $this->xml)) && (false === strpos($k, $this->rdf))) ||
                 preg_match('/(\_[0-9]+|value|Seq|Bag|Alt|Statement|Property|List)$/', $k)) {
                 if (strpos($k, ':')) {
                     $this->add($s['value'], $k, $v, $s['type'], 'literal', null, $s['x_lang']);
@@ -377,7 +374,7 @@ class RdfXml extends Parser
     protected function startState2($t, $a)
     {
         $s = $this->getParentS();
-        foreach (array('p_x_base', 'p_x_lang', 'p_id', 'o_is_coll') as $k) {
+        foreach (['p_x_base', 'p_x_lang', 'p_id', 'o_is_coll'] as $k) {
             unset($s[$k]);
         }
         /* base */
@@ -392,7 +389,7 @@ class RdfXml extends Parser
         $l = isset($s['p_x_lang']) && $s['p_x_lang'] ? $s['p_x_lang'] : $s['x_lang'];
         /* adjust li */
         if ($t === $this->rdf.'li') {
-            $s['li_count']++;
+            ++$s['li_count'];
             $t = $this->rdf.'_'.$s['li_count'];
         }
         /* set p */
@@ -401,7 +398,7 @@ class RdfXml extends Parser
         if (isset($a[$this->rdf.'ID'])) {
             $s['p_id'] = $a[$this->rdf.'ID'];
         }
-        $o = array('value' => null, 'type' => null, 'x_base' => $b, 'x_lang' => $l);
+        $o = ['value' => null, 'type' => null, 'x_base' => $b, 'x_lang' => $l];
         /* resource/rdf:resource */
         if (isset($a['resource'])) {
             $a[$this->rdf.'resource'] = $a['resource'];
@@ -453,13 +450,13 @@ class RdfXml extends Parser
             }
             /* parseType */
         } elseif (isset($a[$this->rdf.'parseType'])) {
-            if ($a[$this->rdf.'parseType'] === 'Literal') {
+            if ('Literal' === $a[$this->rdf.'parseType']) {
                 $s['o_xml_level'] = 0;
                 $s['o_xml_data'] = '';
                 $s['p_xml_literal_level'] = 0;
-                $s['ns'] = array();
+                $s['ns'] = [];
                 $this->state = 6;
-            } elseif ($a[$this->rdf.'parseType'] === 'Resource') {
+            } elseif ('Resource' === $a[$this->rdf.'parseType']) {
                 $o['value'] = $this->graph->newBNodeId();
                 $o['type'] = 'bnode';
                 $o['hasClosingTag'] = 0;
@@ -478,7 +475,7 @@ class RdfXml extends Parser
                     unset($s['p_id']);
                 }
                 $this->state = 2;
-            } elseif ($a[$this->rdf.'parseType'] === 'Collection') {
+            } elseif ('Collection' === $a[$this->rdf.'parseType']) {
                 $s['o_is_coll'] = true;
                 $this->state = 4;
             }
@@ -492,8 +489,8 @@ class RdfXml extends Parser
         }
         /* any other attrs (skip rdf and xml) */
         foreach ($a as $k => $v) {
-            if (((strpos($k, $this->xml) === false) &&
-             (strpos($k, $this->rdf) === false)) ||
+            if (((false === strpos($k, $this->xml)) &&
+             (false === strpos($k, $this->rdf))) ||
              preg_match('/(\_[0-9]+|value)$/', $k)) {
                 if (strpos($k, ':')) {
                     if (!$o['value']) {
@@ -531,6 +528,7 @@ class RdfXml extends Parser
     protected function startState5($t, $a)
     {
         $this->state = 4;
+
         return $this->startState4($t, $a);
     }
 
@@ -539,25 +537,25 @@ class RdfXml extends Parser
     {
         $s = $this->getParentS();
         $data = isset($s['o_xml_data']) ? $s['o_xml_data'] : '';
-        $ns = isset($s['ns']) ? $s['ns'] : array();
+        $ns = isset($s['ns']) ? $s['ns'] : [];
         $parts = $this->splitURI($t);
-        if (count($parts) === 1) {
+        if (1 === \count($parts)) {
             $data .= '<'.$t;
         } else {
             $nsUri = $parts[0];
             $name = $parts[1];
             if (!isset($this->nsp[$nsUri])) {
                 foreach ($this->nsp as $tmp1 => $tmp2) {
-                    if (strpos($t, $tmp1) === 0) {
+                    if (0 === strpos($t, $tmp1)) {
                         $nsUri = $tmp1;
-                        $name = substr($t, strlen($tmp1));
+                        $name = substr($t, \strlen($tmp1));
                         break;
                     }
                 }
             }
 
             $nsp = isset($this->nsp[$nsUri]) ? $this->nsp[$nsUri] : '';
-            $data .= $nsp ? '<' . $nsp . ':' . $name : '<' . $name;
+            $data .= $nsp ? '<'.$nsp.':'.$name : '<'.$name;
             /* ns */
             if (!isset($ns[$nsp.'='.$nsUri]) || !$ns[$nsp.'='.$nsUri]) {
                 $data .= $nsp ? ' xmlns:'.$nsp.'="'.$nsUri.'"' : ' xmlns="'.$nsUri.'"';
@@ -567,13 +565,13 @@ class RdfXml extends Parser
         }
         foreach ($a as $k => $v) {
             $parts = $this->splitURI($k);
-            if (count($parts) === 1) {
+            if (1 === \count($parts)) {
                 $data .= ' '.$k.'="'.$v.'"';
             } else {
                 $nsUri = $parts[0];
                 $name = $parts[1];
                 $nsp = isset($this->nsp[$nsUri]) ? $this->nsp[$nsUri] : '';
-                $data .= $nsp ? ' '.$nsp.':'.$name.'="'.$v.'"' : ' '.$name.'="'.$v.'"' ;
+                $data .= $nsp ? ' '.$nsp.':'.$name.'="'.$v.'"' : ' '.$name.'="'.$v.'"';
             }
         }
         $data .= '>';
@@ -654,7 +652,7 @@ class RdfXml extends Parser
                 $dt = isset($s['o_datatype']) ? $s['o_datatype'] : null;
                 $l = isset($s['p_x_lang']) && $s['p_x_lang'] ?
                      $s['p_x_lang'] : (isset($s['x_lang']) ? $s['x_lang'] : null);
-                $o = array('type' => 'literal', 'value' => $s['o_cdata']);
+                $o = ['type' => 'literal', 'value' => $s['o_cdata']];
                 $this->add(
                     $s['value'],
                     $s['p'],
@@ -706,7 +704,7 @@ class RdfXml extends Parser
                 (isset($s['x_lang']) ? $s['x_lang'] : null);
             $data = $s['o_xml_data'];
             $level = $s['o_xml_level'];
-            if ($level === 0) {
+            if (0 === $level) {
                 /* pClose */
                 $this->add(
                     $s['value'],
@@ -721,16 +719,16 @@ class RdfXml extends Parser
                 $this->state = 2;
             } else {
                 $parts = $this->splitURI($t);
-                if (count($parts) == 1) {
+                if (1 == \count($parts)) {
                     $data .= '</'.$t.'>';
                 } else {
                     $nsUri = $parts[0];
                     $name = $parts[1];
                     if (!isset($this->nsp[$nsUri])) {
                         foreach ($this->nsp as $tmp1 => $tmp2) {
-                            if (strpos($t, $tmp1) === 0) {
+                            if (0 === strpos($t, $tmp1)) {
                                 $nsUri = $tmp1;
-                                $name = substr($t, strlen($tmp1));
+                                $name = substr($t, \strlen($tmp1));
                                 break;
                             }
                         }
@@ -742,7 +740,7 @@ class RdfXml extends Parser
                 $s['o_xml_level'] = $level - 1;
                 if ($t == $s['p']) {
                     /* xml container prop */
-                    $s['p_xml_literal_level']--;
+                    --$s['p_xml_literal_level'];
                 }
             }
             $this->updateS($s);
@@ -753,7 +751,7 @@ class RdfXml extends Parser
     protected function cdataState4($d)
     {
         if ($s = $this->getParentS()) {
-            $s['o_cdata'] = isset($s['o_cdata']) ? $s['o_cdata'] . $d : $d;
+            $s['o_cdata'] = isset($s['o_cdata']) ? $s['o_cdata'].$d : $d;
             $this->updateS($s);
         }
     }
@@ -763,8 +761,8 @@ class RdfXml extends Parser
     {
         if ($s = $this->getParentS()) {
             if (isset($s['o_xml_data']) || preg_match('/[\n\r]/', $d) || trim($d)) {
-                $d = htmlspecialchars($d, ENT_NOQUOTES);
-                $s['o_xml_data'] = isset($s['o_xml_data']) ? $s['o_xml_data'] . $d : $d;
+                $d = htmlspecialchars($d, \ENT_NOQUOTES);
+                $s['o_xml_data'] = isset($s['o_xml_data']) ? $s['o_xml_data'].$d : $d;
             }
             $this->updateS($s);
         }
@@ -780,16 +778,15 @@ class RdfXml extends Parser
      *
      * @throws Exception
      * @throws \EasyRdf\Exception
-     * @return integer             The number of triples added to the graph
+     *
+     * @return int The number of triples added to the graph
      */
     public function parse($graph, $data, $format, $baseUri)
     {
         parent::checkParseParams($graph, $data, $format, $baseUri);
 
-        if ($format != 'rdfxml') {
-            throw new \EasyRdf\Exception(
-                "EasyRdf\\Parser\\RdfXml does not support: $format"
-            );
+        if ('rdfxml' != $format) {
+            throw new \EasyRdf\Exception("EasyRdf\\Parser\\RdfXml does not support: $format");
         }
 
         $this->init($graph, $baseUri);
@@ -800,19 +797,15 @@ class RdfXml extends Parser
 
         /* split into 1MB chunks, so XML parser can cope */
         $chunkSize = 1000000;
-        $length = strlen($data);
-        for ($pos=0; $pos < $length; $pos += $chunkSize) {
+        $length = \strlen($data);
+        for ($pos = 0; $pos < $length; $pos += $chunkSize) {
             $chunk = substr($data, $pos, $chunkSize);
             $isLast = ($pos + $chunkSize > $length);
 
             /* Parse the chunk */
             if (!xml_parse($this->xmlParser, $chunk, $isLast)) {
                 $message = xml_error_string(xml_get_error_code($this->xmlParser));
-                throw new Exception(
-                    'XML error: "' . $message . '"',
-                    xml_get_current_line_number($this->xmlParser),
-                    xml_get_current_column_number($this->xmlParser)
-                );
+                throw new Exception('XML error: "'.$message.'"', xml_get_current_line_number($this->xmlParser), xml_get_current_column_number($this->xmlParser));
             }
         }
 

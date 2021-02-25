@@ -1,4 +1,5 @@
 <?php
+
 namespace EasyRdf;
 
 /**
@@ -31,7 +32,6 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2016 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -39,40 +39,37 @@ namespace EasyRdf;
 /**
  * Parent class for the EasyRdf serialiser
  *
- * @package    EasyRdf
  * @copyright  Copyright (c) 2009-2016 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 abstract class Serialiser
 {
-    protected $prefixes = array();
+    protected $prefixes = [];
 
     /**
      * Keep track of the prefixes used while serialising
+     *
      * @ignore
      */
     protected function addPrefix($qname)
     {
-        list ($prefix) = explode(':', $qname);
+        list($prefix) = explode(':', $qname);
         $this->prefixes[$prefix] = true;
     }
 
     /**
      * Check and cleanup parameters passed to serialise() method
+     *
      * @ignore
      */
     protected function checkSerialiseParams(&$format)
     {
-        if (is_null($format) or $format == '') {
-            throw new \InvalidArgumentException(
-                '$format cannot be null or empty'
-            );
-        } elseif (is_object($format) and ($format instanceof Format)) {
+        if (null === $format || '' == $format) {
+            throw new \InvalidArgumentException('$format cannot be null or empty');
+        } elseif (\is_object($format) && ($format instanceof Format)) {
             $format = $format->getName();
-        } elseif (!is_string($format)) {
-            throw new \InvalidArgumentException(
-                '$format should be a string or an EasyRdf\Format object'
-            );
+        } elseif (!\is_string($format)) {
+            throw new \InvalidArgumentException('$format should be a string or an EasyRdf\Format object');
         }
     }
 
@@ -80,29 +77,29 @@ abstract class Serialiser
      * Protected method to get the number of reverse properties for a resource
      * If a resource only has a single property, the number of values for that
      * property is returned instead.
+     *
      * @ignore
      */
     protected function reversePropertyCount($resource)
     {
         $properties = $resource->reversePropertyUris();
-        $count = count($properties);
-        if ($count == 1) {
+        $count = \count($properties);
+        if (1 == $count) {
             $property = $properties[0];
+
             return $resource->countValues("^<$property>");
         } else {
             return $count;
         }
     }
 
-
     /**
      * Serialise an EasyRdf\Graph into desired format.
      *
-     * @param Graph         $graph  An EasyRdf\Graph object.
-     * @param Format|string $format The name of the format to convert to.
-     * @param array         $options
+     * @param Graph         $graph  an EasyRdf\Graph object
+     * @param Format|string $format the name of the format to convert to
      *
-     * @return string The RDF in the new desired format.
+     * @return string the RDF in the new desired format
      */
-    abstract public function serialise(Graph $graph, $format, array $options = array());
+    abstract public function serialise(Graph $graph, $format, array $options = []);
 }

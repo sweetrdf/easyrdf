@@ -1,7 +1,8 @@
 <?php
+
 namespace EasyRdf\Literal;
 
-/**
+/*
  * EasyRdf
  *
  * LICENSE
@@ -38,8 +39,7 @@ namespace EasyRdf\Literal;
 
 use EasyRdf\TestCase;
 
-require_once realpath(__DIR__ . '/../../') . '/TestHelper.php';
-
+require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class IntegerTest extends TestCase
 {
@@ -50,7 +50,7 @@ class IntegerTest extends TestCase
         $this->assertStringEquals('0', $literal);
         $this->assertInternalType('int', $literal->getValue());
         $this->assertSame(0, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -61,7 +61,7 @@ class IntegerTest extends TestCase
         $this->assertStringEquals('1', $literal);
         $this->assertInternalType('int', $literal->getValue());
         $this->assertSame(1, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -72,7 +72,7 @@ class IntegerTest extends TestCase
         $this->assertStringEquals('100', $literal);
         $this->assertInternalType('int', $literal->getValue());
         $this->assertSame(100, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -83,7 +83,7 @@ class IntegerTest extends TestCase
         $this->assertStringEquals('0100', $literal);
         $this->assertInternalType('int', $literal->getValue());
         $this->assertSame(100, $literal->getValue());
-        $this->assertSame(null, $literal->getLang());
+        $this->assertNull($literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 }
