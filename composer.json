@@ -3,7 +3,6 @@
     "description": "EasyRdf is a PHP library designed to make it easy to consume and produce RDF.",
     "type": "library",
     "keywords": ["RDF", "Semantic Web", "Linked Data", "Turtle", "RDFa", "SPARQL"],
-    "homepage": "http://www.easyrdf.org/",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -17,6 +16,12 @@
             "email": "indeyets@gmail.com",
             "homepage": "http://indeyets.ru/",
             "role": "Developer"
+        },
+        {
+            "name": "Konrad Abicht",
+            "email": "hi@inspirito.de",
+            "homepage": "http://inspirito.de/",
+            "role": "Maintainer, Developer"
         }
     ],
     "require": {
@@ -27,16 +32,14 @@
         "ext-xmlreader" : "*",
         "lib-libxml" : "*"
     },
-    "suggest": {
-        "ml/json-ld": "~1.0",
-        "semsol/arc2": "~2.2"
-    },
     "require-dev": {
-        "ml/json-ld": "~1.0",
-        "phpunit/phpunit": "^7",
+        "friendsofphp/php-cs-fixer": "^2.16.3",
+        "ml/json-ld": "^1.0",
+        "phpunit/phpunit": "^7.5",
+        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan-phpunit": "^0.12",
         "semsol/arc2": "^2.4",
-        "squizlabs/php_codesniffer": "3.*",
-        "zendframework/zend-http": "~2.3"
+        "laminas/laminas-http": "^2.3"
     },
     "autoload": {
         "psr-4": {

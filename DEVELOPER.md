@@ -35,15 +35,7 @@ Make sure you ran `composer update`, if you want to execute the test suite ([Get
 
 To run all tests, open your terminal and run:
 
-> make test-lib
-
-### Travis
-
-We use Travis to run tests automatically after new code is being received by Github (library and examples):
-
-Link: https://travis-ci.com/github/easyrdf/easyrdf
-
-After you made a pull request, use Travis to check the test result.
+> vendor/bin/phpunit
 
 ## Important notes
 

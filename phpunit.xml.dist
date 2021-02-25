@@ -2,13 +2,13 @@
 <phpunit
     backupGlobals="false"
     backupStaticAttributes="false"
-    colors="false"
+    colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
-    verbose="false">
+    verbose="true">
 
     <php>
       <!--
@@ -20,21 +20,17 @@
 
     <testsuites>
       <testsuite name="EasyRdf Library">
-        <directory suffix="Test.php">../test/EasyRdf/</directory>
+        <directory suffix="Test.php">test/EasyRdf/</directory>
       </testsuite>
       <testsuite name="EasyRdf Examples">
-        <directory suffix="Test.php">../test/examples/</directory>
+        <directory suffix="Test.php">test/examples/</directory>
       </testsuite>
     </testsuites>
 
     <!-- Files to be included in the coverage report -->
     <filter>
       <whitelist addUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">../lib/EasyRdf/</directory>
+        <directory suffix=".php">lib/EasyRdf/</directory>
       </whitelist>
     </filter>
-
-    <logging>
-        <log type="junit" target="../reports/test-results.xml" />
-    </logging>
 </phpunit>

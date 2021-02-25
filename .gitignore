@@ -1,7 +1,4 @@
 /doap.rdf
 /docs/api
-/reports
-*.tar.gz
 /vendor
-/composer.phar
 /composer.lock
