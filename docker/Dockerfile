@@ -1,4 +1,4 @@
-FROM php:7.3-cli
+FROM php:7.4-cli
 
 RUN apt-get update && \
     apt-get install -y git graphviz libicu-dev libzip-dev make nano net-tools raptor2-utils wget zip zlib1g-dev
