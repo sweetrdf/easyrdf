@@ -31,11 +31,6 @@
         }
     }
 
-    // Stupid PHP :(
-    if (get_magic_quotes_gpc() and isset($_REQUEST['data'])) {
-        $_REQUEST['data'] = stripslashes($_REQUEST['data']);
-    }
-
     // Default to Guess input and Turtle output
     if (!isset($_REQUEST['output_format'])) {
         $_REQUEST['output_format'] = 'turtle';
