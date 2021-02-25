@@ -6,7 +6,7 @@ For more information about this fork, scroll at the end of this document.
 
 ---
 
-[![Build Status](https://travis-ci.com/easyrdf/easyrdf.svg?branch=master)](https://travis-ci.com/easyrdf/easyrdf)
+![CI](https://github.com/sweetrdf/easyrdf/workflows/Tests/badge.svg)
 
 EasyRdf is a PHP library designed to make it easy to consume and produce [RDF].
 It was designed for use in mixed teams of experienced and inexperienced RDF
