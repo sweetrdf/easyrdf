@@ -67,7 +67,7 @@ class MockClient extends Client
         }
 
         // Try and find a matching response
-        $n = count($this->mocks);
+        $n = \count($this->mocks);
         for ($i = 0; $i < $n; ++$i) {
             list($m, $response, $once) = $this->mocks[$i];
             if (isset($m['uri']) && !$this->matchUri($m['uri'], $uri)) {
