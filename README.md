@@ -1,5 +1,10 @@
-EasyRdf
-=======
+# EasyRdf (Fork)
+
+---
+
+For more information about this fork, scroll at the end of this document.
+
+---
 
 [![Build Status](https://travis-ci.com/easyrdf/easyrdf.svg?branch=master)](https://travis-ci.com/easyrdf/easyrdf)
 
@@ -108,9 +113,27 @@ php -S localhost:8080 -t examples
 
 Then open the following URL in your browser: http://localhost:8080/
 
+## Why this fork?
 
-Licensing
----------
+EasyRdf was in maintenance mode since 2017 ([link](https://github.com/easyrdf/easyrdf/issues/282)) and not actively maintained since. There were 6+ pull requests pending at that time with fixes and new features. Its sad to see another RDF PHP project die slowly, so i decided to clean house and give the code a new home ([old fork](https://github.com/sweetyrdf/easyrdf), [further info](https://github.com/easyrdf/easyrdf/issues/320)). A few months in late 2020 EasyRdf was actively improved (me being a co-maintainer for a while), but that stopped and decay began again.
+
+I decided to abondon my [old fork](https://github.com/sweetyrdf/easyrdf) to make use of latest EasyRdf improvements. Therefore this Github repository was created.
+
+#### What can you expect as a user?
+
+This fork aims to be a drop-in replacement for the `easyrdf/easyrdf` package, which means, you can use it without changing your code. But you should still read the notes of the latest release, to make sure nothing unexpected happens after an update.
+
+#### What can you expect as an EasyRdf developer?
+
+This repository is set up in a way to lower the maintenance overhead in comparison to the original version.
+
+Furthermore, this repository is held by an organization instead of a user. This allows more flexible maintenance like add further maintainer or helper.
+
+**Contributions are welcome!** Please read [CONTRIBUTING.md](https://github.com/sweetyrdf/easyrdf/blob/master/CONTRIBUTING.md) for further information.
+
+Further mainainers are possible, please send an email to [@k00ni](https://github.com/k00ni).
+
+## Licensing
 
 The EasyRdf library and tests are licensed under the [BSD-3-Clause] license.
 The examples are in the public domain, for more information see [UNLICENSE].
