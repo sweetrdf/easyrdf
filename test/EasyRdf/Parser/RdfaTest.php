@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Parser;
+namespace Test\EasyRdf\Parser;
 
 /*
  * EasyRdf
@@ -38,12 +38,9 @@ namespace EasyRdf\Parser;
  */
 
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
-
-require_once realpath(__DIR__.'/..').'/Serialiser/NtriplesArray.php';
+use EasyRdf\Parser\Ntriples;
+use EasyRdf\Parser\Rdfa;
+use Test\TestCase;
 
 class RdfaTest extends TestCase
 {
@@ -1014,8 +1011,8 @@ class RdfaTest extends TestCase
 
     public function testParseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Parser\Rdfa does not support: unsupportedformat'
         );
         $graph = new Graph();

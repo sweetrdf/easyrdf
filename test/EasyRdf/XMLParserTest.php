@@ -1,6 +1,9 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\XMLParser;
+use Test\TestCase;
 
 /**
  * EasyRdf
@@ -32,11 +35,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
+ * @copyright  Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
 class XMLParserTest extends TestCase
 {
     public $result = [];

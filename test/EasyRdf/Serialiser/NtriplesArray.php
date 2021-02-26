@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * EasyRdf
@@ -36,9 +36,11 @@ namespace EasyRdf\Serialiser;
  * @copyright  Copyright (c) 2009-2016 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
+
 use EasyRdf\Exception;
 use EasyRdf\Format;
 use EasyRdf\Graph;
+use EasyRdf\Serialiser\Ntriples;
 
 /**
  * Class to serialise an EasyRdf\Graph to an array of triples.
@@ -104,4 +106,4 @@ class NtriplesArray extends Ntriples
 }
 
 Format::register('ntriples-array', 'PHP Array of Triples');
-Format::registerSerialiser('ntriples-array', 'EasyRdf\Serialiser\NtriplesArray');
+Format::registerSerialiser('ntriples-array', NtriplesArray::class);

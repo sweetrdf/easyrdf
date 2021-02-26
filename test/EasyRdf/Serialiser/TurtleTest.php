@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +34,7 @@ namespace EasyRdf\Serialiser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -40,10 +42,9 @@ namespace EasyRdf\Serialiser;
 use EasyRdf\Graph;
 use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Serialiser\Turtle;
+use InvalidArgumentException;
+use Test\TestCase;
 
 class TurtleTest extends TestCase
 {
@@ -251,8 +252,8 @@ class TurtleTest extends TestCase
 
     public function testSerialiseObjectUnknown()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             'serialiseObject() requires $object to be of type EasyRdf\Resource or EasyRdf\Literal'
         );
         $this->serialiser->serialiseObject($this);
@@ -736,8 +737,8 @@ class TurtleTest extends TestCase
 
     public function testSerialiseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Serialiser\Turtle does not support: unsupportedformat'
         );
         $this->serialiser->serialise(

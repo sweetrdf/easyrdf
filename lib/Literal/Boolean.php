@@ -58,10 +58,16 @@ class Boolean extends Literal
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
+        /**
+         * workaround to avoid PHPStan error:
+         * Constructor of class EasyRdf\Literal\Integer has an unused parameter $lang.
+         */
+        $lang = null;
+
         if (!\is_string($value)) {
             $value = $value ? 'true' : 'false';
         }
-        parent::__construct($value, null, $datatype);
+        parent::__construct($value, $lang, $datatype);
     }
 
     /** Return the value of the literal cast to a PHP bool

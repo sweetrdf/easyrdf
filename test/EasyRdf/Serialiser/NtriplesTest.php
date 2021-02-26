@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +34,7 @@ namespace EasyRdf\Serialiser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -41,10 +43,8 @@ use EasyRdf\Graph;
 use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Serialiser\Ntriples;
+use Test\TestCase;
 
 class NtriplesTest extends TestCase
 {
@@ -148,8 +148,8 @@ class NtriplesTest extends TestCase
 
     public function testSerialiseBadValue()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             "Unable to serialise object of type 'chipmonk' to ntriples"
         );
         $this->serialiser->serialiseValue(
@@ -274,8 +274,8 @@ class NtriplesTest extends TestCase
 
     public function testSerialiseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Serialiser\Ntriples does not support: unsupportedformat'
         );
         $this->serialiser->serialise(

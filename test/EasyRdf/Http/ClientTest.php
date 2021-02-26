@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Http;
+namespace Test\EasyRdf\Http;
 
 /*
  * EasyRdf
@@ -32,15 +32,14 @@ namespace EasyRdf\Http;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
+use EasyRdf\Http\Client;
 use EasyRdf\Resource;
-use EasyRdf\TestCase;
-
-require_once realpath(__DIR__.'/../../').'/TestHelper.php';
+use Test\TestCase;
 
 class ClientTest extends TestCase
 {
@@ -109,8 +108,8 @@ class ClientTest extends TestCase
 
     public function testSetGopherUri()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             "Client only supports the 'http' and 'https' schemes."
         );
         $uristr = 'gopher://g.example.com/';
@@ -138,8 +137,8 @@ class ClientTest extends TestCase
 
     public function testSetConfigNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$config should be an array and cannot be null'
         );
         $this->client->setConfig(null);
@@ -147,8 +146,8 @@ class ClientTest extends TestCase
 
     public function testSetConfigNonArray()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$config should be an array and cannot be null'
         );
         $this->client->setConfig('foo');
@@ -191,8 +190,8 @@ class ClientTest extends TestCase
 
     public function testSetNonStringMethod()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Invalid HTTP request method.'
         );
         $this->client->setMethod($this);
@@ -200,8 +199,8 @@ class ClientTest extends TestCase
 
     public function testSetNumericMethod()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Invalid HTTP request method.'
         );
         $this->client->setMethod(1234);
@@ -237,8 +236,8 @@ class ClientTest extends TestCase
     public function testRequestNoUri()
     {
         $client = new Client();
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Set URI before calling Client->request()'
         );
         $client->request();

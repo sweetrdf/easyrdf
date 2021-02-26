@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Sparql;
+namespace Test\EasyRdf\Sparql;
 
 /*
  * EasyRdf
@@ -32,16 +32,15 @@ namespace EasyRdf\Sparql;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Literal;
 use EasyRdf\Resource;
-use EasyRdf\TestCase;
-
-require_once realpath(__DIR__.'/../../').'/TestHelper.php';
+use EasyRdf\Sparql\Result;
+use Test\TestCase;
 
 class ResultTest extends TestCase
 {
@@ -323,10 +322,7 @@ class ResultTest extends TestCase
 
     public function testInvalidXml()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Failed to parse SPARQL XML Query Results format'
-        );
+        $this->expectExceptionMessage('Failed to parse SPARQL XML Query Results format');
         new Result(
             readFixture('sparql_invalid.xml'),
             'application/sparql-results+xml'
@@ -335,8 +331,7 @@ class ResultTest extends TestCase
 
     public function testIncorrectSparqlNamespaceXml()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectExceptionMessage(
             'Root node namespace is not http://www.w3.org/2005/sparql-results#'
         );
         new Result(
@@ -347,10 +342,7 @@ class ResultTest extends TestCase
 
     public function testNotSparqlXml()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Root node in XML Query Results format is not <sparql>'
-        );
+        $this->expectExceptionMessage('Root node in XML Query Results format is not <sparql>');
         new Result(
             readFixture('not_sparql_result.xml'),
             'application/sparql-results+xml'
@@ -359,10 +351,7 @@ class ResultTest extends TestCase
 
     public function testInvalidJson()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Failed to parse SPARQL JSON Query Results format'
-        );
+        $this->expectExceptionMessage('Failed to parse SPARQL JSON Query Results format');
         new Result(
             readFixture('sparql_invalid.json'),
             'application/sparql-results+json'
@@ -371,8 +360,7 @@ class ResultTest extends TestCase
 
     public function testInvalidJsonTerm()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectExceptionMessage(
             'Failed to parse SPARQL Query Results format, unknown term type: newtype'
         );
         new Result(
@@ -475,8 +463,7 @@ class ResultTest extends TestCase
         }
         $reflector->setValue($result, 'foobar');
 
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectExceptionMessage(
             'Failed to dump SPARQL Query Results format, unknown type: foobar'
         );
         $result->dump();
@@ -516,10 +503,8 @@ class ResultTest extends TestCase
 
     public function testUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Unsupported SPARQL Query Results format: foo/bar'
-        );
+        $this->expectExceptionMessage('Unsupported SPARQL Query Results format: foo/bar');
+
         new Result('foobar', 'foo/bar');
     }
 }

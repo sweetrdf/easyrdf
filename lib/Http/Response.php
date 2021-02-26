@@ -80,6 +80,11 @@ class Response
     private $body;
 
     /**
+     * @var string
+     */
+    private $version;
+
+    /**
      * Constructor.
      *
      * @param int    $status  HTTP Status code

@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Http;
+namespace Test\EasyRdf\Http;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,16 +34,13 @@ namespace EasyRdf\Http;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-/*
- * Test helper
- */
-use EasyRdf\TestCase;
-
-require_once realpath(__DIR__.'/../../').'/TestHelper.php';
+use EasyRdf\Http\Response;
+use Test\TestCase;
 
 class ResponseTest extends TestCase
 {
@@ -83,8 +81,8 @@ class ResponseTest extends TestCase
 
     public function testInvalidResponse()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Failed to parse HTTP response.'
         );
         Response::fromString('foobar');
@@ -92,8 +90,8 @@ class ResponseTest extends TestCase
 
     public function testInvalidStatusLine()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Failed to parse HTTP response status line.'
         );
         Response::fromString(
@@ -152,8 +150,8 @@ class ResponseTest extends TestCase
 
     public function testInvalidChunkedBody()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Error parsing body - doesn\'t seem to be a chunked message'
         );
         $response = Response::fromString(

@@ -45,5 +45,14 @@
         "psr-4": {
             "EasyRdf\\": "lib"
         }
+    },
+    "autoload-dev": {
+        "files": [
+            "test/TestHelper.php"
+        ],
+        "psr-4": {
+            "Test\\": "test/",
+            "Test\\EasyRdf\\": "test/EasyRdf"
+        }
     }
 }

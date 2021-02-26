@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Parser;
+namespace Test\EasyRdf\Parser;
 
 /*
  * EasyRdf
@@ -32,17 +32,15 @@ namespace EasyRdf\Parser;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Format;
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Parser\JsonLd;
+use Test\TestCase;
 
 /**
  * JSON-LD parsing tests
@@ -102,8 +100,8 @@ class JsonLdTest extends TestCase
 
     public function testParseJsonSyntaxError()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Syntax error, malformed JSON.'
         );
 
@@ -126,8 +124,8 @@ class JsonLdTest extends TestCase
 
     public function testParseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Parser\JsonLd does not support unsupportedformat'
         );
         $this->parser->parse(

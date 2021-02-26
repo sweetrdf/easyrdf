@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Sparql;
+namespace Test\EasyRdf\Sparql;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,17 +34,18 @@ namespace EasyRdf\Sparql;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
+use EasyRdf\Graph;
 use EasyRdf\Http;
-use EasyRdf\Http\MockClient;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
-use EasyRdf\TestCase;
-
-require_once realpath(__DIR__.'/../../').'/TestHelper.php';
+use EasyRdf\Sparql\Client;
+use Test\EasyRdf\Http\MockClient;
+use Test\TestCase;
 
 class ClientTest extends TestCase
 {
@@ -158,10 +160,8 @@ class ClientTest extends TestCase
                 'headers' => ['Content-Type' => 'unsupported/format'],
             ]
         );
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Format is not recognised: unsupported/format'
-        );
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage('Format is not recognised: unsupported/format');
         $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
     }
 
@@ -258,7 +258,7 @@ class ClientTest extends TestCase
             ]
         );
         $graph = $this->sparql->query('CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}');
-        $this->assertClass('EasyRdf\Graph', $graph);
+        $this->assertClass(Graph::class, $graph);
         $name = $graph->get('http://www.example.com/joe#me', 'foaf:name');
         $this->assertStringEquals('Joe Bloggs', $name);
     }
@@ -274,7 +274,7 @@ class ClientTest extends TestCase
             ]
         );
         $graph = $this->sparql->query('CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}');
-        $this->assertClass('EasyRdf\Graph', $graph);
+        $this->assertClass(Graph::class, $graph);
         $name = $graph->get('http://www.example.com/joe#me', 'foaf:name');
         $this->assertStringEquals('Joe Bloggs', $name);
     }

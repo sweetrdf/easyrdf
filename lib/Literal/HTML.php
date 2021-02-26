@@ -56,7 +56,13 @@ class HTML extends Literal
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
-        parent::__construct($value, null, $datatype);
+        /**
+         * workaround to avoid PHPStan error:
+         * Constructor of class EasyRdf\Literal\HTML has an unused parameter $lang.
+         */
+        $lang = null;
+
+        parent::__construct($value, $lang, $datatype);
     }
 
     /** Strip the HTML tags from the literal

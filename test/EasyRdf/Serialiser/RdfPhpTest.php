@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * EasyRdf
@@ -32,17 +32,15 @@ namespace EasyRdf\Serialiser;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Graph;
 use EasyRdf\Literal;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Serialiser\RdfPhp;
+use Test\TestCase;
 
 class RdfPhpTest extends TestCase
 {
@@ -102,10 +100,9 @@ class RdfPhpTest extends TestCase
 
     public function testSerialiseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'EasyRdf\Serialiser\RdfPhp does not support: unsupportedformat'
-        );
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage('EasyRdf\Serialiser\RdfPhp does not support: unsupportedformat');
+
         $this->serialiser->serialise(
             $this->graph,
             'unsupportedformat'

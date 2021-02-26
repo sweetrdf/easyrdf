@@ -1,6 +1,8 @@
 <?php
 
-namespace EasyRdf\Examples;
+namespace Test\Examples;
+
+use Test\TestCase;
 
 /**
  * EasyRdf
@@ -35,9 +37,7 @@ namespace EasyRdf\Examples;
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class ParseRssTest extends \EasyRdf\TestCase
+class ParseRssTest extends TestCase
 {
     public function testNoParams()
     {

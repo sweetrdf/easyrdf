@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +34,7 @@ namespace EasyRdf\Serialiser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -41,10 +43,8 @@ use EasyRdf\Graph;
 use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Serialiser\RdfXml;
+use Test\TestCase;
 
 class RdfXmlTest extends TestCase
 {
@@ -312,10 +312,9 @@ class RdfXmlTest extends TestCase
             'bar'
         );
 
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'foo'
-        );
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage('foo');
+
         $this->serialiser->serialise($this->graph, 'rdfxml');
     }
 
@@ -336,10 +335,11 @@ class RdfXmlTest extends TestCase
 
     public function testSerialiseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Serialiser\RdfXml does not support: unsupportedformat'
         );
+
         $this->serialiser->serialise($this->graph, 'unsupportedformat');
     }
 
@@ -503,6 +503,7 @@ class RdfXmlTest extends TestCase
         $xml = $g->serialise('rdfxml');
 
         $g2 = new Graph('http://example.com/', $xml, 'rdfxml');
+        /** @var array<int,\EasyRdf\Resource> */
         $types = $g2->resource('http://example.com/resource')->typesAsResources();
 
         $expected = ['http://example.com/TypeA', 'http://xmlns.com/foaf/0.1/Person'];

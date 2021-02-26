@@ -1,12 +1,17 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Graph;
+use EasyRdf\RdfNamespace;
+use Test\TestCase;
 
 /**
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,11 +37,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
 class NamespaceTest extends TestCase
 {
     /** @var Graph */
@@ -114,8 +118,8 @@ class NamespaceTest extends TestCase
 
     public function testGetNullNamespace()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should be a string and cannot be null or empty'
         );
         RdfNamespace::get(null);
@@ -123,8 +127,8 @@ class NamespaceTest extends TestCase
 
     public function testGetNonStringNamespace()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should be a string and cannot be null or empty'
         );
         RdfNamespace::get([]);
@@ -132,8 +136,8 @@ class NamespaceTest extends TestCase
 
     public function testGetNonAlphanumeric()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should only contain alpha-numeric characters'
         );
         RdfNamespace::get('/K.O/');
@@ -159,8 +163,8 @@ class NamespaceTest extends TestCase
 
     public function testAddNamespaceShortNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should be a string and cannot be null or empty'
         );
         RdfNamespace::set(null, 'http://purl.org/ontology/ko/');
@@ -178,8 +182,8 @@ class NamespaceTest extends TestCase
 
     public function testAddNamespaceShortNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should be a string and cannot be null or empty'
         );
         RdfNamespace::set([], 'http://purl.org/ontology/ko/');
@@ -187,8 +191,8 @@ class NamespaceTest extends TestCase
 
     public function testAddNamespaceShortInvalid()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'should match RDFXML-QName specification'
         );
         RdfNamespace::set('/K.O/', 'http://purl.org/ontology/ko/');
@@ -196,8 +200,8 @@ class NamespaceTest extends TestCase
 
     public function testAddNamespaceLongNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$long should be a string and cannot be null or empty'
         );
         RdfNamespace::set('ko', null);
@@ -205,8 +209,8 @@ class NamespaceTest extends TestCase
 
     public function testAddNamespaceLongEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$long should be a string and cannot be null or empty'
         );
         RdfNamespace::set('ko', '');
@@ -214,8 +218,8 @@ class NamespaceTest extends TestCase
 
     public function testAddNamespaceLongNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$long should be a string and cannot be null or empty'
         );
         RdfNamespace::set('ko', []);
@@ -231,8 +235,8 @@ class NamespaceTest extends TestCase
 
     public function testDeleteEmptyNamespace()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should be a string and cannot be null or empty'
         );
         RdfNamespace::delete('');
@@ -240,8 +244,8 @@ class NamespaceTest extends TestCase
 
     public function testDeleteNullNamespace()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should be a string and cannot be null or empty'
         );
         RdfNamespace::delete(null);
@@ -249,8 +253,8 @@ class NamespaceTest extends TestCase
 
     public function testDeleteNonStringNamespace()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$prefix should be a string and cannot be null or empty'
         );
         RdfNamespace::delete($this);
@@ -283,8 +287,8 @@ class NamespaceTest extends TestCase
 
     public function testSetDefaultUnknown()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Unable to set default namespace to unknown prefix: foobar'
         );
         RdfNamespace::setDefault('foobar');
@@ -354,8 +358,8 @@ class NamespaceTest extends TestCase
 
     public function testSplitUriNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri cannot be null or empty'
         );
         RdfNamespace::splitUri(null);
@@ -363,8 +367,8 @@ class NamespaceTest extends TestCase
 
     public function testSplitUriEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri cannot be null or empty'
         );
         RdfNamespace::splitUri('');
@@ -372,8 +376,8 @@ class NamespaceTest extends TestCase
 
     public function testSplitUriNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri should be a string or EasyRdf\Resource'
         );
         RdfNamespace::splitUri($this);
@@ -453,8 +457,8 @@ class NamespaceTest extends TestCase
 
     public function testShortenNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri cannot be null or empty'
         );
         RdfNamespace::shorten(null);
@@ -462,8 +466,8 @@ class NamespaceTest extends TestCase
 
     public function testShortenEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri cannot be null or empty'
         );
         RdfNamespace::shorten('');
@@ -471,8 +475,8 @@ class NamespaceTest extends TestCase
 
     public function testShortenNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri should be a string or EasyRdf\Resource'
         );
         RdfNamespace::shorten($this);
@@ -515,8 +519,8 @@ class NamespaceTest extends TestCase
 
     public function testPrefixOfUriNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri cannot be null or empty'
         );
         RdfNamespace::prefixOfUri(null);
@@ -524,8 +528,8 @@ class NamespaceTest extends TestCase
 
     public function testPrefixOfUriEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri cannot be null or empty'
         );
         RdfNamespace::prefixOfUri('');
@@ -533,8 +537,8 @@ class NamespaceTest extends TestCase
 
     public function testPrefixOfUriNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri should be a string or EasyRdf\Resource'
         );
         RdfNamespace::prefixOfUri([]);
@@ -626,8 +630,8 @@ class NamespaceTest extends TestCase
 
     public function testExpandNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$shortUri should be a string and cannot be null or empty'
         );
         RdfNamespace::expand(null);
@@ -635,8 +639,8 @@ class NamespaceTest extends TestCase
 
     public function testExpandEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$shortUri should be a string and cannot be null or empty'
         );
         RdfNamespace::expand('');
@@ -644,8 +648,8 @@ class NamespaceTest extends TestCase
 
     public function testExpandNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$shortUri should be a string and cannot be null or empty'
         );
         RdfNamespace::expand($this);

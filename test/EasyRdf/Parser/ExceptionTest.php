@@ -1,6 +1,9 @@
 <?php
 
-namespace EasyRdf\Parser;
+namespace Test\EasyRdf\Parser;
+
+use EasyRdf\Parser\Exception;
+use Test\TestCase;
 
 /*
  * EasyRdf
@@ -33,21 +36,17 @@ namespace EasyRdf\Parser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
 
 class ExceptionTest extends TestCase
 {
     public function testThrowException()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
             'Test'
         );
         throw new Exception('Test');
@@ -55,8 +54,8 @@ class ExceptionTest extends TestCase
 
     public function testThrowExceptionWithLine()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
             'Test on line 10'
         );
         throw new Exception('Test', 10);
@@ -64,8 +63,8 @@ class ExceptionTest extends TestCase
 
     public function testThrowExceptionWithLineAndColumn()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
             'Test on line 10, column 22'
         );
         throw new Exception('Test', 10, 22);

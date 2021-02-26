@@ -61,6 +61,12 @@ class Date extends Literal
      */
     public function __construct($value = null, $lang = null, $datatype = null)
     {
+        /**
+         * workaround to avoid PHPStan error:
+         * Constructor of class EasyRdf\Literal\Date has an unused parameter $lang.
+         */
+        $lang = null;
+
         // If $value is null, use today's date
         if (null === $value) {
             $value = new \DateTime('today');
@@ -71,7 +77,7 @@ class Date extends Literal
             $value = $value->format('Y-m-d');
         }
 
-        parent::__construct($value, null, $datatype);
+        parent::__construct($value, $lang, $datatype);
     }
 
     /** Parses a string using DateTime and creates a new literal

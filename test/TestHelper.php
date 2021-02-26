@@ -34,38 +34,8 @@
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-/*
- * Set error reporting to the level to be stricter.
- */
-error_reporting(\E_ALL | \E_STRICT);
-
 // Set time zone to UTC for running tests
 date_default_timezone_set('UTC');
-
-/*
- * Determine the root, lib, and test directories
- */
-$easyrdfRoot = realpath(__DIR__.\DIRECTORY_SEPARATOR.'..');
-$easyrdfLibDir = $easyrdfRoot.\DIRECTORY_SEPARATOR.'lib';
-$easyrdfTestDir = $easyrdfRoot.\DIRECTORY_SEPARATOR.'test';
-
-/*
- * Prepend the lib and test directories to the  include_path.
- */
-$path = [
-    $easyrdfLibDir,
-    $easyrdfTestDir,
-    get_include_path(),
-];
-set_include_path(implode(\PATH_SEPARATOR, $path));
-
-/*
- * Unset global variables that are no longer needed.
- */
-unset($easyrdfRoot, $easyrdfLibDir, $easyrdfTestDir, $path);
-
-require_once __DIR__.'/EasyRdf/TestCase.php';
-require_once __DIR__.'/EasyRdf/Http/MockClient.php';
 
 /**
  * Helper function: get path to a fixture file
@@ -88,33 +58,7 @@ function fixturePath($name)
  */
 function readFixture($name)
 {
-    return file_get_contents(
-        fixturePath($name)
-    );
-}
-
-/**
- * Helper function: check to see if a required file exists
- *
- * @param string $filename the filename to check
- *
- * @return bool Returns true if the file exists
- */
-function requireExists($filename)
-{
-    $paths = explode(\PATH_SEPARATOR, get_include_path());
-    foreach ($paths as $path) {
-        if (\DIRECTORY_SEPARATOR == substr($path, -1)) {
-            $fullpath = $path.$filename;
-        } else {
-            $fullpath = $path.\DIRECTORY_SEPARATOR.$filename;
-        }
-        if (file_exists($fullpath)) {
-            return true;
-        }
-    }
-
-    return false;
+    return file_get_contents(fixturePath($name));
 }
 
 /**

@@ -1,12 +1,20 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Exception;
+use EasyRdf\Literal;
+use EasyRdf\Resource;
+use EasyRdf\Utils;
+use InvalidArgumentException;
+use Test\TestCase;
 
 /**
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,11 +40,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
 class UtilsTest extends TestCase
 {
     public function testCameliseSimple()
@@ -191,10 +198,9 @@ class UtilsTest extends TestCase
 
     public function testDumpResourceValueWithIllegalColor()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            '$color must be a legal color code or name'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$color must be a legal color code or name');
+
         Utils::dumpResourceValue(
             'http://example.com/',
             'html',
@@ -291,10 +297,9 @@ class UtilsTest extends TestCase
 
     public function testDumpLiteralValueWithIllegalColor()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            '$color must be a legal color code or name'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('$color must be a legal color code or name');
+
         Utils::dumpLiteralValue(
             'literal',
             'html',
@@ -373,19 +378,17 @@ class UtilsTest extends TestCase
 
     public function testExecCommandPipeFalse()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Error while executing command false'
-        );
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Error while executing command false');
+
         Utils::execCommandPipe('false');
     }
 
     public function testExecCommandPipeNotFound()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Error while executing command no_such_command'
-        );
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Error while executing command no_such_command');
+
         Utils::execCommandPipe('no_such_command');
     }
 }
