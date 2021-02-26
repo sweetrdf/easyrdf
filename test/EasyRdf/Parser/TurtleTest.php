@@ -39,10 +39,15 @@ namespace Test\EasyRdf\Parser;
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
+use EasyRdf\Format;
 use EasyRdf\Graph;
 use EasyRdf\Parser\Ntriples;
 use EasyRdf\Parser\Turtle;
+use Test\EasyRdf\Serialiser\NtriplesArray;
 use Test\TestCase;
+
+Format::register('ntriples-array', 'PHP Array of Triples');
+Format::registerSerialiser('ntriples-array', NtriplesArray::class);
 
 class TurtleTest extends TestCase
 {

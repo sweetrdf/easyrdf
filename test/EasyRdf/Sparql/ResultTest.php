@@ -322,7 +322,6 @@ class ResultTest extends TestCase
 
     public function testInvalidXml()
     {
-        $this->expectException('EasyRdf\Exception');
         $this->expectExceptionMessage('Failed to parse SPARQL XML Query Results format');
         new Result(
             readFixture('sparql_invalid.xml'),
@@ -332,7 +331,6 @@ class ResultTest extends TestCase
 
     public function testIncorrectSparqlNamespaceXml()
     {
-        $this->expectException('EasyRdf\Exception');
         $this->expectExceptionMessage(
             'Root node namespace is not http://www.w3.org/2005/sparql-results#'
         );
@@ -344,7 +342,6 @@ class ResultTest extends TestCase
 
     public function testNotSparqlXml()
     {
-        $this->expectException('EasyRdf\Exception');
         $this->expectExceptionMessage('Root node in XML Query Results format is not <sparql>');
         new Result(
             readFixture('not_sparql_result.xml'),
@@ -354,7 +351,6 @@ class ResultTest extends TestCase
 
     public function testInvalidJson()
     {
-        $this->expectException('EasyRdf\Exception');
         $this->expectExceptionMessage('Failed to parse SPARQL JSON Query Results format');
         new Result(
             readFixture('sparql_invalid.json'),
@@ -364,7 +360,6 @@ class ResultTest extends TestCase
 
     public function testInvalidJsonTerm()
     {
-        $this->expectException('EasyRdf\Exception');
         $this->expectExceptionMessage(
             'Failed to parse SPARQL Query Results format, unknown term type: newtype'
         );
@@ -468,7 +463,6 @@ class ResultTest extends TestCase
         }
         $reflector->setValue($result, 'foobar');
 
-        $this->expectException('EasyRdf\Exception');
         $this->expectExceptionMessage(
             'Failed to dump SPARQL Query Results format, unknown type: foobar'
         );
@@ -509,7 +503,6 @@ class ResultTest extends TestCase
 
     public function testUnsupportedFormat()
     {
-        $this->expectException('EasyRdf\Exception');
         $this->expectExceptionMessage('Unsupported SPARQL Query Results format: foo/bar');
 
         new Result('foobar', 'foo/bar');

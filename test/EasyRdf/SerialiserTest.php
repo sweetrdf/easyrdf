@@ -5,7 +5,7 @@ namespace Test\EasyRdf;
 use EasyRdf\Format;
 use EasyRdf\Graph;
 use InvalidArgumentException;
-use Test\EasyRdf\Serializer\MockSerializer;
+use Test\EasyRdf\Serialiser\MockSerialiser;
 use Test\TestCase;
 
 /**
@@ -55,7 +55,7 @@ class SerialiserTest extends TestCase
     protected function setUp()
     {
         $this->graph = new Graph();
-        $this->serialiser = new MockSerializer();
+        $this->serialiser = new MockSerialiser();
     }
 
     public function testSerialise()

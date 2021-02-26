@@ -58,7 +58,7 @@ class TypeMapperTest extends TestCase
     public function testGet()
     {
         $this->assertSame(
-            'EasyRdf\MyTypeClass',
+            TypeClassStub::class,
             TypeMapper::get('rdf:mytype')
         );
     }
@@ -66,7 +66,7 @@ class TypeMapperTest extends TestCase
     public function testGetUri()
     {
         $this->assertSame(
-            'EasyRdf\MyTypeClass',
+            TypeClassStub::class,
             TypeMapper::get(
                 'http://www.w3.org/1999/02/22-rdf-syntax-ns#mytype'
             )
@@ -106,11 +106,11 @@ class TypeMapperTest extends TestCase
     {
         TypeMapper::set(
             'http://xmlns.com/foaf/0.1/Person',
-            'EasyRdf\MyTypeClass'
+            TypeClassStub::class
         );
 
         $this->assertSame(
-            'EasyRdf\MyTypeClass',
+            TypeClassStub::class,
             TypeMapper::get('foaf:Person')
         );
     }
@@ -119,21 +119,21 @@ class TypeMapperTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$type should be a string and cannot be null or empty');
-        TypeMapper::set(null, 'EasyRdf\MyTypeClass');
+        TypeMapper::set(null, TypeClassStub::class);
     }
 
     public function testSetTypeEmpty()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$type should be a string and cannot be null or empty');
-        TypeMapper::set('', 'EasyRdf\MyTypeClass');
+        TypeMapper::set('', TypeClassStub::class);
     }
 
     public function testSetTypeNonString()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$type should be a string and cannot be null or empty');
-        TypeMapper::set([], 'EasyRdf\MyTypeClass');
+        TypeMapper::set([], TypeClassStub::class);
     }
 
     public function testSetClassNull()
@@ -159,7 +159,7 @@ class TypeMapperTest extends TestCase
 
     public function testDelete()
     {
-        $this->assertSame('EasyRdf\MyTypeClass', TypeMapper::get('rdf:mytype'));
+        $this->assertSame(TypeClassStub::class, TypeMapper::get('rdf:mytype'));
         TypeMapper::delete('rdf:mytype');
         $this->assertNull(TypeMapper::get('rdf:mytype'));
     }
@@ -233,7 +233,7 @@ class TypeMapperTest extends TestCase
 
     public function testInstantiate()
     {
-        TypeMapper::set('foaf:Person', 'EasyRdf\MyTypeClass');
+        TypeMapper::set('foaf:Person', TypeClassStub::class);
         $data = readFixture('foaf.json');
         $graph = new Graph(
             'http://www.example.com/joe/foaf.rdf',
@@ -241,21 +241,21 @@ class TypeMapperTest extends TestCase
             'json'
         );
         $joe = $graph->resource('http://www.example.com/joe#me');
-        $this->assertClass('EasyRdf\MyTypeClass', $joe);
+        $this->assertClass(TypeClassStub::class, $joe);
         $this->assertTrue($joe->myMethod());
 
         $joeFoaf = $graph->resource('http://www.example.com/joe/foaf.rdf');
 
         $this->assertClass(Resource::class, $joeFoaf);
 
-        TypeMapper::setDefaultResourceClass('EasyRdf\MyTypeClass');
+        TypeMapper::setDefaultResourceClass(TypeClassStub::class);
         $graph = new Graph(
             'http://www.example.com/joe/foaf.rdf',
             $data,
             'json'
         );
         $joesFoaf = $graph->resource('http://www.example.com/joe/foaf.rdf');
-        $this->assertClass('EasyRdf\MyTypeClass', $joesFoaf);
+        $this->assertClass(TypeClassStub::class, $joesFoaf);
         $this->assertTrue($joesFoaf->myMethod());
     }
 }

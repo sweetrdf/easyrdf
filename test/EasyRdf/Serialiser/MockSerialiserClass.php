@@ -1,9 +1,6 @@
 <?php
 
-namespace Test\EasyRdf\Serializer;
-
-use EasyRdf\Graph;
-use EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * This file is licensed under the terms of BSD-3 license and
@@ -16,12 +13,6 @@ use EasyRdf\Serialiser;
  * file that was distributed with this source code.
  */
 
-class MockSerializer extends Serialiser
+class MockSerialiserClass
 {
-    public function serialise(Graph $graph, $format, array $options = [])
-    {
-        parent::checkSerialiseParams($format);
-        // Serialising goes here
-        return true;
-    }
 }

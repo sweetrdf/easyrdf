@@ -411,9 +411,9 @@ class LiteralTest extends TestCase
 
     public function testConstructCustomClass()
     {
-        Literal::setDatatypeMapping('ex:mytype', 'EasyRdf\MyDatatypeClass');
+        Literal::setDatatypeMapping('ex:mytype', MyDatatypeClass::class);
         $literal = new MyDatatypeClass('foobar');
-        $this->assertClass('EasyRdf\MyDatatypeClass', $literal);
+        $this->assertClass(MyDatatypeClass::class, $literal);
         $this->assertStringEquals('!foobar!', $literal);
         $this->assertSame('foobar', $literal->getValue());
         $this->assertSame('ex:mytype', $literal->getDatatype());
@@ -422,9 +422,9 @@ class LiteralTest extends TestCase
 
     public function testCreateCustomClass()
     {
-        Literal::setDatatypeMapping('ex:mytype', 'EasyRdf\MyDatatypeClass');
+        Literal::setDatatypeMapping('ex:mytype', MyDatatypeClass::class);
         $literal = Literal::create('foobar', null, 'ex:mytype');
-        $this->assertClass('EasyRdf\MyDatatypeClass', $literal);
+        $this->assertClass(MyDatatypeClass::class, $literal);
         $this->assertStringEquals('!foobar!', $literal);
         $this->assertSame('foobar', $literal->getValue());
         $this->assertSame('ex:mytype', $literal->getDatatype());
@@ -437,7 +437,7 @@ class LiteralTest extends TestCase
         $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
-        Literal::setDatatypeMapping(null, 'EasyRdf\MyDatatypeClass');
+        Literal::setDatatypeMapping(null, MyDatatypeClass::class);
     }
 
     public function testSetDatatypeMappingEmpty()
@@ -446,7 +446,7 @@ class LiteralTest extends TestCase
         $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
-        Literal::setDatatypeMapping('', 'EasyRdf\MyDatatypeClass');
+        Literal::setDatatypeMapping('', MyDatatypeClass::class);
     }
 
     public function testSetDatatypeMappingNonString()
@@ -455,7 +455,7 @@ class LiteralTest extends TestCase
         $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
-        Literal::setDatatypeMapping([], 'EasyRdf\MyDatatypeClass');
+        Literal::setDatatypeMapping([], MyDatatypeClass::class);
     }
 
     public function testSetDatatypeMappingClassNull()

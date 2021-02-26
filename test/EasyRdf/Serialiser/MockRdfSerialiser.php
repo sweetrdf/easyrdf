@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\EasyRdf\Serializer;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * This file is licensed under the terms of BSD-3 license and
@@ -13,7 +13,7 @@ namespace Test\EasyRdf\Serializer;
  * file that was distributed with this source code.
  */
 
-class MockRdfSerializer
+class MockRdfSerialiser
 {
     public function serialise($graph, $format = null)
     {
