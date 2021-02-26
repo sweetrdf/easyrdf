@@ -19,14 +19,6 @@ After it started, you will be logged in automatically.
 
 Afterwards you can run further commands on the CLI, like `composer update` or PHPUnit test suite.
 
-### Fuseki
-
-You can run Fuseki inside the Docker container by calling the following on the Terminal:
-
-> bash test/start_fuseki.sh
-
-It will start the server in the background. Wait a few seconds and then run PHPUnit as always.
-
 ## Tests
 
 Our test related files are located in `test` folder. Tests are written using PHPUnit.

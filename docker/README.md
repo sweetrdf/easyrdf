@@ -10,7 +10,6 @@ The container provides a PHP with further tools installed, like:
 
 * Composer
 * GraphViz
-* Jena Fuseki
 * raptor2-utils
 
 Everything is directly accessible after loggin into the container.

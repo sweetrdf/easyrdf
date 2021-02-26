@@ -28,9 +28,4 @@ RUN usermod -a -G www-data easyrdf
 RUN mkdir /home/easyrdf
 RUN chown easyrdf:www-data /home/easyrdf
 
-# install fuseki
-RUN wget "http://archive.apache.org/dist/jena/binaries/apache-jena-fuseki-2.4.0.tar.gz" && \
-        tar -zxf *jena*fuseki*.tar.gz && mv *jena*fuseki*/ /home/easyrdf/fuseki
-RUN chown -R easyrdf:easyrdf /home/easyrdf/fuseki
-
 CMD ["tail -f /dev/null"]
