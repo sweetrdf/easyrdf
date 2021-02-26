@@ -1,6 +1,10 @@
 <?php
 
-namespace EasyRdf\Literal;
+namespace Test\EasyRdf\Literal;
+
+use DateTime;
+use EasyRdf\Literal\Date;
+use Test\TestCase;
 
 /*
  * EasyRdf
@@ -32,14 +36,10 @@ namespace EasyRdf\Literal;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-
-use EasyRdf\TestCase;
-
-require_once realpath(__DIR__.'/../../').'/TestHelper.php';
 
 class DateTest extends TestCase
 {
@@ -54,7 +54,7 @@ class DateTest extends TestCase
 
     public function testConstructFromDateTime()
     {
-        $dt = new \DateTime('2011-07-18');
+        $dt = new DateTime('2011-07-18');
         $literal = new Date($dt);
         $this->assertStringEquals('2011-07-18', $literal);
         $this->assertClass('DateTime', $literal->getValue());
@@ -67,7 +67,7 @@ class DateTest extends TestCase
     {
         // Would be very unlucky if this ran at midnight and failed
         // (but it is possible)
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
         $literal = new Date();
         $this->assertEquals($today, $literal->getValue());
         $this->assertRegExp('|^\d{4}-\d{2}-\d{2}$|', (string) $literal);

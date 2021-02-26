@@ -45,5 +45,11 @@
         "psr-4": {
             "EasyRdf\\": "lib"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\": "test/",
+            "Test\\EasyRdf\\": "test/EasyRdf"
+        }
     }
 }

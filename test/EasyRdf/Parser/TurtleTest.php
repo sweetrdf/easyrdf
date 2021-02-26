@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Parser;
+namespace Test\EasyRdf\Parser;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,22 +34,21 @@ namespace EasyRdf\Parser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
-
-require_once realpath(__DIR__.'/..').'/Serialiser/NtriplesArray.php';
+use EasyRdf\Parser\Ntriples;
+use EasyRdf\Parser\Turtle;
+use Test\TestCase;
 
 class TurtleTest extends TestCase
 {
     /** @var Turtle */
     protected $turtleParser = null;
+
     /** @var Ntriples */
     protected $ntriplesParser = null;
 
@@ -114,8 +114,8 @@ class TurtleTest extends TestCase
 
     public function testParseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Parser\Turtle does not support: unsupportedformat'
         );
         $this->turtleParser->parse(
@@ -351,8 +351,8 @@ class TurtleTest extends TestCase
     public function testBad00()
     {
         // prefix name must end in a :
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected ':', found '<' on line 2, column 12"
         );
         $this->parseTurtle('turtle/bad-00.ttl');
@@ -361,8 +361,8 @@ class TurtleTest extends TestCase
     public function testBad01()
     {
         // Forbidden by RDF - predicate cannot be blank
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected an RDF value here, found '[' on line 3, column 4"
         );
         $this->parseTurtle('turtle/bad-01.ttl');
@@ -371,8 +371,8 @@ class TurtleTest extends TestCase
     public function testBad02()
     {
         // Forbidden by RDF - predicate cannot be blank
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected an RDF value here, found '[' on line 3, column 4"
         );
         $this->parseTurtle('turtle/bad-02.ttl');
@@ -381,8 +381,8 @@ class TurtleTest extends TestCase
     public function testBad03()
     {
         // 'a' only allowed as a predicate
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected ':', found ' ' on line 3, column 3"
         );
         $this->parseTurtle('turtle/bad-03.ttl');
@@ -391,8 +391,8 @@ class TurtleTest extends TestCase
     public function testBad04()
     {
         // No comma is allowed in collections
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected an RDF value here, found ',' on line 3, column 16"
         );
         $this->parseTurtle('turtle/bad-04.ttl');
@@ -401,8 +401,8 @@ class TurtleTest extends TestCase
     public function testBad05()
     {
         // N3 {}s are not in Turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected an RDF value here, found '{' on line 3, column 1"
         );
         $this->parseTurtle('turtle/bad-05.ttl');
@@ -411,8 +411,8 @@ class TurtleTest extends TestCase
     public function testBad06()
     {
         // is and of are not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected ':', found ' ' on line 3, column 7"
         );
         $this->parseTurtle('turtle/bad-06.ttl');
@@ -421,8 +421,8 @@ class TurtleTest extends TestCase
     public function testBad07()
     {
         // paths are not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Turtle Parse Error: object for statement missing on line 3, column 5'
         );
         $this->parseTurtle('turtle/bad-07.ttl');
@@ -431,8 +431,8 @@ class TurtleTest extends TestCase
     public function testBad08()
     {
         // @keywords is not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Turtle Parse Error: unknown directive "@keywords" on line 1, column 10'
         );
         $this->parseTurtle('turtle/bad-08.ttl');
@@ -441,8 +441,8 @@ class TurtleTest extends TestCase
     public function testBad09()
     {
         // implies is not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected an RDF value here, found '=' on line 3, column 4"
         );
         $this->parseTurtle('turtle/bad-09.ttl');
@@ -451,8 +451,8 @@ class TurtleTest extends TestCase
     public function testBad10()
     {
         // equivalence is not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             "Turtle Parse Error: expected an RDF value here, found '=' on line 3, column 4"
         );
         $this->parseTurtle('turtle/bad-10.ttl');
@@ -461,8 +461,8 @@ class TurtleTest extends TestCase
     public function testBad11()
     {
         // @forAll is not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Turtle Parse Error: unknown directive "@forall" on line 3, column 8'
         );
         $this->parseTurtle('turtle/bad-11.ttl');
@@ -471,8 +471,8 @@ class TurtleTest extends TestCase
     public function testBad12()
     {
         // @forSome is not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Turtle Parse Error: unknown directive "@forsome" on line 3, column 9'
         );
         $this->parseTurtle('turtle/bad-12.ttl');
@@ -481,8 +481,8 @@ class TurtleTest extends TestCase
     public function testBad13()
     {
         // <= is not in turtle
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Turtle Parse Error: unexpected end of file while reading URI on line 4, column 1'
         );
         $this->parseTurtle('turtle/bad-13.ttl');
@@ -491,8 +491,8 @@ class TurtleTest extends TestCase
     public function testBad14()
     {
         // Test long literals with missing end
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Turtle Parse Error: unexpected end of file while reading long string on line 7, column 1'
         );
         $this->parseTurtle('turtle/bad-14.ttl');

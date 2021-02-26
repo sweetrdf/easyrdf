@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
 
 /*
  * EasyRdf
@@ -32,14 +32,17 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-use EasyRdf\Http\MockClient;
-
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Format;
+use EasyRdf\Graph;
+use EasyRdf\GraphStore;
+use EasyRdf\Http;
+use Test\EasyRdf\Http\MockClient;
+use Test\TestCase;
 
 class GraphStoreTest extends TestCase
 {
@@ -75,7 +78,7 @@ class GraphStoreTest extends TestCase
             readFixture('foaf.json')
         );
         $graph = $this->graphStore->get('foaf.rdf');
-        $this->assertClass('EasyRdf\Graph', $graph);
+        $this->assertClass(Graph::class, $graph);
         $this->assertSame('http://localhost:8080/data/foaf.rdf', $graph->getUri());
         $this->assertStringEquals(
             'Joe Bloggs',
@@ -91,7 +94,7 @@ class GraphStoreTest extends TestCase
             readFixture('foaf.json')
         );
         $graph = $this->graphStore->get('http://foo.com/bar.rdf');
-        $this->assertClass('EasyRdf\Graph', $graph);
+        $this->assertClass(Graph::class, $graph);
         $this->assertSame('http://foo.com/bar.rdf', $graph->getUri());
         $this->assertStringEquals(
             'Joe Bloggs',
@@ -107,7 +110,7 @@ class GraphStoreTest extends TestCase
             readFixture('foaf.json')
         );
         $graph = $this->graphStore->getDefault();
-        $this->assertClass('EasyRdf\Graph', $graph);
+        $this->assertClass(Graph::class, $graph);
         $this->assertNull($graph->getUri());
         $this->assertStringEquals(
             'Joe Bloggs',
@@ -145,8 +148,8 @@ class GraphStoreTest extends TestCase
             'Graph not found.',
             ['status' => 404]
         );
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'HTTP request to delete http://localhost:8080/data/filenotfound failed'
         );
         $this->graphStore->delete('filenotfound');
@@ -212,8 +215,8 @@ class GraphStoreTest extends TestCase
             'Internal Server Error',
             ['status' => 500]
         );
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'HTTP request for http://localhost:8080/data/new.rdf failed'
         );
         $this->graphStore->insert($data, 'new.rdf');
@@ -279,8 +282,8 @@ class GraphStoreTest extends TestCase
             'Internal Server Error',
             ['status' => 500]
         );
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'HTTP request for http://localhost:8080/data/existing.rdf failed'
         );
         $this->graphStore->replace($data, 'existing.rdf');

@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Literal;
+namespace Test\EasyRdf\Literal;
 
 /*
  * EasyRdf
@@ -32,16 +32,15 @@ namespace EasyRdf\Literal;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Format;
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once realpath(__DIR__.'/../../').'/TestHelper.php';
+use EasyRdf\Literal\HexBinary;
+use Test\TestCase;
 
 class HexBinaryTest extends TestCase
 {
@@ -74,8 +73,8 @@ class HexBinaryTest extends TestCase
 
     public function testContructInvalid()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Literal of type xsd:hexBinary contains non-hexadecimal characters'
         );
         new HexBinary('48FZ');

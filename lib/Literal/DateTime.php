@@ -61,6 +61,12 @@ class DateTime extends Date
      */
     public function __construct($value = null, $lang = null, $datatype = null)
     {
+        /**
+         * workaround to avoid PHPStan error:
+         * Constructor of class EasyRdf\Literal\DateTime has an unused parameter $lang.
+         */
+        $lang = null;
+
         // If $value is null, use 'now'
         if (null === $value) {
             $value = new \DateTime('now');
@@ -72,7 +78,7 @@ class DateTime extends Date
             $value = preg_replace('/[\+\-]00(\:?)00$/', 'Z', $atom);
         }
 
-        Literal::__construct($value, null, $datatype);
+        parent::__construct($value, $lang, $datatype);
     }
 
     /** Parses a string using DateTime and creates a new literal

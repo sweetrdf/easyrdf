@@ -1,6 +1,13 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Format;
+use EasyRdf\Graph;
+use EasyRdf\Parser;
+use InvalidArgumentException;
+use Test\EasyRdf\Parser\MockParser;
+use Test\TestCase;
 
 /**
  * EasyRdf
@@ -35,18 +42,6 @@ namespace EasyRdf;
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class MockParser extends Parser
-{
-    public function parse($graph, $data, $format, $baseUri)
-    {
-        parent::checkParseParams($graph, $data, $format, $baseUri);
-        // Parsing goes here
-        return true;
-    }
-}
-
 class ParserTest extends TestCase
 {
     private $graph;
@@ -93,8 +88,8 @@ class ParserTest extends TestCase
 
     public function testParseNullGraph()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$graph should be an EasyRdf\Graph object and cannot be null'
         );
         $this->parser->parse(null, $this->foaf_data, 'json', null);
@@ -102,8 +97,8 @@ class ParserTest extends TestCase
 
     public function testParseNonObjectGraph()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$graph should be an EasyRdf\Graph object and cannot be null'
         );
         $this->parser->parse('string', $this->foaf_data, 'json', null);
@@ -111,8 +106,8 @@ class ParserTest extends TestCase
 
     public function testParseNonGraph()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$graph should be an EasyRdf\Graph object and cannot be null'
         );
         $this->parser->parse($this->resource, $this->foaf_data, 'json', null);
@@ -134,8 +129,8 @@ class ParserTest extends TestCase
 
     public function testParseNullFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$format cannot be null or empty'
         );
         $this->parser->parse($this->graph, $this->foaf_data, null, null);
@@ -143,8 +138,8 @@ class ParserTest extends TestCase
 
     public function testParseEmptyFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$format cannot be null or empty'
         );
         $this->parser->parse($this->graph, $this->foaf_data, '', null);
@@ -152,8 +147,8 @@ class ParserTest extends TestCase
 
     public function testParseBadObjectFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$format should be a string or an EasyRdf\Format object'
         );
         $this->parser->parse($this->graph, $this->foaf_data, $this, null);
@@ -161,8 +156,8 @@ class ParserTest extends TestCase
 
     public function testParseIntegerFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$format should be a string or an EasyRdf\Format object'
         );
         $this->parser->parse($this->graph, $this->foaf_data, 1, null);
@@ -170,8 +165,8 @@ class ParserTest extends TestCase
 
     public function testParseNonStringBaseUri()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
             '$baseUri should be a string'
         );
         $this->parser->parse($this->graph, $this->foaf_data, 'json', 1);
@@ -179,11 +174,12 @@ class ParserTest extends TestCase
 
     public function testParseUndefined()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'This method should be overridden by sub-classes.'
         );
 
+        /** @var \EasyRdf\Parser */
         $parser = $this->getMockForAbstractClass(Parser::class);
         $parser->parse($this->graph, 'data', 'format', 'baseUri');
     }

@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,20 +34,20 @@ namespace EasyRdf\Serialiser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Serialiser\GraphViz;
+use Test\TestCase;
 
 class GraphVizTest extends TestCase
 {
-    /** @var Graph */
+    /** @var \EasyRdf\Graph */
     private $graph;
+
     /** @var GraphViz */
     private $serialiser;
 
@@ -271,20 +272,20 @@ class GraphVizTest extends TestCase
 
     public function testDotNotFound()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Error while executing command does/not/exist'
-        );
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage('Error while executing command does/not/exist');
+
         $this->serialiser->setDotCommand('does/not/exist');
         $this->serialiser->renderImage($this->graph);
     }
 
     public function testSerialiseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Serialiser\GraphViz does not support: unsupportedformat'
         );
+
         $this->serialiser->serialise(
             $this->graph,
             'unsupportedformat'

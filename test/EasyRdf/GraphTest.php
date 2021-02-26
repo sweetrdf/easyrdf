@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,42 +34,31 @@ namespace EasyRdf;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-use EasyRdf\Http\MockClient;
-
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class MockRdfParser
-{
-    public function parse($graph, $data, $format, $baseUri)
-    {
-        $graph->add(
-            'http://www.example.com/joe#me',
-            'foaf:name',
-            'Joseph Bloggs'
-        );
-
-        return true;
-    }
-}
-
-class MockRdfSerialiser
-{
-    public function serialise($graph, $format = null)
-    {
-        return '<rdf></rdf>';
-    }
-}
+use EasyRdf\Format;
+use EasyRdf\Graph;
+use EasyRdf\Http;
+use EasyRdf\Literal;
+use EasyRdf\ParsedUri;
+use EasyRdf\RdfNamespace;
+use EasyRdf\Resource;
+use EasyRdf\Utils;
+use Test\EasyRdf\Http\MockClient;
+use Test\TestCase;
 
 class GraphTest extends TestCase
 {
-    /** @var MockClient */
+    /** @var \Test\EasyRdf\Http\MockClient */
     private $client;
-    /** @var Graph */
+
+    /** @var \EasyRdf\Graph */
     private $graph;
+
+    /** @var string */
     private $uri;
 
     /**
@@ -174,8 +164,8 @@ class GraphTest extends TestCase
 
     public function testParseUnknownFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Unable to parse data of an unknown format.'
         );
         $graph = new Graph();
@@ -208,8 +198,8 @@ class GraphTest extends TestCase
 
     public function testLoadNullUri()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'No URI given to load() and the graph does not have a URI.'
         );
         $graph = new Graph();
@@ -218,8 +208,8 @@ class GraphTest extends TestCase
 
     public function testLoadEmptyUri()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'got empty string'
         );
         $graph = new Graph();
@@ -228,8 +218,8 @@ class GraphTest extends TestCase
 
     public function testLoadNonStringUri()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$resource should be either IRI, blank-node identifier or EasyRdf\Resource'
         );
         $graph = new Graph();
@@ -239,8 +229,8 @@ class GraphTest extends TestCase
     public function testLoadUnknownFormat()
     {
         $this->client->addMockOnce('GET', 'http://www.example.com/foaf.unknown', 'unknown');
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Unable to parse data of an unknown format.'
         );
         $graph = new Graph();
@@ -255,8 +245,8 @@ class GraphTest extends TestCase
             'Not Found',
             ['status' => 404]
         );
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'HTTP request for http://www.example.com/404 failed'
         );
         $graph = new Graph('http://www.example.com/404');
@@ -400,7 +390,7 @@ class GraphTest extends TestCase
     {
         $this->client->addMockOnce('GET', 'http://www.example.com/', readFixture('foaf.json'));
         $graph = Graph::newAndLoad('http://www.example.com/', 'json');
-        $this->assertClass('EasyRdf\Graph', $graph);
+        $this->assertClass(Graph::class, $graph);
         $this->assertStringEquals(
             'Joe Bloggs',
             $graph->get('http://www.example.com/joe#me', 'foaf:name')
@@ -481,8 +471,8 @@ class GraphTest extends TestCase
 
     public function testGetNullResourceForNullGraphUri()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri is null and EasyRdf\Graph object has no URI either.'
         );
         $graph = new Graph();
@@ -491,8 +481,8 @@ class GraphTest extends TestCase
 
     public function testGetResourceEmptyUri()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'got empty string'
         );
         $graph = new Graph();
@@ -501,8 +491,8 @@ class GraphTest extends TestCase
 
     public function testGetResourceNonStringUri()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$resource should be either IRI, blank-node identifier or EasyRdf\Resource'
         );
         $graph = new Graph();
@@ -805,8 +795,8 @@ class GraphTest extends TestCase
 
     public function testGetNullResource()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'got null'
         );
         $this->graph->get(null, 'rdf:test');
@@ -814,8 +804,8 @@ class GraphTest extends TestCase
 
     public function testGetEmptyResource()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'got empty string'
         );
         $this->graph->get('', 'rdf:test');
@@ -823,8 +813,8 @@ class GraphTest extends TestCase
 
     public function testGetNullProperty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath should be a string, array or EasyRdf\Resource and cannot be null'
         );
         $this->graph->get($this->uri, null);
@@ -832,8 +822,8 @@ class GraphTest extends TestCase
 
     public function testGetEmptyProperty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath cannot be an empty string'
         );
         $this->graph->get($this->uri, '');
@@ -841,8 +831,8 @@ class GraphTest extends TestCase
 
     public function testGetNonStringProperty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath should be a string, array or EasyRdf\Resource and cannot be null'
         );
         $this->graph->get($this->uri, $this);
@@ -954,8 +944,8 @@ class GraphTest extends TestCase
 
     public function testAllNullKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->all($this->uri, null);
@@ -963,8 +953,8 @@ class GraphTest extends TestCase
 
     public function testAllEmptyKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath cannot be an empty string'
         );
         $this->graph->all($this->uri, '');
@@ -972,8 +962,8 @@ class GraphTest extends TestCase
 
     public function testAllNonStringKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->all($this->uri, []);
@@ -1126,8 +1116,8 @@ class GraphTest extends TestCase
 
     public function testJoinNullKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->join($this->uri, null, 'Test C');
@@ -1135,8 +1125,8 @@ class GraphTest extends TestCase
 
     public function testJoinEmptyKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath cannot be an empty string'
         );
         $this->graph->join($this->uri, '', 'Test C');
@@ -1144,8 +1134,8 @@ class GraphTest extends TestCase
 
     public function testJoinNonStringKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->join($this->uri, [], 'Test C');
@@ -1257,8 +1247,8 @@ class GraphTest extends TestCase
 
     public function testAddNullKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->add($this->uri, null, 'Test C');
@@ -1266,8 +1256,8 @@ class GraphTest extends TestCase
 
     public function testAddEmptyKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$property cannot be an empty string'
         );
         $this->graph->add($this->uri, '', 'Test C');
@@ -1275,8 +1265,8 @@ class GraphTest extends TestCase
 
     public function testAddNonStringKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->add($this->uri, [], 'Test C');
@@ -1289,8 +1279,8 @@ class GraphTest extends TestCase
         } else {
             $class = '\PHPUnit\Framework\Error\Error';
         }
-        $this->setExpectedException(
-            $class,
+        $this->expectException($class);
+        $this->expectExceptionMessage(
             'Object of class EasyRdf\GraphTest could not be converted to string'
         );
         $this->graph->add($this->uri, 'rdf:foo', $this);
@@ -1298,8 +1288,8 @@ class GraphTest extends TestCase
 
     public function testAddMissingArrayType()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$value is missing a \'type\' key'
         );
         $this->graph->add($this->uri, 'rdf:foo', ['value' => 'bar']);
@@ -1307,8 +1297,8 @@ class GraphTest extends TestCase
 
     public function testAddMissingArrayValue()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$value is missing a \'value\' key'
         );
         $this->graph->add($this->uri, 'rdf:foo', ['type' => 'literal']);
@@ -1316,8 +1306,8 @@ class GraphTest extends TestCase
 
     public function testAddInvalidArrayType()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$value does not have a valid type (foo)'
         );
         $this->graph->add($this->uri, 'rdf:foo', ['type' => 'foo', 'value' => 'bar']);
@@ -1325,8 +1315,8 @@ class GraphTest extends TestCase
 
     public function testAddArrayWithLangAndDatatype()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$value cannot have both and language and a datatype'
         );
         $this->graph->add(
@@ -1359,8 +1349,8 @@ class GraphTest extends TestCase
 
     public function testAddPropertiesInvalidResourceClass()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$resource should be either IRI, blank-node identifier or EasyRdf\Resource'
         );
         $graph = new Graph();
@@ -1508,8 +1498,8 @@ class GraphTest extends TestCase
 
     public function testDeleteNullKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->delete($this->uri, null);
@@ -1517,8 +1507,8 @@ class GraphTest extends TestCase
 
     public function testDeleteEmptyKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$property cannot be an empty string'
         );
         $this->graph->delete($this->uri, '');
@@ -1526,8 +1516,8 @@ class GraphTest extends TestCase
 
     public function testDeleteNonStringKey()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
         $this->graph->delete($this->uri, []);
@@ -1848,8 +1838,8 @@ class GraphTest extends TestCase
 
     public function testDoesntHasBnodeProperty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$property cannot be a blank node'
         );
         $this->graph->hasProperty($this->uri, '_:foo');

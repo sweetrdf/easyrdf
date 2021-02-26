@@ -299,6 +299,7 @@ class Isomorphic
         $hashes = $groundedHahes;
         $ungroundedHashes = [];
         $hashNeeded = true;
+        $hash = null;
 
         // We may have to go over the list multiple times.  If a node is marked as
         // grounded, other nodes can then use it to decide their own state of

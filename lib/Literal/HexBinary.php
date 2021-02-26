@@ -58,6 +58,14 @@ class HexBinary extends Literal
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
+        /**
+         * workaround to avoid PHPStan errors:
+         *      Constructor of class EasyRdf\Literal\HexBinary has an unused parameter $lang.
+         *      Constructor of class EasyRdf\Literal\HexBinary has an unused parameter $datatype.
+         */
+        $lang = null;
+        $datatype = 'xsd:hexBinary';
+
         // Normalise the canonical representation, as specified here:
         // http://www.w3.org/TR/xmlschema-2/#hexBinary-canonical-repr
         $value = strtoupper($value);
@@ -67,7 +75,7 @@ class HexBinary extends Literal
             throw new \InvalidArgumentException('Literal of type xsd:hexBinary contains non-hexadecimal characters');
         }
 
-        parent::__construct(strtoupper($value), null, 'xsd:hexBinary');
+        parent::__construct(strtoupper($value), $lang, $datatype);
     }
 
     /** Constructor for creating a new literal object from a binary blob

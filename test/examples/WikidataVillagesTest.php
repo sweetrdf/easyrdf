@@ -1,12 +1,15 @@
 <?php
 
-namespace EasyRdf\Examples;
+namespace Test\Examples;
+
+use Test\TestCase;
 
 /**
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,12 +35,11 @@ namespace EasyRdf\Examples;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class WikidataVillagesTest extends \EasyRdf\TestCase
+class WikidataVillagesTest extends TestCase
 {
     public function testIndex()
     {

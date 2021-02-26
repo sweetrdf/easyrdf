@@ -1,9 +1,11 @@
 <?php
 
-namespace EasyRdf\Http;
+namespace Test\EasyRdf\Http;
 
 use EasyRdf\Exception;
 use EasyRdf\Format;
+use EasyRdf\Http\Client;
+use EasyRdf\Http\Response;
 
 /**
  * EasyRdf
@@ -124,10 +126,10 @@ class MockClient extends Client
             } else {
                 $headers = [];
                 $format = Format::guessFormat($body);
-                if (isset($format)) {
+                if (!empty($format)) {
                     $headers['Content-Type'] = $format->getDefaultMimeType();
                 }
-                if (isset($body)) {
+                if (!empty($body)) {
                     $headers['Content-Length'] = \strlen($body);
                 }
             }

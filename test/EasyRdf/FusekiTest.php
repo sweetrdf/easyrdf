@@ -1,13 +1,19 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Exception;
+use EasyRdf\Graph;
+use EasyRdf\GraphStore;
+use EasyRdf\Literal;
+use Test\TestCase;
 
 /**
  * EasyRdf
  *
  * LICENSE
  *
- * Copyright (c) 2013-2020 Nicholas J Humfrey.  All rights reserved.
+ * Copyright (c) 2013 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,97 +38,82 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
- * @license    https://www.opensource.org/licenses/bsd-license.php
+ * @copyright  Copyright (c) 2009-2013 Nicholas J Humfrey
+ * @license    http://www.opensource.org/licenses/bsd-license.php
  */
-require_once __DIR__.\DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class FusekiTest extends \EasyRdf\TestCase
+class FusekiTest extends TestCase
 {
-    private static $port = null;
-    private static $proc = null;
-
     /** @var \EasyRdf\GraphStore */
     private $gs;
 
-    // Starting up Fuseki is slow - we re-use the same instance for every test
-    public static function setUpBeforeClass()
-    {
-        $descriptorspec = [
-            0 => ['pipe', 'r'],
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
-        ];
-
-        // Start fuseki on a random port number
-        self::$port = rand(10000, 60000);
-        $cmd = 'fuseki-server --port='.self::$port.' --update --mem /ds';
-        $dir = sys_get_temp_dir();
-        self::$proc = proc_open($cmd, $descriptorspec, $pipes, $dir);
-
-        // FIXME: timeout
-        while ($line = fgets($pipes[1])) {
-            if (preg_match('/Started (.+) on port (\d+)/', $line, $matches)) {
-                break;
-            }
-        }
-
-        // Fuseki needs a little bit of extra time before it can acctually recieve requests
-        sleep(3);
-    }
-
-    public static function tearDownAfterClass()
-    {
-        if (self::$proc) {
-            // Cause the fuseki server process to terminate
-            proc_terminate(self::$proc);
-
-            // Close the process resource
-            proc_close(self::$proc);
-        }
-    }
+    /** @var array<int> */
+    private $validStatuses = [200, 201, 204];
 
     protected function setUp()
     {
-        $this->gs = new \EasyRdf\GraphStore('http://localhost:'.self::$port.'/ds/data');
+        parent::__construct();
+
+        $this->gs = new GraphStore('http://localhost:3030/ds/data');
+
+        // check connection
+        if (false == $this->isFusekiServerAccessible()) {
+            $this->markTestSkipped('Fuseki Server not online');
+        }
+    }
+
+    protected function isFusekiServerAccessible(): bool
+    {
+        try {
+            $graph1 = new Graph();
+            $graph1->set('http://example.com/test', 'rdfs:label', 'Test 0');
+            $this->gs->replace($graph1, 'easyrdf-graphstore-test.rdf');
+        } catch (Exception $exception) {
+            if (false !== strpos($exception->getMessage(), 'Unable to connect')) {
+                return false;
+            }
+
+            throw $exception;
+        }
+
+        return true;
     }
 
     public function testGraphStoreReplace()
     {
-        $graph1 = new \EasyRdf\Graph();
+        $graph1 = new Graph();
         $graph1->set('http://example.com/test', 'rdfs:label', 'Test 0');
         $result = $this->gs->replace($graph1, 'easyrdf-graphstore-test.rdf');
-        $this->assertSame(201, $result->getStatus());
+        $this->assertTrue(\in_array($result->getStatus(), $this->validStatuses));
 
         $graph1->set('http://example.com/test', 'rdfs:label', 'Test 1');
         $result = $this->gs->replace($graph1, 'easyrdf-graphstore-test.rdf');
-        $this->assertSame(204, $result->getStatus());
+        $this->assertTrue(\in_array($result->getStatus(), $this->validStatuses));
 
         $graph2 = $this->gs->get('easyrdf-graphstore-test.rdf');
         $this->assertEquals(
-            [new \EasyRdf\Literal('Test 1')],
+            [new Literal('Test 1')],
             $graph2->all('http://example.com/test', 'rdfs:label')
         );
     }
 
     public function testGraphStoreInsert()
     {
-        $graph1 = new \EasyRdf\Graph();
+        $graph1 = new Graph();
         $graph1->set('http://example.com/test', 'rdfs:label', 'Test 2');
         $result = $this->gs->insert($graph1, 'easyrdf-graphstore-test2.rdf');
-        $this->assertSame(201, $result->getStatus());
+        $this->assertTrue(\in_array($result->getStatus(), $this->validStatuses), $result->getStatus());
 
         $graph1->set('http://example.com/test', 'rdfs:label', 'Test 3');
         $result = $this->gs->insert($graph1, 'easyrdf-graphstore-test2.rdf');
-        $this->assertSame(204, $result->getStatus());
+        $this->assertTrue(\in_array($result->getStatus(), $this->validStatuses), $result->getStatus());
 
         $graph2 = $this->gs->get('easyrdf-graphstore-test2.rdf');
         $labels = $graph2->all('http://example.com/test', 'rdfs:label');
         sort($labels);
         $this->assertEquals(
             [
-                new \EasyRdf\Literal('Test 2'),
-                new \EasyRdf\Literal('Test 3'),
+                new Literal('Test 2'),
+                new Literal('Test 3'),
             ],
             $labels
         );
@@ -130,7 +121,7 @@ class FusekiTest extends \EasyRdf\TestCase
 
     public function testGraphStoreDelete()
     {
-        $graph1 = new \EasyRdf\Graph();
+        $graph1 = new Graph();
         $graph1->set('http://example.com/test', 'rdfs:label', 'Test 4');
         $result = $this->gs->insert($graph1, 'easyrdf-graphstore-test3.rdf');
         $this->assertSame(201, $result->getStatus());

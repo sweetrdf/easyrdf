@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Parser;
+namespace Test\EasyRdf\Parser;
 
 /*
  * EasyRdf
@@ -32,16 +32,14 @@ namespace EasyRdf\Parser;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Parser\Rapper;
+use Test\TestCase;
 
 class RapperTest extends TestCase
 {
@@ -67,8 +65,8 @@ class RapperTest extends TestCase
 
     public function testRapperNotFound()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             "Failed to execute the command 'random_command_that_doesnt_exist'"
         );
         new Rapper('random_command_that_doesnt_exist');
@@ -76,8 +74,8 @@ class RapperTest extends TestCase
 
     public function testRapperTooOld()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Version 1.4.17 or higher of rapper is required.'
         );
         new Rapper('echo 1.0.0');
@@ -146,8 +144,8 @@ class RapperTest extends TestCase
 
     public function testParseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Error while executing command rapper'
         );
         $this->parser->parse(

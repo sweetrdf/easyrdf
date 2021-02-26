@@ -43,6 +43,7 @@ use EasyRdf\Literal;
  *
  * @see       http://www.w3.org/TR/REC-rdf-syntax/#section-Syntax-XML-literals
  *
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
@@ -56,7 +57,12 @@ class XML extends Literal
      */
     public function __construct($value, $lang = null, $datatype = null)
     {
-        parent::__construct($value, null, $datatype);
+        /**
+         * workaround to avoid PHPStan error:
+         * Constructor of class EasyRdf\Literal\XML has an unused parameter $lang.
+         */
+        $lang = null;
+        parent::__construct($value, $lang, $datatype);
     }
 
     /** Parse the XML literal into a DOMDocument

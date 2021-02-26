@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
 
 /*
  * EasyRdf
@@ -32,14 +32,14 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-use EasyRdf\Http\MockClient;
-
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Http;
+use Test\EasyRdf\Http\MockClient;
+use Test\TestCase;
 
 class HttpTest extends TestCase
 {
@@ -63,8 +63,8 @@ class HttpTest extends TestCase
 
     public function testSetDefaultHttpClientNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client'
         );
         Http::setDefaultHttpClient(null);
@@ -72,8 +72,8 @@ class HttpTest extends TestCase
 
     public function testSetDefaultHttpClientString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client'
         );
         Http::setDefaultHttpClient('foobar');

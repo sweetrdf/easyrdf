@@ -1,6 +1,12 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Format;
+use EasyRdf\Graph;
+use InvalidArgumentException;
+use Test\EasyRdf\Serializer\MockSerializer;
+use Test\TestCase;
 
 /**
  * EasyRdf
@@ -35,25 +41,12 @@ namespace EasyRdf;
  * @copyright  Copyright (c) 2009-2016 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class MockSerialiser extends Serialiser
-{
-    public function serialise(Graph $graph, $format, array $options = [])
-    {
-        parent::checkSerialiseParams($format);
-        // Serialising goes here
-        return true;
-    }
-}
-
 class SerialiserTest extends TestCase
 {
-    /** @var Graph */
+    /** @var \EasyRdf\Graph */
     private $graph;
-    /** @var resource */
-    private $resource;
-    /** @var Serialiser */
+
+    /** @var \EasyRdf\Serialiser */
     private $serialiser;
 
     /**
@@ -62,58 +55,49 @@ class SerialiserTest extends TestCase
     protected function setUp()
     {
         $this->graph = new Graph();
-        $this->resource = $this->graph->resource('http://www.example.com/');
-        $this->serialiser = new MockSerialiser();
+        $this->serialiser = new MockSerializer();
     }
 
     public function testSerialise()
     {
-        $this->assertTrue(
-            $this->serialiser->serialise($this->graph, 'php')
-        );
+        $this->assertTrue($this->serialiser->serialise($this->graph, 'php'));
     }
 
     public function testSerialiseFormatObject()
     {
         $format = Format::getFormat('json');
-        $this->assertTrue(
-            $this->serialiser->serialise($this->graph, $format)
-        );
+        $this->assertTrue($this->serialiser->serialise($this->graph, $format));
     }
 
     public function testSerialiseNullFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            '$format cannot be null or empty'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$format cannot be null or empty');
+
         $this->serialiser->serialise($this->graph, null);
     }
 
     public function testSerialiseEmptyFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            '$format cannot be null or empty'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$format cannot be null or empty');
+
         $this->serialiser->serialise($this->graph, '');
     }
 
     public function testSerialiseBadObjectFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            '$format should be a string or an EasyRdf\Format object'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$format should be a string or an EasyRdf\Format object');
+
         $this->serialiser->serialise($this->graph, $this);
     }
 
     public function testSerialiseIntegerFormat()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            '$format should be a string or an EasyRdf\Format object'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$format should be a string or an EasyRdf\Format object');
+
         $this->serialiser->serialise($this->graph, 1);
     }
 }

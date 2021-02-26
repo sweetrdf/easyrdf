@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Serialiser;
+namespace Test\EasyRdf\Serialiser;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,15 +34,14 @@ namespace EasyRdf\Serialiser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Serialiser\Rapper;
+use Test\TestCase;
 
 class RapperTest extends TestCase
 {
@@ -66,10 +66,11 @@ class RapperTest extends TestCase
 
     public function testRapperNotFound()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             "Failed to execute the command 'random_command_that_doesnt_exist'"
         );
+
         new Rapper('random_command_that_doesnt_exist');
     }
 
@@ -92,10 +93,9 @@ class RapperTest extends TestCase
 
     public function testSerialiseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
-            'Error while executing command rapper'
-        );
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage('Error while executing command rapper');
+
         $this->serialiser->serialise(
             $this->graph,
             'unsupportedformat'

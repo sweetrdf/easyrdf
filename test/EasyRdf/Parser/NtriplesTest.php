@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Parser;
+namespace Test\EasyRdf\Parser;
 
 /*
  * EasyRdf
@@ -33,15 +33,14 @@ namespace EasyRdf\Parser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2015 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Parser\Ntriples;
+use Test\TestCase;
 
 class NtriplesTest extends TestCase
 {
@@ -334,8 +333,8 @@ class NtriplesTest extends TestCase
 
     public function testParseInvalidSubject()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Failed to parse subject: foobar on line 1'
         );
         $this->parser->parse(
@@ -348,8 +347,8 @@ class NtriplesTest extends TestCase
 
     public function testParseInvalidPredicate()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Failed to parse statement on line 2'
         );
         $this->parser->parse(
@@ -362,8 +361,8 @@ class NtriplesTest extends TestCase
 
     public function testParseInvalidObject()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Failed to parse object: foobar on line 1'
         );
         $this->parser->parse(
@@ -376,8 +375,8 @@ class NtriplesTest extends TestCase
 
     public function testParseInvalidStatement()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'Failed to parse statement on line 3'
         );
         $this->parser->parse(
@@ -390,8 +389,8 @@ class NtriplesTest extends TestCase
 
     public function testParseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Parser\Ntriples does not support: unsupportedformat'
         );
         $this->parser->parse(

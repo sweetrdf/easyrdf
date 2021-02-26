@@ -1,12 +1,13 @@
 <?php
 
-namespace EasyRdf\Parser;
+namespace Test\EasyRdf\Parser;
 
 /*
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,15 +34,14 @@ namespace EasyRdf\Parser;
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
 use EasyRdf\Graph;
-use EasyRdf\TestCase;
-
-require_once \dirname(__DIR__, 2).
-             \DIRECTORY_SEPARATOR.'TestHelper.php';
+use EasyRdf\Parser\RdfXml;
+use Test\TestCase;
 
 class RdfXmlTest extends TestCase
 {
@@ -121,8 +121,8 @@ class RdfXmlTest extends TestCase
 
     public function testXMLParseError()
     {
-        $this->setExpectedException(
-            'EasyRdf\Parser\Exception',
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
             'XML error: "Mismatched tag" on line 4, column 21'
         );
         $this->parser->parse(
@@ -139,8 +139,8 @@ class RdfXmlTest extends TestCase
 
     public function testParseUnsupportedFormat()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'EasyRdf\Parser\RdfXml does not support: unsupportedformat'
         );
         $this->parser->parse(

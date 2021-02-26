@@ -1,6 +1,10 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Graph;
+use EasyRdf\RdfNamespace;
+use Test\TestCase;
 
 /**
  * EasyRdf
@@ -32,13 +36,15 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
 class CollectionTest extends TestCase
 {
+    /** @var \EasyRdf\Graph */
+    private $graph;
+
     protected function setUp()
     {
         $this->graph = new Graph();
@@ -137,10 +143,8 @@ class CollectionTest extends TestCase
 
     public function testSeekInvalid()
     {
-        $this->setExpectedException(
-            'OutOfBoundsException',
-            'Unable to seek to position 2 in the collection'
-        );
+        $this->expectException('OutOfBoundsException');
+        $this->expectExceptionMessage('Unable to seek to position 2 in the collection');
         $list = $this->graph->newBnode('rdf:List');
         $list->addLiteral('rdf:first', 'Item 1');
         $list->addResource('rdf:rest', 'rdf:nil');
@@ -149,18 +153,16 @@ class CollectionTest extends TestCase
 
     public function testSeekZero()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'Collection position must be a positive integer'
-        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Collection position must be a positive integer');
         $list = $this->graph->newBnode('rdf:List');
         $list->seek(0);
     }
 
     public function testSeekMinusOne()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection position must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -169,8 +171,8 @@ class CollectionTest extends TestCase
 
     public function testSeekNonInteger()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection position must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -233,8 +235,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetExistsZero()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -243,8 +245,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetExistsMinusOne()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -253,8 +255,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetExistsNonInteger()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -288,8 +290,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetGetZero()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -298,8 +300,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetGetMinusOne()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -308,8 +310,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetGetNonInteger()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -364,8 +366,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetSetZero()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -374,8 +376,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetSetMinusOne()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -384,8 +386,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetSetNonInteger()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -462,8 +464,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetZero()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -472,8 +474,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetMinusOne()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');
@@ -482,8 +484,8 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetNonInteger()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
         $list = $this->graph->newBnode('rdf:List');

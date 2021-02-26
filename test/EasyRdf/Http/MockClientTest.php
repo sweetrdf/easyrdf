@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyRdf\Http;
+namespace Test\EasyRdf\Http;
 
 /*
  * EasyRdf
@@ -32,19 +32,17 @@ namespace EasyRdf\Http;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    EasyRdf
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
-use EasyRdf\TestCase;
-
-require_once realpath(__DIR__.'/../../').'/TestHelper.php';
-require_once __DIR__.'/MockClient.php';
+use EasyRdf\Http\Response;
+use Test\TestCase;
 
 class MockClientTest extends TestCase
 {
-    /** @var MockClient */
+    /** @var \Test\EasyRdf\Http\MockClient */
     private $client;
 
     protected function setUp()
@@ -110,8 +108,8 @@ class MockClientTest extends TestCase
 
     public function testUnknownUrl()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Unexpected request: GET http://example.com/test'
         );
         $this->get('http://example.com/test');
@@ -119,8 +117,8 @@ class MockClientTest extends TestCase
 
     public function testMethodUnknownMatch()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Unexpected request: GET http://example.com/test'
         );
         $this->client->addMock('PUT', '/test', '10');
@@ -160,7 +158,7 @@ class MockClientTest extends TestCase
     {
         $response = new Response(234, ['Foo' => 'bar'], 'x');
         $this->client->addMock('GET', '/test', $response);
-        $r = $this->get('http://example.com/test', ['throw' => false]);
+        $r = $this->get('http://example.com/test');
         $this->assertSame(234, $r->getStatus());
         $this->assertSame('bar', $r->getHeader('Foo'));
         $this->assertSame('x', $r->getBody());

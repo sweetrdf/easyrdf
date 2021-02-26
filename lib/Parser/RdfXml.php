@@ -44,6 +44,7 @@ use EasyRdf\Parser;
 /**
  * A pure-php class to parse RDF/XML.
  *
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  *             Copyright (c) 2004-2010 Benjamin Nowack (based on ARC2_RDFXMLParser.php)
  * @license    https://www.opensource.org/licenses/bsd-license.php
@@ -58,6 +59,9 @@ class RdfXml extends Parser
     private $nsp;
     private $sStack;
     private $sCount;
+
+    /** @var \EasyRdf\Parser\RdfXml */
+    private $xmlParser;
 
     /**
      * Constructor
@@ -630,6 +634,7 @@ class RdfXml extends Parser
             if (isset($s['is_coll']) && $s['is_coll']) {
                 $this->add($s['value'], $this->rdf.'rest', $this->rdf.'nil', $s['type'], 'uri');
                 /* back to collection start */
+                $subS = null;
                 while ((!isset($s['p']) || ($s['p'] != $t))) {
                     $subS = $s;
                     $this->popS();

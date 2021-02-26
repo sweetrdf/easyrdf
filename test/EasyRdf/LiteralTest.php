@@ -1,6 +1,12 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Literal;
+use EasyRdf\ParsedUri;
+use EasyRdf\RdfNamespace;
+use Exception;
+use Test\TestCase;
 
 /**
  * EasyRdf
@@ -35,16 +41,6 @@ namespace EasyRdf;
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
-class MyDatatypeClass extends Literal
-{
-    public function __toString()
-    {
-        return '!'.(string) ($this->value).'!';
-    }
-}
-
 class LiteralTest extends TestCase
 {
     protected function setUp()
@@ -437,8 +433,8 @@ class LiteralTest extends TestCase
 
     public function testSetDatatypeMappingNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
         Literal::setDatatypeMapping(null, 'EasyRdf\MyDatatypeClass');
@@ -446,8 +442,8 @@ class LiteralTest extends TestCase
 
     public function testSetDatatypeMappingEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
         Literal::setDatatypeMapping('', 'EasyRdf\MyDatatypeClass');
@@ -455,8 +451,8 @@ class LiteralTest extends TestCase
 
     public function testSetDatatypeMappingNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
         Literal::setDatatypeMapping([], 'EasyRdf\MyDatatypeClass');
@@ -464,8 +460,8 @@ class LiteralTest extends TestCase
 
     public function testSetDatatypeMappingClassNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$class should be a string and cannot be null or empty'
         );
         Literal::setDatatypeMapping('ex:mytype', null);
@@ -473,8 +469,8 @@ class LiteralTest extends TestCase
 
     public function testSetDatatypeMappingClassEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$class should be a string and cannot be null or empty'
         );
         Literal::setDatatypeMapping('ex:mytype', '');
@@ -482,8 +478,8 @@ class LiteralTest extends TestCase
 
     public function testSetDatatypeMappingClassNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$class should be a string and cannot be null or empty'
         );
         Literal::setDatatypeMapping('ex:mytype', []);
@@ -491,8 +487,8 @@ class LiteralTest extends TestCase
 
     public function testDeleteDatatypeMappingNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
         Literal::deleteDatatypeMapping(null);
@@ -500,8 +496,8 @@ class LiteralTest extends TestCase
 
     public function testDeleteDatatypeMappingEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
         Literal::deleteDatatypeMapping('');
@@ -509,8 +505,8 @@ class LiteralTest extends TestCase
 
     public function testDeleteDatatypeMappingNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$datatype should be a string and cannot be null or empty'
         );
         Literal::deleteDatatypeMapping([]);

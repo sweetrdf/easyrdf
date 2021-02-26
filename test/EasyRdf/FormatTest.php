@@ -1,12 +1,16 @@
 <?php
 
-namespace EasyRdf;
+namespace Test\EasyRdf;
+
+use EasyRdf\Format;
+use Test\TestCase;
 
 /**
  * EasyRdf
  *
  * LICENSE
  *
+ * Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * Copyright (c) 2009-2020 Nicholas J Humfrey.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,11 +36,10 @@ namespace EasyRdf;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
+ * @copyright  Copyright (c) 2021 Konrad Abicht <hi@inspirito.de>
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-require_once \dirname(__DIR__).\DIRECTORY_SEPARATOR.'TestHelper.php';
-
 class MockParserClass
 {
 }
@@ -47,7 +50,7 @@ class MockSerialiserClass
 
 class FormatTest extends TestCase
 {
-    /** @var Format */
+    /** @var \EasyRdf\Format */
     private $format;
 
     /**
@@ -71,8 +74,8 @@ class FormatTest extends TestCase
 
     public function testRegisterNameNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$name should be a string and cannot be null or empty'
         );
         Format::register(null);
@@ -80,8 +83,8 @@ class FormatTest extends TestCase
 
     public function testRegisterNameEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$name should be a string and cannot be null or empty'
         );
         Format::register('');
@@ -89,8 +92,8 @@ class FormatTest extends TestCase
 
     public function testRegisterNameNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$name should be a string and cannot be null or empty'
         );
         Format::register([]);
@@ -199,8 +202,8 @@ class FormatTest extends TestCase
 
     public function testGetFormatNull()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$query should be a string and cannot be null or empty'
         );
         Format::getFormat(null);
@@ -208,8 +211,8 @@ class FormatTest extends TestCase
 
     public function testGetFormatEmpty()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$query should be a string and cannot be null or empty'
         );
         Format::getFormat('');
@@ -217,8 +220,8 @@ class FormatTest extends TestCase
 
     public function testGetFormatNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$query should be a string and cannot be null or empty'
         );
         Format::getFormat([]);
@@ -226,8 +229,8 @@ class FormatTest extends TestCase
 
     public function testGetFormatUnknown()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'Format is not recognised: unknown'
         );
         $this->assertNull(Format::getFormat('unknown'));
@@ -270,8 +273,8 @@ class FormatTest extends TestCase
 
     public function testSetLabelNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$label should be a string'
         );
         $this->format->setLabel($this);
@@ -297,8 +300,8 @@ class FormatTest extends TestCase
 
     public function testSetUriNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$uri should be a string'
         );
         $this->format->setUri($this);
@@ -440,8 +443,8 @@ class FormatTest extends TestCase
 
     public function testSetParserClassNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$class should be a string'
         );
         $this->format->setParserClass($this);
@@ -474,8 +477,8 @@ class FormatTest extends TestCase
 
     public function testNewParserNull()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'No parser class available for format: my'
         );
         $this->format->setParserClass(null);
@@ -505,8 +508,8 @@ class FormatTest extends TestCase
 
     public function testSetSerialiserClassNonString()
     {
-        $this->setExpectedException(
-            'InvalidArgumentException',
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
             '$class should be a string'
         );
         $this->format->setSerialiserClass($this);
@@ -522,8 +525,8 @@ class FormatTest extends TestCase
 
     public function testNewSerialiserNull()
     {
-        $this->setExpectedException(
-            'EasyRdf\Exception',
+        $this->expectException('EasyRdf\Exception');
+        $this->expectExceptionMessage(
             'No serialiser class available for format: my'
         );
         $this->format->setSerialiserClass(null);

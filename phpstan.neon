@@ -1,0 +1,20 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+    bootstrapFiles:
+        - vendor/autoload.php
+
+    fileExtensions:
+        - php
+
+    level: 1
+
+    paths:
+        - lib
+        - test
+
+    parallel:
+        maximumNumberOfProcesses: 1
+
+    tmpDir: /tmp/phpstan
