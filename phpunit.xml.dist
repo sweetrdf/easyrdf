@@ -27,10 +27,9 @@
       </testsuite>
     </testsuites>
 
-    <!-- Files to be included in the coverage report -->
     <filter>
-      <whitelist addUncoveredFilesFromWhitelist="true">
-        <directory suffix=".php">lib/EasyRdf/</directory>
-      </whitelist>
+        <whitelist>
+            <directory>lib</directory>
+        </whitelist>
     </filter>
 </phpunit>
