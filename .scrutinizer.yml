@@ -3,7 +3,7 @@ build:
         coverage:
             tests:
                 override:
-                    -   command: vendor/bin/phpunit -v --coverage-clover /home/scrutinizer/build/coverage/clover.xml
+                    -   command: vendor/bin/phpunit -v --exclude expensive --coverage-clover /home/scrutinizer/build/coverage/clover.xml
                         coverage:
                             file: /home/scrutinizer/build/coverage/clover.xml
                             format: clover
