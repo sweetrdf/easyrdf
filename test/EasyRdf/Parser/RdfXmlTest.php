@@ -152,7 +152,12 @@ class RdfXmlTest extends TestCase
     }
 
     /**
-     * Check that the RDF/XML parser is capable of parsing files more than 10MB
+     * Check that the RDF/XML parser is capable of parsing files more than 10MB.
+     *
+     * Parsing may result in a fatal error if memory gets exhausted (e.g. in Scrutinizer).
+     * Therefore this test is in group "expensive".
+     *
+     * @group expensive
      *
      * @see https://github.com/easyrdf/easyrdf/issues/350
      */
@@ -162,7 +167,7 @@ class RdfXmlTest extends TestCase
         $large = "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n";
         $large .= "         xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n";
         $large .= "         xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\">\n";
-        for ($i = 1; $i < 25000; ++$i) {
+        for ($i = 1; $i < 55000; ++$i) {
             $large .= "<owl:Thing rdf:about=\"http://www.example.com/resource$i\">\n";
             $large .= "  <rdfs:label>This is item $i</rdfs:label>\n";
             $large .= '  <rdfs:comment>';
@@ -176,14 +181,14 @@ class RdfXmlTest extends TestCase
         $this->assertGreaterThan(10485760, \strlen($large));
 
         // Now parse it into a graph
-        $count = $this->parser->parse(
+        $this->parser->parse(
             $this->graph,
             $large,
             'rdfxml',
             null
         );
 
-        $this->assertEquals(25000, \count($this->graph->resources()));
+        $this->assertEquals(55000, \count($this->graph->resources()));
     }
 
     /**

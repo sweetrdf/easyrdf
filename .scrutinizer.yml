@@ -1,0 +1,12 @@
+build:
+    nodes:
+        coverage:
+            tests:
+                override:
+                    -   command: vendor/bin/phpunit -v --exclude expensive --coverage-clover coverage/clover.xml
+                        coverage:
+                            file: coverage/clover.xml
+                            format: clover
+            environment:
+                php:
+                    version: 7.4
