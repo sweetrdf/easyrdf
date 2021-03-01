@@ -3,9 +3,9 @@ build:
         coverage:
             tests:
                 override:
-                    -   command: php vendor/bin/phpunit --coverage-clover coverage/clover.xml
+                    -   command: vendor/bin/phpunit -v --coverage-clover /home/scrutinizer/build/coverage/clover.xml
                         coverage:
-                            file: coverage/clover.xml
+                            file: /home/scrutinizer/build/coverage/clover.xml
                             format: clover
             environment:
                 php:
