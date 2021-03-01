@@ -1,11 +1,9 @@
 build:
     nodes:
-        analysis:
+        coverage:
             tests:
                 override:
-                    - php-scrutinizer-run
-                    -
-                        command: php vendor/bin/phpunit --coverage-clover coverage/clover.xml
+                    -   command: php vendor/bin/phpunit --coverage-clover coverage/clover.xml
                         coverage:
                             file: coverage/clover.xml
                             format: clover
