@@ -372,7 +372,7 @@ class Format
 
     /** Get the default registered mime type for a format object
      *
-     * @return string the default mime type as a string
+     * @return string|void the default mime type as a string
      */
     public function getDefaultMimeType()
     {
@@ -410,7 +410,7 @@ class Format
 
     /** Get the default registered file extension (filename suffix) for a format object
      *
-     * @return string the default extension as a string
+     * @return string|void the default extension as a string
      */
     public function getDefaultExtension()
     {

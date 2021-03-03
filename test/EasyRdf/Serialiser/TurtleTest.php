@@ -425,6 +425,8 @@ class TurtleTest extends TestCase
     public function testSerialiseCollection()
     {
         $joe = $this->graph->resource('http://example.com/joe');
+
+        /** @var \EasyRdf\Collection */
         $pets = $this->graph->newBnode('rdf:List');
         $pets->append('Rat');
         $pets->append('Cat');
@@ -446,6 +448,8 @@ class TurtleTest extends TestCase
     public function testSerialiseCollectionSingle()
     {
         $joe = $this->graph->resource('http://example.com/joe');
+
+        /** @var \EasyRdf\Collection */
         $pets = $this->graph->newBnode('rdf:List');
         $pets->append('Rat');
         $joe->add('foaf:pets', $pets);

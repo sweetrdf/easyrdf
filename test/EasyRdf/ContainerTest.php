@@ -64,6 +64,7 @@ class ContainerTest extends TestCase
             'http://www.w3.org/TR/REC-rdf-syntax/'
         );
 
+        /** @var \EasyRdf\Collection */
         $favourites = $this->graph->resource('ex:favourite-fruit');
         $this->assertSame('rdf:Seq', $favourites->type());
         $this->assertClass('EasyRdf\Container', $favourites);
@@ -135,6 +136,7 @@ class ContainerTest extends TestCase
             'http://www.w3.org/TR/REC-rdf-syntax/'
         );
 
+        /** @var \EasyRdf\Collection */
         $favourites = $this->graph->resource('ex:favourite-fruit');
 
         $favourites->seek(1);
@@ -160,6 +162,8 @@ class ContainerTest extends TestCase
         $this->expectExceptionMessage(
             'Unable to seek to position 2 in the container'
         );
+
+        /** @var \EasyRdf\Collection */
         $seq = $this->graph->newBnode('rdf:Seq');
         $seq->add('rdf:_1', 'Item 1');
         $seq->seek(2);
@@ -171,6 +175,8 @@ class ContainerTest extends TestCase
         $this->expectExceptionMessage(
             'Container position must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $seq = $this->graph->newBnode('rdf:Seq');
         $seq->seek(0);
     }
@@ -181,6 +187,8 @@ class ContainerTest extends TestCase
         $this->expectExceptionMessage(
             'Container position must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $seq = $this->graph->newBnode('rdf:Seq');
         $seq->seek(-1);
     }
@@ -191,6 +199,8 @@ class ContainerTest extends TestCase
         $this->expectExceptionMessage(
             'Container position must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $seq = $this->graph->newBnode('rdf:Seq');
         $seq->seek('foo');
     }
@@ -419,6 +429,7 @@ class ContainerTest extends TestCase
 
     public function testAppend()
     {
+        /** @var \EasyRdf\Collection */
         $animals = $this->graph->newBnode('rdf:Seq');
         $this->assertSame('rdf:Seq', $animals->type());
         $this->assertClass('EasyRdf\Container', $animals);

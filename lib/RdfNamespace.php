@@ -360,7 +360,7 @@ class RdfNamespace
      *
      * @param string $uri A full URI (eg 'http://xmlns.com/foaf/0.1/name')
      *
-     * @return string The prefix namespace that it is a part of(eg 'foaf')
+     * @return string|void The prefix namespace that it is a part of(eg 'foaf')
      */
     public static function prefixOfUri($uri)
     {
@@ -381,7 +381,7 @@ class RdfNamespace
      * @param string $uri             The full URI (eg 'http://xmlns.com/foaf/0.1/name')
      * @param bool   $createNamespace If true, a new namespace will be created
      *
-     * @return string The shortened URI (eg 'foaf:name') or null
+     * @return string|void The shortened URI (eg 'foaf:name') or null
      */
     public static function shorten($uri, $createNamespace = false)
     {

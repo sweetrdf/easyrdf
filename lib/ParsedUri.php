@@ -247,15 +247,19 @@ class ParsedUri
 
     /**
      * Resolves a relative URI using this URI as the base URI.
+     *
+     * @param string|\EasyRdf\ParsedUri $relUri
      */
     public function resolve($relUri)
     {
         // If it is a string, then convert it to a parsed object
         if (\is_string($relUri)) {
+            /** @var \EasyRdf\ParsedUri */
             $relUri = new self($relUri);
         }
 
         // This code is based on the pseudocode in section 5.2.2 of RFC3986
+        /** @var \EasyRdf\ParsedUri */
         $target = new self();
         if ($relUri->scheme) {
             $target->scheme = $relUri->scheme;

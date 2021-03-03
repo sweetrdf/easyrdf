@@ -149,7 +149,7 @@ class Resource implements \ArrayAccess
      * The local name is defined as the part of the URI string
      * after the last occurrence of the '#', ':' or '/' character.
      *
-     * @return string The local name
+     * @return string|void The local name
      */
     public function localName()
     {
@@ -656,7 +656,7 @@ class Resource implements \ArrayAccess
      *
      * Returns null if no primary topic is available.
      *
-     * @return resource the primary topic of this resource
+     * @return \EasyRdf\Resource the primary topic of this resource
      */
     public function primaryTopic()
     {
@@ -816,8 +816,8 @@ class Resource implements \ArrayAccess
      *
      * @see http://php.net/manual/en/arrayaccess.offsetset.php
      *
-     * @param mixed the offset to assign the value to
-     * @param mixed $value the value to set
+     * @param mixed $offset the offset to assign the value to
+     * @param mixed $value  the value to set
      *
      * @return void
      */
