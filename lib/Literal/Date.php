@@ -102,7 +102,7 @@ class Date extends Literal
      *
      * @see DateTime::format
      *
-     * @return string
+     * @return \DateTime
      */
     public function getValue()
     {

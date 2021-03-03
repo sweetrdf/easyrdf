@@ -145,6 +145,8 @@ class CollectionTest extends TestCase
     {
         $this->expectException('OutOfBoundsException');
         $this->expectExceptionMessage('Unable to seek to position 2 in the collection');
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->addLiteral('rdf:first', 'Item 1');
         $list->addResource('rdf:rest', 'rdf:nil');
@@ -155,6 +157,8 @@ class CollectionTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Collection position must be a positive integer');
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->seek(0);
     }
@@ -165,6 +169,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection position must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->seek(-1);
     }
@@ -175,6 +181,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection position must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->seek('foo');
     }
@@ -187,6 +195,7 @@ class CollectionTest extends TestCase
 
     public function testCountOne()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->append('Item');
         $this->assertSame(1, \count($list));
@@ -194,6 +203,7 @@ class CollectionTest extends TestCase
 
     public function testCountTwo()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->append('Item 1');
         $list->append('Item 2');
@@ -202,6 +212,7 @@ class CollectionTest extends TestCase
 
     public function testCountThree()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->append('Item 1');
         $list->append('Item 2');
@@ -211,6 +222,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetExists()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->addLiteral('rdf:first', 'Item');
         $list->addResource('rdf:rest', 'rdf:nil');
@@ -220,6 +232,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetDoesntExist()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->addLiteral('rdf:first', 'Item');
         $list->addResource('rdf:rest', 'rdf:nil');
@@ -229,6 +242,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetDoesntExistEmpty()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $this->assertFalse(isset($list[1]));
     }
@@ -239,6 +253,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         isset($list[0]);
     }
@@ -249,6 +265,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         isset($list[-1]);
     }
@@ -259,6 +277,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         isset($list['foo']);
     }
@@ -277,6 +297,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetGetNonexistent()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->append('foo');
         $this->assertNull($list[2]);
@@ -284,6 +305,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetGetEmptyNonexistent()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $this->assertNull($list[1]);
     }
@@ -294,6 +316,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list[0];
     }
@@ -304,6 +328,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list[-1];
     }
@@ -314,12 +340,15 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list['foo'];
     }
 
     public function testArrayOffsetSet()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
 
         $list[1] = 'Item 1';
@@ -396,6 +425,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetFirst()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
 
         $list->append('Item 1');
@@ -410,6 +440,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetSingle()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->addResource('rdf:first', 'Item 1');
         unset($list[1]);
@@ -419,6 +450,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetUnterminated()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         $list->addResource('rdf:first', 'Item 1');
         $next = $this->graph->newBnode();
@@ -436,6 +468,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetMiddle()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
 
         $list->append('Item 1');
@@ -450,6 +483,7 @@ class CollectionTest extends TestCase
 
     public function testArrayOffsetUnsetLast()
     {
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
 
         $list->append('Item 1');
@@ -468,6 +502,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         unset($list[0]);
     }
@@ -478,6 +514,8 @@ class CollectionTest extends TestCase
         $this->expectExceptionMessage(
             'Collection offset must be a positive integer'
         );
+
+        /** @var \EasyRdf\Collection */
         $list = $this->graph->newBnode('rdf:List');
         unset($list[-1]);
     }
@@ -494,6 +532,7 @@ class CollectionTest extends TestCase
 
     public function testAppend()
     {
+        /** @var \EasyRdf\Collection */
         $animals = $this->graph->newBnode('rdf:List');
         $this->assertSame('rdf:List', $animals->type());
         $this->assertClass('EasyRdf\Collection', $animals);

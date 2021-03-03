@@ -710,11 +710,15 @@ class Rdfa extends Parser
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('xh', 'http://www.w3.org/1999/xhtml');
         $nodeList = $xpath->query('/xh:html/xh:head/xh:base');
+
+        /** @var \DOMElement */
         $node = $nodeList->item(0);
         if ($node && $href = $node->getAttribute('href')) {
             $this->baseUri = new ParsedUri($href);
         }
         $nodeList = $xpath->query('/html/head/base');
+
+        /** @var \DOMElement */
         $node = $nodeList->item(0);
         if ($node && $href = $node->getAttribute('href')) {
             $this->baseUri = new ParsedUri($href);

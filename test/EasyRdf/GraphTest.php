@@ -57,7 +57,7 @@ class GraphTest extends TestCase
     /** @var \Test\EasyRdf\Http\MockClient */
     private $client;
 
-    /** @var \EasyRdf\Graph */
+    /** @var \Test\ClassProxy\EasyRdf\GraphProxy */
     private $graph;
 
     /** @var string */

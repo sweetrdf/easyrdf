@@ -240,6 +240,8 @@ class TypeMapperTest extends TestCase
             $data,
             'json'
         );
+
+        /** @var \Test\EasyRdf\TypeClassStub */
         $joe = $graph->resource('http://www.example.com/joe#me');
         $this->assertClass(TypeClassStub::class, $joe);
         $this->assertTrue($joe->myMethod());
@@ -254,6 +256,8 @@ class TypeMapperTest extends TestCase
             $data,
             'json'
         );
+
+        /** @var \Test\EasyRdf\TypeClassStub */
         $joesFoaf = $graph->resource('http://www.example.com/joe/foaf.rdf');
         $this->assertClass(TypeClassStub::class, $joesFoaf);
         $this->assertTrue($joesFoaf->myMethod());

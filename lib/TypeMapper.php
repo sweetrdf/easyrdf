@@ -48,7 +48,7 @@ class TypeMapper
     private static $map = [];
 
     /** Default resource class */
-    private static $defaultResourceClass = 'EasyRdf\Resource';
+    private static $defaultResourceClass = Resource::class;
 
     /** Get the registered class for an RDF type
      *

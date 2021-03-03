@@ -397,6 +397,8 @@ class RdfXmlTest extends TestCase
     public function testSerialiseContainer()
     {
         $joe = $this->graph->resource('http://example.com/joe', 'foaf:Person');
+
+        /** @var \EasyRdf\Collection */
         $pets = $this->graph->newBnode('rdf:Seq');
         $pets->append('Rat');
         $pets->append('Cat');

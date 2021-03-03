@@ -529,8 +529,8 @@ class Client
      *
      * @ignore
      *
-     * @param $host
-     * @param $port
+     * @param string $host
+     * @param int    $port
      *
      * @return array
      */

@@ -64,10 +64,10 @@ class Arc extends RdfPhp
     /**
      * Parse an RDF document into an EasyRdf\Graph
      *
-     * @param Graph  $graph   the graph to load the data into
-     * @param string $data    the RDF document data
-     * @param string $format  the format of the input data
-     * @param string $baseUri the base URI of the data being parsed
+     * @param \EasyRdf\Graph $graph   the graph to load the data into
+     * @param string         $data    the RDF document data
+     * @param string         $format  the format of the input data
+     * @param string         $baseUri the base URI of the data being parsed
      *
      * @throws \EasyRdf\Exception
      *
