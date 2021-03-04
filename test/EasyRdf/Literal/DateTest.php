@@ -48,7 +48,7 @@ class DateTest extends TestCase
         $literal = new Date('2011-08-05Z');
         $this->assertStringEquals('2011-08-05Z', $literal);
         $this->assertClass('DateTime', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:date', $literal->getDatatype());
     }
 
@@ -59,7 +59,7 @@ class DateTest extends TestCase
         $this->assertStringEquals('2011-07-18', $literal);
         $this->assertClass('DateTime', $literal->getValue());
         $this->assertEquals($dt, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:date', $literal->getDatatype());
     }
 
@@ -78,7 +78,7 @@ class DateTest extends TestCase
         $literal = Date::parse('5th August 2011');
         $this->assertStringEquals('2011-08-05', $literal);
         $this->assertClass('DateTime', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:date', $literal->getDatatype());
     }
 

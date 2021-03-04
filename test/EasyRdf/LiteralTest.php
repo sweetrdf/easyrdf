@@ -59,8 +59,8 @@ class LiteralTest extends TestCase
         $literal = Literal::create('Rat');
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('Rat', $literal->getValue());
-        $this->assertNull($literal->getLang());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getLang());
+        $this->assertStringEquals('', $literal->getDatatype());
     }
 
     public function testCreateWithLanguage()
@@ -69,15 +69,15 @@ class LiteralTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('Rat', $literal->getValue());
         $this->assertSame('en', $literal->getLang());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getDatatype());
     }
 
     public function testCreateWithDatatype()
     {
         $literal = Literal::create(1, null, 'xsd:integer');
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
-        $this->assertSame(1, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertEquals(1, $literal->getValue());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -86,7 +86,7 @@ class LiteralTest extends TestCase
         $literal = Literal::create('Rat', 'en', 'http://www.w3.org/2001/XMLSchema#string');
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('Rat', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:string', $literal->getDatatype());
     }
 
@@ -96,7 +96,7 @@ class LiteralTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('10', $literal->getValue());
         $this->assertSame('en', $literal->getLang());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getDatatype());
     }
 
     public function testCreateWithObjectDatatype()
@@ -104,8 +104,8 @@ class LiteralTest extends TestCase
         $datatype = new ParsedUri('http://www.w3.org/2001/XMLSchema#integer');
         $literal = Literal::create(1, null, $datatype);
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
-        $this->assertSame(1, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertEquals(1, $literal->getValue());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -117,8 +117,8 @@ class LiteralTest extends TestCase
             'http://www.w3.org/2001/XMLSchema#integer'
         );
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
-        $this->assertSame(1, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertEquals(1, $literal->getValue());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -131,8 +131,8 @@ class LiteralTest extends TestCase
         );
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('1', $literal->getValue());
-        $this->assertNull($literal->getLang());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getLang());
+        $this->assertStringEquals('', $literal->getDatatype());
     }
 
     public function testCreateWithAssociativeArray()
@@ -140,8 +140,8 @@ class LiteralTest extends TestCase
         $literal = Literal::create(['value' => 'Rat']);
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('Rat', $literal->getValue());
-        $this->assertNull($literal->getLang());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getLang());
+        $this->assertStringEquals('', $literal->getDatatype());
     }
 
     public function testCreateWithAssociativeArrayWithLang()
@@ -149,7 +149,7 @@ class LiteralTest extends TestCase
         $literal = Literal::create(['value' => 'Rat', 'lang' => 'en']);
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('Rat', $literal->getValue());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getDatatype());
         $this->assertSame('en', $literal->getLang());
     }
 
@@ -158,7 +158,7 @@ class LiteralTest extends TestCase
         $literal = Literal::create(['value' => 'Rattus', 'xml:lang' => 'fr']);
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('Rattus', $literal->getValue());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getDatatype());
         $this->assertSame('fr', $literal->getLang());
     }
 
@@ -168,16 +168,16 @@ class LiteralTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('Rat', $literal->getValue());
         $this->assertSame('xsd:string', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateWithInteger()
     {
         $literal = Literal::create(10);
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
-        $this->assertSame(10, $literal->getValue());
+        $this->assertEquals(10, $literal->getValue());
         $this->assertSame('xsd:integer', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateWithFloat()
@@ -186,7 +186,7 @@ class LiteralTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $literal);
         $this->assertSame('1.5', $literal->getValue());
         $this->assertSame('xsd:double', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateWithFloatInBadLocale()
@@ -211,7 +211,7 @@ class LiteralTest extends TestCase
         $this->assertClass('EasyRdf\Literal\Boolean', $literal);
         $this->assertTrue($literal->getValue());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateWithBooleanFalse()
@@ -220,7 +220,7 @@ class LiteralTest extends TestCase
         $this->assertClass('EasyRdf\Literal\Boolean', $literal);
         $this->assertFalse($literal->getValue());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateWithDateTime()
@@ -229,7 +229,7 @@ class LiteralTest extends TestCase
         $literal = Literal::create($dt);
         $this->assertStringEquals('2010-09-08T07:06:05Z', $literal);
         $this->assertEquals($dt, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:dateTime', $literal->getDatatype());
     }
 
@@ -237,59 +237,59 @@ class LiteralTest extends TestCase
     {
         $literal = Literal::create(1, null, 'xsd:boolean');
         $this->assertClass('EasyRdf\Literal\Boolean', $literal);
-        $this->assertInternalType('bool', $literal->getValue());
+        $this->assertEquals('boolean', \gettype($literal->getValue()));
         $this->assertTrue($literal->getValue());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateConvertToBooleanFalse()
     {
         $literal = Literal::create(0, null, 'xsd:boolean');
         $this->assertClass('EasyRdf\Literal\Boolean', $literal);
-        $this->assertInternalType('bool', $literal->getValue());
+        $this->assertEquals('boolean', \gettype($literal->getValue()));
         $this->assertFalse($literal->getValue());
         $this->assertSame('xsd:boolean', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateConvertToInteger()
     {
         $literal = Literal::create('100.00', null, 'xsd:integer');
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
-        $this->assertInternalType('integer', $literal->getValue());
-        $this->assertSame(100, $literal->getValue());
+        $this->assertEquals('integer', \gettype($literal->getValue()));
+        $this->assertEquals(100, $literal->getValue());
         $this->assertSame('xsd:integer', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateConvertToDecimal()
     {
         $literal = Literal::create('1', null, 'xsd:decimal');
         $this->assertClass('EasyRdf\Literal\Decimal', $literal);
-        $this->assertInternalType('string', $literal->getValue());
+        $this->assertEquals('string', \gettype($literal->getValue()));
         $this->assertSame('1.0', $literal->getValue());
         $this->assertSame('xsd:decimal', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateConvertToString()
     {
         $literal = Literal::create(true, null, 'xsd:string');
         $this->assertClass('EasyRdf\Literal', $literal);
-        $this->assertInternalType('string', $literal->getValue());
+        $this->assertEquals('string', \gettype($literal->getValue()));
         // Hmm, not sure about this, but PHP does the conversion not me:
         $this->assertSame('1', $literal->getValue());
         $this->assertSame('xsd:string', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testConstruct()
     {
         $literal = new Literal('Rat');
         $this->assertSame('Rat', $literal->getValue());
-        $this->assertNull($literal->getLang());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getLang());
+        $this->assertStringEquals('', $literal->getDatatype());
     }
 
     public function testConstructWithLanguage()
@@ -297,14 +297,14 @@ class LiteralTest extends TestCase
         $literal = new Literal('Rat', 'en');
         $this->assertSame('Rat', $literal->getValue());
         $this->assertSame('en', $literal->getLang());
-        $this->assertNull($literal->getDatatype());
+        $this->assertStringEquals('', $literal->getDatatype());
     }
 
     public function testConstructWithDatatype()
     {
         $literal = new Literal(1, null, 'xsd:integer');
         $this->assertSame('1', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -313,7 +313,7 @@ class LiteralTest extends TestCase
         $datatype = new ParsedUri('http://www.w3.org/2001/XMLSchema#integer');
         $literal = new Literal(1, null, $datatype);
         $this->assertSame('1', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -417,7 +417,7 @@ class LiteralTest extends TestCase
         $this->assertStringEquals('!foobar!', $literal);
         $this->assertSame('foobar', $literal->getValue());
         $this->assertSame('ex:mytype', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testCreateCustomClass()
@@ -428,7 +428,7 @@ class LiteralTest extends TestCase
         $this->assertStringEquals('!foobar!', $literal);
         $this->assertSame('foobar', $literal->getValue());
         $this->assertSame('ex:mytype', $literal->getDatatype());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
     }
 
     public function testSetDatatypeMappingNull()

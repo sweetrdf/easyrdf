@@ -588,7 +588,7 @@ class Resource implements \ArrayAccess
      * may be arbitrary.
      * This method will return null if the resource has no type.
      *
-     * @return resource a type assocated with the resource
+     * @return \EasyRdf\Resource a type assocated with the resource
      */
     public function typeAsResource()
     {
@@ -600,7 +600,7 @@ class Resource implements \ArrayAccess
     /**
      * Get a list of types for a resource, as EasyRdf\Resource
      *
-     * @return resource[]
+     * @return \EasyRdf\Resource[]
      *
      * @throws Exception
      */

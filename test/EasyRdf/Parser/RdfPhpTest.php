@@ -76,7 +76,7 @@ class RdfPhpTest extends TestCase
         $this->assertNotNull($joe);
         $this->assertClass('EasyRdf\Resource', $joe);
         $this->assertSame('http://example.com/joe', $joe->getUri());
-        $this->assertNull($joe->type());
+        $this->assertStringEquals('', $joe->type());
 
         $name = $joe->get('foaf:name');
         $this->assertNotNull($name);

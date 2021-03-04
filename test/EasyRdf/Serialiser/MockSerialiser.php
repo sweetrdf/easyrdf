@@ -22,6 +22,6 @@ class MockSerialiser extends Serialiser
     {
         parent::checkSerialiseParams($format);
         // Serialising goes here
-        return true;
+        return '';
     }
 }

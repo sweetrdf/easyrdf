@@ -197,6 +197,8 @@ class RdfXmlTest extends TestCase
     public function testIssue74()
     {
         $this->markTestIncomplete('fix for bug #74 is not implemented yet');
+
+        /*
         $filename = 'rdfxml/gh74-bio.rdf';
 
         $graph = new Graph();
@@ -208,12 +210,13 @@ class RdfXmlTest extends TestCase
         );
 
         foreach ($graph->resources() as $resource) {
-            /** @var \EasyRdf\Resource $resource */
+            /** @var \EasyRdf\Resource $resource
             if ($resource->isBnode() && $resource->hasProperty('rdfs:comment')) {
                 $comment = trim($resource->getLiteral('rdfs:comment'));
                 $this->assertStringStartsWith('<pre><code>', $comment);
             }
         }
+        */
     }
 
     /**

@@ -45,7 +45,7 @@ class NamespaceTest extends TestCase
 {
     /** @var Graph */
     private $graph;
-    /** @var resource */
+    /** @var \EasyRdf\Resource */
     private $resource;
 
     protected function setUp()
@@ -230,7 +230,7 @@ class NamespaceTest extends TestCase
         RdfNamespace::set('po', 'http://purl.org/ontology/po/');
         $this->assertNotNull(RdfNamespace::get('po'));
         RdfNamespace::delete('po');
-        $this->assertNull(RdfNamespace::get('po'));
+        $this->assertStringEquals('', RdfNamespace::get('po'));
     }
 
     public function testDeleteEmptyNamespace()
@@ -282,7 +282,7 @@ class NamespaceTest extends TestCase
     {
         RdfNamespace::setDefault('http://ogp.me/ns#');
         RdfNamespace::setDefault('');
-        $this->assertNull(RdfNamespace::getDefault());
+        $this->assertStringEquals('', RdfNamespace::getDefault());
     }
 
     public function testSetDefaultUnknown()
@@ -312,7 +312,8 @@ class NamespaceTest extends TestCase
 
     public function testSlitUriUnknown()
     {
-        $this->assertNull(
+        $this->assertStringEquals(
+            '',
             RdfNamespace::splitUri('http://example.com/ns/foo/bar')
         );
     }
@@ -351,7 +352,8 @@ class NamespaceTest extends TestCase
 
     public function testSplitUriUnsplitable()
     {
-        $this->assertNull(
+        $this->assertStringEquals(
+            '',
             RdfNamespace::splitUri('http://example.com/foo/', true)
         );
     }
@@ -423,7 +425,8 @@ class NamespaceTest extends TestCase
 
     public function testShortenUnknown()
     {
-        $this->assertNull(
+        $this->assertStringEquals(
+            '',
             RdfNamespace::shorten('http://example.com/ns/foo/bar')
         );
     }
@@ -450,7 +453,8 @@ class NamespaceTest extends TestCase
 
     public function testShortenUnshortenable()
     {
-        $this->assertNull(
+        $this->assertStringEquals(
+            '',
             RdfNamespace::shorten('http://example.com/foo/', true)
         );
     }
@@ -500,7 +504,8 @@ class NamespaceTest extends TestCase
 
     public function testPrefixOfUnknownUrl()
     {
-        $this->assertNull(
+        $this->assertStringEquals(
+            '',
             RdfNamespace::prefixOfUri('http://www.aelius.com/njh/')
         );
     }
@@ -672,6 +677,9 @@ class NamespaceTest extends TestCase
         RdfNamespace::set('ex', 'http://example.org/');
 
         $this->assertSame('ex:foo', RdfNamespace::shorten('http://example.org/foo'));
-        $this->assertNull(RdfNamespace::shorten('http://example.org/bar/baz'));
+        $this->assertStringEquals(
+            '',
+            RdfNamespace::shorten('http://example.org/bar/baz')
+        );
     }
 }

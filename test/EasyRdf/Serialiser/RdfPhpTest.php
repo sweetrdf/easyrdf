@@ -67,21 +67,22 @@ class RdfPhpTest extends TestCase
         $project->add('foaf:name', 'Project Name');
         $joe->add('foaf:project', $project);
 
+        /** @var array */
         $php = $this->serialiser->serialise($this->graph, 'php');
-        $this->assertInternalType('array', $php);
+        $this->assertEquals('array', \gettype($php));
         $subject = $php['http://www.example.com/joe#me'];
-        $this->assertInternalType('array', $subject);
+        $this->assertEquals('array', \gettype($subject));
         $type = $subject['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][0];
         $this->assertSame('uri', $type['type']);
         $this->assertSame('http://xmlns.com/foaf/0.1/Person', $type['value']);
         $name = $subject['http://xmlns.com/foaf/0.1/name'][0];
-        $this->assertInternalType('array', $name);
+        $this->assertEquals('array', \gettype($name));
         $this->assertSame('literal', $name['type']);
         $this->assertSame('Joe Bloggs', $name['value']);
         $this->assertFalse(isset($name['datatype']));
         $this->assertSame('en', $name['lang']);
         $age = $subject['http://xmlns.com/foaf/0.1/age'][0];
-        $this->assertInternalType('array', $age);
+        $this->assertEquals('array', \gettype($age));
         $this->assertSame('literal', $age['type']);
         $this->assertSame('59', $age['value']);
         $this->assertSame(
@@ -91,7 +92,7 @@ class RdfPhpTest extends TestCase
         $this->assertFalse(isset($age['lang']));
 
         $nodeid = $subject['http://xmlns.com/foaf/0.1/project'][0]['value'];
-        $this->assertInternalType('array', $php[$nodeid]);
+        $this->assertEquals('array', \gettype($php[$nodeid]));
         $projectName = $php[$nodeid]['http://xmlns.com/foaf/0.1/name'][0];
         $this->assertSame('Project Name', $projectName['value']);
         $this->assertFalse(isset($projectName['lang']));
