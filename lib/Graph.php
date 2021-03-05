@@ -2,6 +2,8 @@
 
 namespace EasyRdf;
 
+use EasyRdf\Http\Client;
+
 /**
  * EasyRdf
  *
@@ -307,14 +309,26 @@ class Graph
 
         if ($format && 'guess' !== $format) {
             if (false !== strpos($format, '/')) {
-                $client->setHeaders('Accept', $format);
+                if ($client instanceof Client) {
+                    $client->setHeaders('Accept', $format);
+                } else {
+                    $client->setHeaders(['Accept' => $format]);
+                }
             } else {
                 $formatObj = Format::getFormat($format);
-                $client->setHeaders('Accept', $formatObj->getDefaultMimeType());
+                if ($client instanceof Client) {
+                    $client->setHeaders('Accept', $formatObj->getDefaultMimeType());
+                } else {
+                    $client->setHeaders(['Accept' => $formatObj->getDefaultMimeType()]);
+                }
             }
         } else {
             // Send a list of all the formats we can parse
-            $client->setHeaders('Accept', Format::getHttpAcceptHeader());
+            if ($client instanceof Client) {
+                $client->setHeaders('Accept', Format::getHttpAcceptHeader());
+            } else {
+                $client->setHeaders(['Accept' => Format::getHttpAcceptHeader()]);
+            }
         }
 
         $requestUrl = $uri;
@@ -328,7 +342,11 @@ class Graph
             }
 
             // Make the HTTP request
-            $client->setHeaders('host', null);
+            if ($client instanceof Client) {
+                $client->setHeaders('host', null);
+            } else {
+                $client->setHeaders(['host' => null]);
+            }
             $client->setUri($requestUrl);
             $response = $client->request();
 
