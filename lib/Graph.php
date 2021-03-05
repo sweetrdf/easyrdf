@@ -442,7 +442,7 @@ class Graph
 
     /** Get the URI of the graph
      *
-     * @return string The URI of the graph
+     * @return string|null The URI of the graph
      */
     public function getUri()
     {
