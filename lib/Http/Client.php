@@ -432,7 +432,7 @@ class Client
             $headers = $this->prepareHeaders($uri['host'], $port);
 
             // Open socket to remote server
-            $socket = @fsockopen($host, $port, $errno, $errstr, $this->config['timeout']);
+            $socket = fsockopen($host, $port, $errno, $errstr, $this->config['timeout']);
             if (!$socket) {
                 throw new Exception("Unable to connect to $host:$port ($errstr)");
             }
@@ -483,7 +483,7 @@ class Client
             // FIXME: support HTTP/1.1 100 Continue
 
             // Close the socket
-            @fclose($socket);
+            fclose($socket);
 
             // Parse the response string
             $response = Response::fromString($content);
