@@ -149,6 +149,8 @@ class RdfNamespace
      */
     public static function get($prefix)
     {
+        // TODO fix PHPStan error by rethinking datatype of parameter(s)
+        // @phpstan-ignore-next-line
         if (!\is_string($prefix) || null === $prefix) {
             throw new \InvalidArgumentException('$prefix should be a string and cannot be null or empty');
         }
@@ -178,6 +180,8 @@ class RdfNamespace
      */
     public static function set($prefix, $long)
     {
+        // TODO fix PHPStan error by rethinking datatype of parameter(s)
+        // @phpstan-ignore-next-line
         if (!\is_string($prefix) || null === $prefix) {
             throw new \InvalidArgumentException('$prefix should be a string and cannot be null or empty');
         }
@@ -212,6 +216,8 @@ class RdfNamespace
             }
         }
 
+        // TODO fix PHPStan error by rethinking datatype of parameter(s)
+        // @phpstan-ignore-next-line
         if (!\is_string($long) || null === $long || '' === $long) {
             throw new \InvalidArgumentException('$long should be a string and cannot be null or empty');
         }
@@ -252,6 +258,8 @@ class RdfNamespace
      */
     public static function setDefault($namespace)
     {
+        // TODO fix PHPStan error by rethinking datatype of parameter(s)
+        // @phpstan-ignore-next-line
         if (null === $namespace || '' === $namespace) {
             self::$default = null;
         } elseif (preg_match('/^\w+$/', $namespace)) {
@@ -276,6 +284,8 @@ class RdfNamespace
      */
     public static function delete($prefix)
     {
+        // TODO fix PHPStan error by rethinking datatype of parameter(s)
+        // @phpstan-ignore-next-line
         if (!\is_string($prefix) || null === $prefix || '' === $prefix) {
             throw new \InvalidArgumentException('$prefix should be a string and cannot be null or empty');
         }
@@ -307,8 +317,8 @@ class RdfNamespace
      *
      * If it isn't possible to split the URI, then null will be returned.
      *
-     * @param string $uri             The full URI (eg 'http://xmlns.com/foaf/0.1/name')
-     * @param bool   $createNamespace If true, a new namespace will be created
+     * @param string|\EasyRdf\Resource $uri             The full URI (eg 'http://xmlns.com/foaf/0.1/name')
+     * @param bool                     $createNamespace If true, a new namespace will be created
      *
      * @throws \InvalidArgumentException
      *
@@ -316,6 +326,9 @@ class RdfNamespace
      */
     public static function splitUri($uri, $createNamespace = false)
     {
+        // TODO fix following if-clauses, because they raise PHPStan errors
+        //      align with parameter $uri can be string and an object
+        // @phpstan-ignore-next-line
         if (null === $uri || '' === $uri) {
             throw new \InvalidArgumentException('$uri cannot be null or empty');
         }

@@ -192,7 +192,7 @@ class Client
         $normalizedName = strtolower($name);
 
         // If $value is null or false, unset the header
-        if (null === $value || false === $value) {
+        if (null == $value || false == $value) {
             unset($this->headers[$normalizedName]);
         } else {
             // Else, set the header

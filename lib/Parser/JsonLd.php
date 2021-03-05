@@ -82,43 +82,45 @@ class JsonLd extends Parser
 
         foreach ($quads as $quad) {
             // Ignore named graphs
-            if (null !== $quad->getGraph()) {
-                continue;
-            }
+            if (null == $quad->getGraph()) {
+                $subject = (string) $quad->getSubject();
+                if ('_:' === substr($subject, 0, 2)) {
+                    $subject = $this->remapBnode($subject);
+                }
 
-            $subject = (string) $quad->getSubject();
-            if ('_:' === substr($subject, 0, 2)) {
-                $subject = $this->remapBnode($subject);
-            }
+                $predicate = (string) $quad->getProperty();
 
-            $predicate = (string) $quad->getProperty();
-
-            if ($quad->getObject() instanceof \ML\IRI\IRI) {
-                $object = [
-                    'type' => 'uri',
-                    'value' => (string) $quad->getObject(),
-                ];
-
-                if ('_:' === substr($object['value'], 0, 2)) {
+                if ($quad->getObject() instanceof \ML\IRI\IRI) {
                     $object = [
-                        'type' => 'bnode',
-                        'value' => $this->remapBnode($object['value']),
+                        'type' => 'uri',
+                        'value' => (string) $quad->getObject(),
                     ];
-                }
-            } else {
-                $object = [
-                    'type' => 'literal',
-                    'value' => $quad->getObject()->getValue(),
-                ];
 
-                if ($quad->getObject() instanceof LD\LanguageTaggedString) {
-                    $object['lang'] = $quad->getObject()->getLanguage();
+                    if ('_:' === substr($object['value'], 0, 2)) {
+                        $object = [
+                            'type' => 'bnode',
+                            'value' => $this->remapBnode($object['value']),
+                        ];
+                    }
                 } else {
-                    $object['datatype'] = $quad->getObject()->getType();
-                }
-            }
+                    $object = [
+                        'type' => 'literal',
+                        'value' => $quad->getObject()->getValue(),
+                    ];
 
-            $this->addTriple($subject, $predicate, $object);
+                    if ($quad->getObject() instanceof LD\LanguageTaggedString) {
+                        /** @var \ML\JsonLD\LanguageTaggedString */
+                        $_o = $quad->getObject();
+                        $object['lang'] = $_o->getLanguage();
+                    } else {
+                        /** @var \ML\JsonLD\TypedValue */
+                        $_o = $quad->getObject();
+                        $object['datatype'] = $_o->getType();
+                    }
+                }
+
+                $this->addTriple($subject, $predicate, $object);
+            }
         }
 
         return $this->tripleCount;

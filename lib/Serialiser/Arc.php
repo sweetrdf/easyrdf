@@ -85,15 +85,9 @@ class Arc extends RdfPhp
             throw new Exception("EasyRdf\\Serialiser\\Arc does not support: {$format}");
         }
 
-        /** @var \ARC2_RDFSerializer $serialiser */
-        $serialiser = \ARC2::getSer($className);
-        if ($serialiser) {
-            return $serialiser->getSerializedIndex(
-                parent::serialise($graph, 'php')
-            );
-        } else {
-            throw new Exception("ARC2 failed to get a $className serialiser.");
-        }
+        return (\ARC2::getSer($className))->getSerializedIndex(
+            parent::serialise($graph, 'php')
+        );
     }
 }
 

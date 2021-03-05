@@ -241,8 +241,8 @@ class Format
      *
      * If the document format is not recognised, null is returned.
      *
-     * @param string $data     The document data
-     * @param string $filename Optional filename
+     * @param string|array $data     The document data
+     * @param string       $filename Optional filename
      *
      * @return self|null New format object
      */

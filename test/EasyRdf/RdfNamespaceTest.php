@@ -41,10 +41,11 @@ use Test\TestCase;
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
-class NamespaceTest extends TestCase
+class RdfNamespaceTest extends TestCase
 {
     /** @var Graph */
     private $graph;
+
     /** @var \EasyRdf\Resource */
     private $resource;
 

@@ -107,8 +107,8 @@ class Turtle extends Serialiser
      * be written to a Turtle document. URIs will be shortened into CURIES
      * where possible.
      *
-     * @param resource|string $resource        The resource to convert to a Turtle string
-     * @param bool            $createNamespace If true, a new namespace may be created
+     * @param \EasyRdf\Resource|string $resource        The resource to convert to a Turtle string
+     * @param bool                     $createNamespace If true, a new namespace may be created
      *
      * @return string
      */
@@ -172,7 +172,7 @@ class Turtle extends Serialiser
      * Convert an EasyRdf object into a string suitable to
      * be written to a Turtle document.
      *
-     * @param resource|Literal $object
+     * @param \EasyRdf\Resource|\EasyRdf\Literal $object
      *
      * @throws \InvalidArgumentException
      *
@@ -376,13 +376,17 @@ class Turtle extends Serialiser
             throw new Exception("EasyRdf\\Serialiser\\Turtle does not support: {$format}");
         }
 
-        $this->prefixes = [];
+        // PHPstan complains, that following if-clause at line ~386 is always false.
+        // therefore the following line was commented
+        // $this->prefixes = [];
+
         $this->outputtedBnodes = [];
 
         $turtle = '';
         $turtle .= $this->serialiseSubjects($graph, 'uri');
         $turtle .= $this->serialiseSubjects($graph, 'bnode');
 
+        // TODO check if property $prefixes has at least one element sometimes or remove check
         if (\count($this->prefixes)) {
             return $this->serialisePrefixes()."\n".$turtle;
         } else {

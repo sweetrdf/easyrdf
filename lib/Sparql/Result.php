@@ -39,6 +39,7 @@ namespace EasyRdf\Sparql;
 use EasyRdf\Exception;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
+use EasyRdf\XMLParser;
 
 /**
  * Class for returned for SPARQL SELECT and ASK query responses.
@@ -360,13 +361,13 @@ class Result extends \ArrayIterator
     {
         $this->parseState = [];
         $this->type = null;
-        $parser = new \EasyRdf\XMLParser();
+        $parser = new XMLParser();
         $parser->startElementCallback = [$this, 'startElementHandler'];
         $parser->textCallback = [$this, 'textHandler'];
         $parser->endElementCallback = [$this, 'endElementHandler'];
         $parser->parse($data);
 
-        if (!$this->type) {
+        if (empty($this->type)) {
             throw new Exception('Failed to parse SPARQL XML Query Results format: unknown type');
         }
     }

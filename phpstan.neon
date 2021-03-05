@@ -8,7 +8,7 @@ parameters:
     fileExtensions:
         - php
 
-    level: 3
+    level: 4
 
     paths:
         - lib

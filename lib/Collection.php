@@ -158,7 +158,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      * If the offset is null, then the last node in the
      * collection (before rdf:nil) will be returned.
      *
-     * @param int $offset The offset into the collection (or null)
+     * @param int|null $offset The offset into the collection (or null)
      *
      * @return array $node, $postion  The node object and postion of the node
      */
@@ -167,7 +167,11 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
         $position = 1;
         $node = $this;
         $nil = $this->graph->resource('rdf:nil');
-        while (($rest = $node->get('rdf:rest')) && $rest !== $nil && (null === $offset || ($position < $offset))) {
+        while (
+            ($rest = $node->get('rdf:rest'))
+            && $rest !== $nil
+            && (null === $offset || ($position < $offset))
+        ) {
             $node = $rest;
             ++$position;
         }

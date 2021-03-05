@@ -573,10 +573,10 @@ class Graph
      *
      * This method will return null if the property does not exist.
      *
-     * @param string       $resource     The URI of the resource (e.g. http://example.com/joe#me)
-     * @param string|array $propertyPath A valid property path
-     * @param string       $type         The type of value to filter by (e.g. literal or resource)
-     * @param string       $lang         The language to filter by (e.g. en)
+     * @param string                              $resource     The URI of the resource (e.g. http://example.com/joe#me)
+     * @param string|array|\EasyRdf\Resource|null $propertyPath A valid property path
+     * @param string                              $type         The type of value to filter by (e.g. literal or resource)
+     * @param string                              $lang         The language to filter by (e.g. en)
      *
      * @throws \InvalidArgumentException
      *
@@ -749,10 +749,10 @@ class Graph
      *
      * This method will return an empty array if the property does not exist.
      *
-     * @param string $resource     The URI of the resource (e.g. http://example.com/joe#me)
-     * @param string $propertyPath A valid property path
-     * @param string $type         The type of value to filter by (e.g. literal)
-     * @param string $lang         The language to filter by (e.g. en)
+     * @param string                        $resource     The URI of the resource (e.g. http://example.com/joe#me)
+     * @param string|\EasyRdf\Resource|null $propertyPath A valid property path
+     * @param string                        $type         The type of value to filter by (e.g. literal)
+     * @param string                        $lang         The language to filter by (e.g. en)
      *
      * @throws \InvalidArgumentException
      *
@@ -1058,9 +1058,9 @@ class Graph
 
     /** Delete a property (or optionally just a specific value)
      *
-     * @param mixed  $resource The resource to delete the property from
-     * @param string $property The name of the property (e.g. foaf:name)
-     * @param mixed  $value    The value to delete (null to delete all values)
+     * @param mixed                         $resource The resource to delete the property from
+     * @param string|\EasyRdf\Resource|null $property The name of the property (e.g. foaf:name)
+     * @param mixed                         $value    The value to delete (null to delete all values)
      *
      * @throws \InvalidArgumentException
      *
@@ -1540,8 +1540,8 @@ class Graph
 
     /** Add one or more rdf:type properties to a resource
      *
-     * @param string $resource The resource to add the type to
-     * @param string $types    One or more types to add (e.g. foaf:Person)
+     * @param string       $resource The resource to add the type to
+     * @param string|array $types    One or more types to add (e.g. foaf:Person)
      *
      * @return int The number of types added
      */
