@@ -1,6 +1,9 @@
 build:
     nodes:
         coverage:
+            dependencies:
+                before:
+                    - sudo apt-get install -y graphviz raptor2-utils
             tests:
                 override:
                     -   command: vendor/bin/phpunit -v --exclude expensive --coverage-clover coverage/clover.xml
