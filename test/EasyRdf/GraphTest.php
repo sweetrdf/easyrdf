@@ -57,7 +57,7 @@ class GraphTest extends TestCase
     /** @var \Test\EasyRdf\Http\MockClient */
     private $client;
 
-    /** @var \Test\ClassProxy\EasyRdf\GraphProxy */
+    /** @var \EasyRdf\Graph */
     private $graph;
 
     /** @var string */
@@ -2129,7 +2129,7 @@ class GraphTest extends TestCase
     {
         RdfNamespace::setDefault('rdf');
         $this->assertStringEquals('',
-            $this->graph->foobar
+            $this->graph->test
         );
     }
 

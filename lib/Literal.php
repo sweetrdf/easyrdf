@@ -172,7 +172,7 @@ class Literal
      *
      * @param mixed $value
      *
-     * @return string a URI for the datatype of $value
+     * @return string|null a URI for the datatype of $value
      */
     public static function getDatatypeForValue($value)
     {
@@ -234,7 +234,7 @@ class Literal
 
     /** Returns the value of the literal.
      *
-     * @return string value of this literal
+     * @return string|int|bool|\DateTime value of this literal
      */
     public function getValue()
     {
@@ -252,7 +252,7 @@ class Literal
 
     /** Returns the shortened datatype URI of the literal.
      *
-     * @return string Datatype of this literal (e.g. xsd:integer).
+     * @return string|null Datatype of this literal (e.g. xsd:integer).
      */
     public function getDatatype()
     {

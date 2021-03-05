@@ -41,6 +41,12 @@ namespace EasyRdf;
  *
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
+ *
+ * PHPStan related:
+ *
+ * @property string $test
+ *
+ * @see https://phpstan.org/writing-php-code/phpdocs-basics#magic-properties
  */
 class Graph
 {
@@ -1436,7 +1442,7 @@ class Graph
      *
      * @param string|null $resource
      *
-     * @return string A type assocated with the resource (e.g. foaf:Document)
+     * @return string|null A type assocated with the resource (e.g. foaf:Document)
      */
     public function type($resource = null)
     {
@@ -1457,7 +1463,7 @@ class Graph
      *
      * @param mixed $resource
      *
-     * @return \EasyRdf\Resource A type associated with the resource
+     * @return \EasyRdf\Resource|null A type associated with the resource
      */
     public function typeAsResource($resource = null)
     {
@@ -1607,7 +1613,7 @@ class Graph
      *
      * @param mixed $resource
      *
-     * @return \EasyRdf\Resource the primary topic of the document
+     * @return \EasyRdf\Resource|null the primary topic of the document
      */
     public function primaryTopic($resource = null)
     {
@@ -1725,9 +1731,13 @@ class Graph
      * @param string $name The name of the property
      *
      * @return int
+     *
+     * @todo Change return type to void, because this violates offsetSet:void
+     *       see: https://www.php.net/manual/en/language.oop5.overloading.php#object.unset
      */
     public function __unset($name)
     {
+        // currently ignored by phpstan (see phpstan.neon)
         return $this->delete($this->uri, $name);
     }
 }

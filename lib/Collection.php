@@ -253,6 +253,9 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      * Array Access: set an item at a positon in collection using array syntax
      *
      * Example: $list[2] = $item;
+     *
+     * @todo Change return type to void, because this violates offsetSet:void
+     *       see: https://php.net/manual/en/arrayaccess.offsetset.php
      */
     public function offsetSet($offset, $value)
     {
@@ -276,6 +279,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
                 $node->addResource('rdf:rest', 'rdf:nil');
             }
 
+            // currently ignored by phpstan (see phpstan.neon)
             return $node->set('rdf:first', $value);
         } else {
             throw new \InvalidArgumentException('Collection offset must be a positive integer');

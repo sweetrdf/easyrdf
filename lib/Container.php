@@ -193,12 +193,17 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      * Example: $seq[2] = $item;
      *
      * Warning: creating gaps in the sequence will result in unexpected behavior
+     *
+     * @todo Change return type to void, because this violates offsetSet:void
+     *       see: https://php.net/manual/en/arrayaccess.offsetset.php
      */
     public function offsetSet($offset, $value)
     {
         if (\is_int($offset) && $offset > 0) {
+            // currently ignored by phpstan (see phpstan.neon)
             return $this->set('rdf:_'.$offset, $value);
         } elseif (null === $offset) {
+            // currently ignored by phpstan (see phpstan.neon)
             return $this->append($value);
         } else {
             throw new \InvalidArgumentException('Container position must be a positive integer');
@@ -211,10 +216,14 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      * Example: unset($seq[2]);
      *
      * Warning: creating gaps in the sequence will result in unexpected behavior
+     *
+     * @todo Change return type to void, because this violates offsetUnset:void
+     *       see: https://php.net/manual/en/arrayaccess.offsetunset.php
      */
     public function offsetUnset($offset)
     {
         if (\is_int($offset) && $offset > 0) {
+            // currently ignored by phpstan (see phpstan.neon)
             return $this->delete('rdf:_'.$offset);
         } else {
             throw new \InvalidArgumentException('Container position must be a positive integer');

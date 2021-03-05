@@ -53,7 +53,7 @@ class ResourceTest extends TestCase
     /** @var Graph */
     private $graph;
 
-    /** @var \Test\ClassProxy\EasyRdf\ResourceProxy */
+    /** @var \EasyRdf\Resource */
     private $resource;
 
     /** @var string|\EasyRdf\Resource */
@@ -1259,12 +1259,9 @@ class ResourceTest extends TestCase
 
     public function testMagicGetNonExistent()
     {
-        $this->setupTestGraph();
+        $resource = (new Graph())->resource('http://example.com/#me');
         RdfNamespace::setDefault('rdf');
-        $this->assertStringEquals(
-            null,
-            $this->resource->foobar
-        );
+        $this->assertStringEquals(null, $resource->test);
     }
 
     public function testMagicSet()

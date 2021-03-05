@@ -93,7 +93,7 @@ class Client
     /**
      * The raw post data to send. Could be set by setRawData($data).
      *
-     * @var string
+     * @var string|null
      */
     private $rawPostData = null;
 
@@ -280,7 +280,7 @@ class Client
      *
      * @param string $name
      *
-     * @return string value
+     * @return string|null value
      */
     public function getParameterGet($name)
     {

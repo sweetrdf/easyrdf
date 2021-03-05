@@ -145,7 +145,7 @@ class RdfNamespace
      *
      * @throws \InvalidArgumentException
      *
-     * @return string The namespace URI (eg 'http://xmlns.com/foaf/0.1/')
+     * @return string|null The namespace URI (eg 'http://xmlns.com/foaf/0.1/')
      */
     public static function get($prefix)
     {
@@ -312,7 +312,7 @@ class RdfNamespace
      *
      * @throws \InvalidArgumentException
      *
-     * @return array The split URI (eg 'foaf', 'name') or null
+     * @return array|null The split URI (eg 'foaf', 'name') or null
      */
     public static function splitUri($uri, $createNamespace = false)
     {
