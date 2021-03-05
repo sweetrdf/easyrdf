@@ -33,15 +33,11 @@
 <?php
     if (isset($_REQUEST['uri'])) {
         $graph = \EasyRdf\Graph::newAndLoad($_REQUEST['uri']);
-        if ($graph) {
-            if (isset($_REQUEST['format']) && 'text' == $_REQUEST['format']) {
-                echo '<pre>'.$graph->dump('text').'</pre>';
-            } else {
-                $dump = $graph->dump('html');
-                echo preg_replace_callback("/ href='([^#][^']*)'/", 'makeLinkLocal', $dump);
-            }
+        if (isset($_REQUEST['format']) && 'text' == $_REQUEST['format']) {
+            echo '<pre>'.$graph->dump('text').'</pre>';
         } else {
-            echo '<p>Failed to create graph.</p>';
+            $dump = $graph->dump('html');
+            echo preg_replace_callback("/ href='([^#][^']*)'/", 'makeLinkLocal', $dump);
         }
     }
 

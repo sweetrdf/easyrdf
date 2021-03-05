@@ -11,6 +11,7 @@ parameters:
     level: 4
 
     paths:
+        - examples
         - lib
         - test
 
@@ -21,6 +22,9 @@ parameters:
 
     # temporary solution; related parts are subject for later refactoring
     ignoreErrors:
+        # examples/open_graph_protocol.php: Access to an undefined property EasyRdf\Graph::...
+        - '#Access to an undefined property EasyRdf\\Graph::#'
+
         # lib/Collection.php: offsetSet method returns mixed, but it is of return type void
         # see: https://www.php.net/manual/en/arrayaccess.offsetset.php
         - '#Method EasyRdf\\Collection::offsetSet\(\) with return type void returns mixed#'
