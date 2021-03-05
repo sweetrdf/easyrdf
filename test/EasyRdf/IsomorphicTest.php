@@ -94,8 +94,9 @@ class IsomorphicTest extends TestCase
     public function testGood05()
     {
         $this->markTestIncomplete('FIXME: Three triple chain with renamed bnodes is not implemented yet');
+
         // Three triple chain with renamed bnodes
-        $this->checkTestCase('good-05');
+        // $this->checkTestCase('good-05');
     }
 
     public function testGood06()

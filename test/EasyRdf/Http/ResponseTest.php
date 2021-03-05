@@ -128,13 +128,13 @@ class ResponseTest extends TestCase
      */
     public function testNonStandardDeflateResponseZF6040()
     {
-        $this->markTestSkipped('Not correctly handling non-RFC complient "deflate" responses');
-
         $res = Response::fromString(readFixture('response_deflate_iis'));
 
         $this->assertEquals('deflate', strtolower($res->getHeader('content-encoding')));
         $this->assertEquals('d82c87e3d5888db0193a3fb12396e616', md5($res->getBody()));
         $this->assertEquals('c830dd74bb502443cf12514c185ff174', md5($res->getRawBody()));
+
+        $this->markTestSkipped('Not correctly handling non-RFC complient "deflate" responses');
     }
 
     public function testGetBodyChunked()
@@ -196,7 +196,8 @@ class ResponseTest extends TestCase
             $response->getStatus(),
             'Response code is expected to be 200, but it\'s not.'
         );
-        $this->assertNull(
+        $this->assertStringEquals(
+            '',
             $response->getMessage(),
             'Response message is expected to be null, but it\'s not.'
         );

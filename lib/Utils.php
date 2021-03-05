@@ -259,7 +259,7 @@ class Utils
             );
         } else {
             $fullCommand = escapeshellcmd($command);
-            if ($args) {
+            if (null != $args) {
                 $fullCommand .= ' '.escapeshellcmd($args);
             }
         }

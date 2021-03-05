@@ -254,9 +254,7 @@ class CollectionTest extends TestCase
             'Collection offset must be a positive integer'
         );
 
-        /** @var \EasyRdf\Collection */
-        $list = $this->graph->newBnode('rdf:List');
-        isset($list[0]);
+        $this->assertNull($this->graph->newBnode('rdf:List')[0]);
     }
 
     public function testArrayOffsetExistsMinusOne()
@@ -266,9 +264,7 @@ class CollectionTest extends TestCase
             'Collection offset must be a positive integer'
         );
 
-        /** @var \EasyRdf\Collection */
-        $list = $this->graph->newBnode('rdf:List');
-        isset($list[-1]);
+        $this->assertNull($this->graph->newBnode('rdf:List')[-1]);
     }
 
     public function testArrayOffsetExistsNonInteger()
@@ -278,9 +274,7 @@ class CollectionTest extends TestCase
             'Collection offset must be a positive integer'
         );
 
-        /** @var \EasyRdf\Collection */
-        $list = $this->graph->newBnode('rdf:List');
-        isset($list['foo']);
+        $this->assertNull($this->graph->newBnode('rdf:List')['foo']);
     }
 
     public function testArrayOffsetGet()
@@ -317,9 +311,7 @@ class CollectionTest extends TestCase
             'Collection offset must be a positive integer'
         );
 
-        /** @var \EasyRdf\Collection */
-        $list = $this->graph->newBnode('rdf:List');
-        $list[0];
+        $this->assertNull($this->graph->newBnode('rdf:List')[0]);
     }
 
     public function testArrayOffsetGetMinusOne()
@@ -329,9 +321,7 @@ class CollectionTest extends TestCase
             'Collection offset must be a positive integer'
         );
 
-        /** @var \EasyRdf\Collection */
-        $list = $this->graph->newBnode('rdf:List');
-        $list[-1];
+        $this->assertNull($this->graph->newBnode('rdf:List')[-1]);
     }
 
     public function testArrayOffsetGetNonInteger()
@@ -341,9 +331,7 @@ class CollectionTest extends TestCase
             'Collection offset must be a positive integer'
         );
 
-        /** @var \EasyRdf\Collection */
-        $list = $this->graph->newBnode('rdf:List');
-        $list['foo'];
+        $this->assertNull($this->graph->newBnode('rdf:List')['foo']);
     }
 
     public function testArrayOffsetSet()

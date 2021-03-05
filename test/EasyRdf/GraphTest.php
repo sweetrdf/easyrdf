@@ -57,7 +57,7 @@ class GraphTest extends TestCase
     /** @var \Test\EasyRdf\Http\MockClient */
     private $client;
 
-    /** @var \Test\ClassProxy\EasyRdf\GraphProxy */
+    /** @var \EasyRdf\Graph */
     private $graph;
 
     /** @var string */
@@ -123,7 +123,7 @@ class GraphTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joe Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertNull($name->getDatatype());
+        $this->assertStringEquals('', $name->getDatatype());
     }
 
     public function testParseDataGuess()
@@ -137,7 +137,7 @@ class GraphTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joe Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertNull($name->getDatatype());
+        $this->assertStringEquals('', $name->getDatatype());
     }
 
     public function testParseFile()
@@ -150,7 +150,7 @@ class GraphTest extends TestCase
         $this->assertClass('EasyRdf\Literal', $name);
         $this->assertSame('Joe Bloggs', $name->getValue());
         $this->assertSame('en', $name->getLang());
-        $this->assertNull($name->getDatatype());
+        $this->assertStringEquals('', $name->getDatatype());
     }
 
     public function testParseFileRelativeUri()
@@ -731,7 +731,7 @@ class GraphTest extends TestCase
     {
         $this->graph->addLiteral($this->uri, 'foaf:homepage', 'http://example.com/');
         $this->graph->addLiteral('http://example.com/', 'dc:title', 'My Homepage');
-        $this->assertNull(
+        $this->assertStringEquals('',
             $this->graph->get($this->uri, 'foaf:homepage/dc:title')
         );
     }
@@ -778,21 +778,21 @@ class GraphTest extends TestCase
 
     public function testGetNonExistantLiteral()
     {
-        $this->assertNull(
+        $this->assertStringEquals('',
             $this->graph->getLiteral($this->uri, 'rdf:type')
         );
     }
 
     public function testGetNonExistantResource()
     {
-        $this->assertNull(
+        $this->assertStringEquals('',
             $this->graph->get('foo:bar', 'foo:bar')
         );
     }
 
     public function testGetNonExistantProperty()
     {
-        $this->assertNull($this->graph->get($this->uri, 'foo:bar'));
+        $this->assertStringEquals('', $this->graph->get($this->uri, 'foo:bar'));
     }
 
     public function testGetNullResource()
@@ -1176,7 +1176,7 @@ class GraphTest extends TestCase
         $title = $this->graph->get($this->uri, 'dc:title');
         $this->assertSame('English Title', $title->getValue());
         $this->assertSame('en', $title->getLang());
-        $this->assertNull($title->getDataType());
+        $this->assertStringEquals('', $title->getDataType());
     }
 
     public function testAddMultipleLiterals()
@@ -1223,7 +1223,7 @@ class GraphTest extends TestCase
         $literal = $this->graph->get($this->uri, 'rdf:test2');
         $this->assertClass('EasyRdf\Literal\DateTime', $literal);
         $this->assertStringEquals('2013-01-25T19:43:19Z', $literal);
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:dateTime', $literal->getDataType());
     }
 
@@ -1386,7 +1386,7 @@ class GraphTest extends TestCase
 
     public function testAddZero()
     {
-        $this->assertNull($this->graph->get($this->uri, 'rdf:test2'));
+        $this->assertStringEquals('', $this->graph->get($this->uri, 'rdf:test2'));
         $count = $this->graph->add($this->uri, 'rdf:test2', 0);
         $this->assertSame(1, $count);
         $this->assertStringEquals('0', $this->graph->get($this->uri, 'rdf:test2'));
@@ -1394,7 +1394,7 @@ class GraphTest extends TestCase
 
     public function testAddLiteralZero()
     {
-        $this->assertNull($this->graph->get($this->uri, 'rdf:test2'));
+        $this->assertStringEquals('', $this->graph->get($this->uri, 'rdf:test2'));
         $count = $this->graph->addLiteral($this->uri, 'rdf:test2', 0);
         $this->assertSame(1, $count);
         $this->assertStringEquals('0', $this->graph->get($this->uri, 'rdf:test2'));
@@ -1625,7 +1625,7 @@ class GraphTest extends TestCase
     public function testTypeUnknown()
     {
         $graph = new Graph();
-        $this->assertNull($graph->type());
+        $this->assertStringEquals('', $graph->type());
     }
 
     public function testPrimaryTopic()
@@ -1645,7 +1645,7 @@ class GraphTest extends TestCase
     public function testPrimaryTopicUnknown()
     {
         $graph = new Graph();
-        $this->assertNull($graph->primaryTopic());
+        $this->assertStringEquals('', $graph->primaryTopic());
     }
 
     public function testSerialise()
@@ -1966,13 +1966,13 @@ class GraphTest extends TestCase
     public function testTypeForResourceWithNoType()
     {
         $resource = $this->graph->resource('http://example.com/notype');
-        $this->assertNull($resource->type());
+        $this->assertStringEquals('', $resource->type());
     }
 
     public function testTypeForUnamedGraph()
     {
         $graph = new Graph();
-        $this->assertNull($graph->type());
+        $this->assertStringEquals('', $graph->type());
     }
 
     public function testTypeAsResource()
@@ -1985,7 +1985,7 @@ class GraphTest extends TestCase
     public function testTypeAsResourceForUnamedGraph()
     {
         $graph = new Graph();
-        $this->assertNull($graph->typeAsResource());
+        $this->assertStringEquals('', $graph->typeAsResource());
     }
 
     public function testIsAQNameNotation()
@@ -2036,7 +2036,7 @@ class GraphTest extends TestCase
     public function testLabelForUnnamedGraph()
     {
         $graph = new Graph();
-        $this->assertNull($graph->label());
+        $this->assertStringEquals('', $graph->label());
     }
 
     public function testLabelWithSkosPrefLabel()
@@ -2071,7 +2071,7 @@ class GraphTest extends TestCase
 
     public function testLabelNoRdfsLabel()
     {
-        $this->assertNull($this->graph->label($this->uri));
+        $this->assertStringEquals('', $this->graph->label($this->uri));
     }
 
     public function testCountTriples()
@@ -2128,8 +2128,8 @@ class GraphTest extends TestCase
     public function testMagicGetNonExistant()
     {
         RdfNamespace::setDefault('rdf');
-        $this->assertNull(
-            $this->graph->foobar
+        $this->assertStringEquals('',
+            $this->graph->test
         );
     }
 

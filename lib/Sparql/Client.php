@@ -334,7 +334,7 @@ class Client
             $result = null;
             $matched = mb_eregi($re, $processed_query, $result);
 
-            if (false === $matched || 2 !== \count($result)) {
+            if (false == $matched || 2 !== \count($result)) {
                 // non-standard query. is this something non-standard?
                 $query_verb = null;
             } else {

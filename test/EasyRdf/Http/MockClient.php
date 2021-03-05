@@ -53,10 +53,6 @@ class MockClient extends Client
      */
     public function request($method = null)
     {
-        if ($method) {
-            $this->setMethod($method);
-        }
-
         $uri = parse_url($this->getUri());
         $params = $this->getParametersGet();
         if (!empty($params)) {
@@ -65,7 +61,7 @@ class MockClient extends Client
             } else {
                 $uri['query'] = '';
             }
-            $uri['query'] .= http_build_query($params, null, '&');
+            $uri['query'] .= http_build_query($params, '', '&');
         }
 
         // Try and find a matching response

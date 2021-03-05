@@ -45,9 +45,9 @@ class DecimalTest extends TestCase
     public function testConstruct15()
     {
         $literal = new Decimal(1.5);
-        $this->assertInternalType('string', $literal->getValue());
+        $this->assertEquals('string', \gettype($literal->getValue()));
         $this->assertSame('1.5', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:decimal', $literal->getDatatype());
     }
 
@@ -59,9 +59,9 @@ class DecimalTest extends TestCase
 
         try {
             $literal = new Decimal(1.5);
-            $this->assertInternalType('string', $literal->getValue());
+            $this->assertEquals('string', \gettype($literal->getValue()));
             $this->assertSame('1.5', $literal->getValue());
-            $this->assertNull($literal->getLang());
+            $this->assertStringEquals('', $literal->getLang());
             $this->assertSame('xsd:decimal', $literal->getDatatype());
 
             setlocale(\LC_NUMERIC, $current_locale);
@@ -74,9 +74,9 @@ class DecimalTest extends TestCase
     public function testConstructString100()
     {
         $literal = new Decimal('100.00');
-        $this->assertInternalType('string', $literal->getValue());
+        $this->assertEquals('string', \gettype($literal->getValue()));
         $this->assertSame('100.0', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:decimal', $literal->getDatatype());
     }
 

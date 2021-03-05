@@ -153,7 +153,6 @@ class Rdfa extends Parser
                 break;
             default:
                 throw new \EasyRdf\Exception('unknown node type: '.$node->nodeType);
-                break;
         }
         echo ' '.$node->nodeName."\n";
 
@@ -589,7 +588,7 @@ class Rdfa extends Parser
                 foreach ($this->processUriList($node, $context, $property) as $prop) {
                     if ($node->hasAttribute('inlist')) {
                         $this->addToList($listMapping, $prop, $value);
-                    } elseif ($subject) {
+                    } elseif (!empty($subject)) {
                         $this->addTriple($subject, $prop, $value);
                     }
                 }
@@ -713,14 +712,14 @@ class Rdfa extends Parser
 
         /** @var \DOMElement */
         $node = $nodeList->item(0);
-        if ($node && $href = $node->getAttribute('href')) {
+        if ($node instanceof \DOMElement && $href = $node->getAttribute('href')) {
             $this->baseUri = new ParsedUri($href);
         }
         $nodeList = $xpath->query('/html/head/base');
 
         /** @var \DOMElement */
         $node = $nodeList->item(0);
-        if ($node && $href = $node->getAttribute('href')) {
+        if ($node instanceof \DOMElement && $href = $node->getAttribute('href')) {
             $this->baseUri = new ParsedUri($href);
         }
 

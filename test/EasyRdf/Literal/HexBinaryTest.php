@@ -56,9 +56,9 @@ class HexBinaryTest extends TestCase
     {
         $literal = new HexBinary('48656C6C6F');
         $this->assertStringEquals('48656C6C6F', $literal);
-        $this->assertInternalType('string', $literal->getValue());
+        $this->assertEquals('string', \gettype($literal->getValue()));
         $this->assertSame('48656C6C6F', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:hexBinary', $literal->getDatatype());
         $this->assertSame('Hello', $literal->toBinary());
     }
@@ -131,8 +131,8 @@ class HexBinaryTest extends TestCase
             '71FD4F207AD770809E0E2D7B0EF5493BEFE73544D8E1BE3DDDB52455C61391A1',
             $modulus
         );
-        $this->assertInternalType('string', $modulus->getValue());
-        $this->assertNull($modulus->getLang());
+        $this->assertEquals('string', \gettype($modulus->getValue()));
+        $this->assertStringEquals('', $modulus->getLang());
         $this->assertSame('xsd:hexBinary', $modulus->getDatatype());
     }
 }

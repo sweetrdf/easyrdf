@@ -41,6 +41,12 @@ namespace EasyRdf;
  *
  * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
+ *
+ * PHPStan related:
+ *
+ * @property string $test
+ *
+ * @see https://phpstan.org/writing-php-code/phpdocs-basics#magic-properties
  */
 class Graph
 {
@@ -436,7 +442,7 @@ class Graph
 
     /** Get the URI of the graph
      *
-     * @return string The URI of the graph
+     * @return string|null The URI of the graph
      */
     public function getUri()
     {
@@ -567,10 +573,10 @@ class Graph
      *
      * This method will return null if the property does not exist.
      *
-     * @param string       $resource     The URI of the resource (e.g. http://example.com/joe#me)
-     * @param string|array $propertyPath A valid property path
-     * @param string       $type         The type of value to filter by (e.g. literal or resource)
-     * @param string       $lang         The language to filter by (e.g. en)
+     * @param string                              $resource     The URI of the resource (e.g. http://example.com/joe#me)
+     * @param string|array|\EasyRdf\Resource|null $propertyPath A valid property path
+     * @param string                              $type         The type of value to filter by (e.g. literal or resource)
+     * @param string                              $lang         The language to filter by (e.g. en)
      *
      * @throws \InvalidArgumentException
      *
@@ -743,10 +749,10 @@ class Graph
      *
      * This method will return an empty array if the property does not exist.
      *
-     * @param string $resource     The URI of the resource (e.g. http://example.com/joe#me)
-     * @param string $propertyPath A valid property path
-     * @param string $type         The type of value to filter by (e.g. literal)
-     * @param string $lang         The language to filter by (e.g. en)
+     * @param string                        $resource     The URI of the resource (e.g. http://example.com/joe#me)
+     * @param string|\EasyRdf\Resource|null $propertyPath A valid property path
+     * @param string                        $type         The type of value to filter by (e.g. literal)
+     * @param string                        $lang         The language to filter by (e.g. en)
      *
      * @throws \InvalidArgumentException
      *
@@ -1052,9 +1058,9 @@ class Graph
 
     /** Delete a property (or optionally just a specific value)
      *
-     * @param mixed  $resource The resource to delete the property from
-     * @param string $property The name of the property (e.g. foaf:name)
-     * @param mixed  $value    The value to delete (null to delete all values)
+     * @param mixed                         $resource The resource to delete the property from
+     * @param string|\EasyRdf\Resource|null $property The name of the property (e.g. foaf:name)
+     * @param mixed                         $value    The value to delete (null to delete all values)
      *
      * @throws \InvalidArgumentException
      *
@@ -1436,7 +1442,7 @@ class Graph
      *
      * @param string|null $resource
      *
-     * @return string A type assocated with the resource (e.g. foaf:Document)
+     * @return string|null A type assocated with the resource (e.g. foaf:Document)
      */
     public function type($resource = null)
     {
@@ -1457,7 +1463,7 @@ class Graph
      *
      * @param mixed $resource
      *
-     * @return \EasyRdf\Resource A type associated with the resource
+     * @return \EasyRdf\Resource|null A type associated with the resource
      */
     public function typeAsResource($resource = null)
     {
@@ -1534,8 +1540,8 @@ class Graph
 
     /** Add one or more rdf:type properties to a resource
      *
-     * @param string $resource The resource to add the type to
-     * @param string $types    One or more types to add (e.g. foaf:Person)
+     * @param string       $resource The resource to add the type to
+     * @param string|array $types    One or more types to add (e.g. foaf:Person)
      *
      * @return int The number of types added
      */
@@ -1607,7 +1613,7 @@ class Graph
      *
      * @param mixed $resource
      *
-     * @return \EasyRdf\Resource the primary topic of the document
+     * @return \EasyRdf\Resource|null the primary topic of the document
      */
     public function primaryTopic($resource = null)
     {
@@ -1725,9 +1731,13 @@ class Graph
      * @param string $name The name of the property
      *
      * @return int
+     *
+     * @todo Change return type to void, because this violates offsetSet:void
+     *       see: https://www.php.net/manual/en/language.oop5.overloading.php#object.unset
      */
     public function __unset($name)
     {
+        // currently ignored by phpstan (see phpstan.neon)
         return $this->delete($this->uri, $name);
     }
 }

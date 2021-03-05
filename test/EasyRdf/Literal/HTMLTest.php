@@ -47,9 +47,9 @@ class HTMLTest extends TestCase
         $literal = new HTML('<p>Hello World</p>');
         $this->assertClass('EasyRdf\Literal\HTML', $literal);
         $this->assertStringEquals('<p>Hello World</p>', $literal);
-        $this->assertInternalType('string', $literal->getValue());
+        $this->assertEquals('string', \gettype($literal->getValue()));
         $this->assertSame('<p>Hello World</p>', $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('rdf:HTML', $literal->getDatatype());
     }
 

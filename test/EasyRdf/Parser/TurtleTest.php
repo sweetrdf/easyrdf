@@ -556,6 +556,8 @@ class TurtleTest extends TestCase
     public function testIssue140()
     {
         $this->markTestIncomplete('fix for bug #140 is not implemented yet');
+
+        /*
         $filename = 'turtle/gh140-freebase.ttl';
 
         $graph = new Graph();
@@ -568,5 +570,6 @@ class TurtleTest extends TestCase
         );
 
         $this->assertEquals(14, $triple_count);
+        */
     }
 }

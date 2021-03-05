@@ -96,7 +96,7 @@ class FormatTest extends TestCase
     public function testGetFormats()
     {
         $formats = Format::getFormats();
-        $this->assertInternalType('array', $formats);
+        $this->assertEquals('array', \gettype($formats));
         $this->assertGreaterThan(0, \count($formats));
         foreach ($formats as $format) {
             $this->assertClass('EasyRdf\Format', $format);
@@ -227,7 +227,7 @@ class FormatTest extends TestCase
         $this->expectExceptionMessage(
             'Format is not recognised: unknown'
         );
-        $this->assertNull(Format::getFormat('unknown'));
+        $this->assertStringEquals('', Format::getFormat('unknown'));
     }
 
     public function testGetNames()
@@ -256,13 +256,13 @@ class FormatTest extends TestCase
     public function testSetLabelNull()
     {
         $this->format->setLabel(null);
-        $this->assertNull($this->format->getLabel());
+        $this->assertStringEquals('', $this->format->getLabel());
     }
 
     public function testSetLabelEmpty()
     {
         $this->format->setLabel('');
-        $this->assertNull($this->format->getLabel());
+        $this->assertStringEquals('', $this->format->getLabel());
     }
 
     public function testSetLabelNonString()
@@ -283,13 +283,13 @@ class FormatTest extends TestCase
     public function testSetUriNull()
     {
         $this->format->setUri(null);
-        $this->assertNull($this->format->getUri());
+        $this->assertStringEquals('', $this->format->getUri());
     }
 
     public function testSetUriEmpty()
     {
         $this->format->setUri('');
-        $this->assertNull($this->format->getUri());
+        $this->assertStringEquals('', $this->format->getUri());
     }
 
     public function testSetUriNonString()
@@ -320,7 +320,7 @@ class FormatTest extends TestCase
     public function testGetDefaultMimeTypeNoDefault()
     {
         $format2 = Format::register('my2', 'Other Format');
-        $this->assertNull(
+        $this->assertStringEquals('',
             $format2->getDefaultMimeType()
         );
     }
@@ -370,7 +370,7 @@ class FormatTest extends TestCase
     public function testGetExtensionNoDefault()
     {
         $format2 = Format::register('my2', 'Other Format');
-        $this->assertNull(
+        $this->assertStringEquals('',
             $format2->getDefaultExtension()
         );
     }
@@ -426,13 +426,13 @@ class FormatTest extends TestCase
     public function testSetParserClassNull()
     {
         $this->format->setParserClass(null);
-        $this->assertNull($this->format->getParserClass());
+        $this->assertStringEquals('', $this->format->getParserClass());
     }
 
     public function testSetParserClassEmpty()
     {
         $this->format->setParserClass('');
-        $this->assertNull($this->format->getParserClass());
+        $this->assertStringEquals('', $this->format->getParserClass());
     }
 
     public function testSetParserClassNonString()
@@ -465,7 +465,7 @@ class FormatTest extends TestCase
     {
         $this->format->setParserClass(MockParserClass::class);
         $parser = $this->format->newParser();
-        $this->assertInternalType('object', $parser);
+        $this->assertEquals('object', \gettype($parser));
         $this->assertClass(MockParserClass::class, $parser);
     }
 
@@ -491,13 +491,13 @@ class FormatTest extends TestCase
     public function testSetSerialiserClassNull()
     {
         $this->format->setSerialiserClass(null);
-        $this->assertNull($this->format->getSerialiserClass());
+        $this->assertStringEquals('', $this->format->getSerialiserClass());
     }
 
     public function testSetSerialiserClassEmpty()
     {
         $this->format->setSerialiserClass('');
-        $this->assertNull($this->format->getSerialiserClass());
+        $this->assertStringEquals('', $this->format->getSerialiserClass());
     }
 
     public function testSetSerialiserClassNonString()
@@ -513,7 +513,7 @@ class FormatTest extends TestCase
     {
         $this->format->setSerialiserClass(MockSerialiserClass::class);
         $serialiser = $this->format->newSerialiser();
-        $this->assertInternalType('object', $serialiser);
+        $this->assertEquals('object', \gettype($serialiser));
         $this->assertClass(MockSerialiserClass::class, $serialiser);
     }
 
@@ -660,7 +660,7 @@ class FormatTest extends TestCase
         $format = Format::guessFormat(
             '<?xml version="1.0" encoding="UTF-8"?>'
         );
-        $this->assertNull($format);
+        $this->assertStringEquals('', $format);
     }
 
     public function testGuessFormatByFilenameTtl()
@@ -692,7 +692,7 @@ class FormatTest extends TestCase
 
     public function testGuessFormatUnknown()
     {
-        $this->assertNull(
+        $this->assertStringEquals('',
             Format::guessFormat('blah blah blah')
         );
     }

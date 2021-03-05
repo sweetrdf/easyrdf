@@ -123,10 +123,10 @@ class Json extends RdfPhp
     /**
      * Parse RDF/JSON into an EasyRdf\Graph
      *
-     * @param Graph  $graph   the graph to load the data into
-     * @param string $data    the RDF document data
-     * @param string $format  the format of the input data
-     * @param string $baseUri the base URI of the data being parsed
+     * @param Graph               $graph   the graph to load the data into
+     * @param string|array<array> $data    the RDF document data
+     * @param string              $format  the format of the input data
+     * @param string              $baseUri the base URI of the data being parsed
      *
      * @throws Exception
      * @throws \EasyRdf\Exception

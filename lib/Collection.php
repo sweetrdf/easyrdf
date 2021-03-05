@@ -158,7 +158,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      * If the offset is null, then the last node in the
      * collection (before rdf:nil) will be returned.
      *
-     * @param int $offset The offset into the collection (or null)
+     * @param int|null $offset The offset into the collection (or null)
      *
      * @return array $node, $postion  The node object and postion of the node
      */
@@ -167,7 +167,11 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
         $position = 1;
         $node = $this;
         $nil = $this->graph->resource('rdf:nil');
-        while (($rest = $node->get('rdf:rest')) && $rest !== $nil && (null === $offset || ($position < $offset))) {
+        while (
+            ($rest = $node->get('rdf:rest'))
+            && $rest !== $nil
+            && (null === $offset || ($position < $offset))
+        ) {
             $node = $rest;
             ++$position;
         }
@@ -253,6 +257,9 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      * Array Access: set an item at a positon in collection using array syntax
      *
      * Example: $list[2] = $item;
+     *
+     * @todo Change return type to void, because this violates offsetSet:void
+     *       see: https://php.net/manual/en/arrayaccess.offsetset.php
      */
     public function offsetSet($offset, $value)
     {
@@ -276,6 +283,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
                 $node->addResource('rdf:rest', 'rdf:nil');
             }
 
+            // currently ignored by phpstan (see phpstan.neon)
             return $node->set('rdf:first', $value);
         } else {
             throw new \InvalidArgumentException('Collection offset must be a positive integer');

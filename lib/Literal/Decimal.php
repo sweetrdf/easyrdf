@@ -72,7 +72,7 @@ class Decimal extends Literal
 
         if (\is_string($value)) {
             self::validate($value);
-        } elseif (\is_float($value) || \is_int($value)) {
+        } elseif (is_numeric($value)) {
             $locale_data = localeconv();
             $value = str_replace($locale_data['decimal_point'], '.', (string) $value);
         } else {

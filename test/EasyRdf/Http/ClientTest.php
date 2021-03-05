@@ -175,7 +175,7 @@ class ClientTest extends TestCase
     {
         $this->client->setHeaders('Accept-Encoding', 'gzip,deflate');
         $this->client->setHeaders('Accept-Encoding', null);
-        $this->assertNull(
+        $this->assertStringEquals('',
             $this->client->getHeader('Accept-encoding'),
             'Returned value of header is expected to be null'
         );
@@ -223,7 +223,7 @@ class ClientTest extends TestCase
         $this->client->setParameterGet('key1', 'value1');
         $this->client->setParameterGet('key2', 'value2');
         $this->client->setParameterGet('key1', null);
-        $this->assertNull($this->client->getParameterGet('key1'));
+        $this->assertStringEquals('', $this->client->getParameterGet('key1'));
         $this->assertSame('value2', $this->client->getParameterGet('key2'));
     }
 
@@ -252,9 +252,9 @@ class ClientTest extends TestCase
         $this->client->setHeaders('Accept-Language', 'en');
         $this->client->resetParameters();
         $this->assertSame('GET', $this->client->getMethod());
-        $this->assertNull($this->client->getRawData());
-        $this->assertNull($this->client->getHeader('Content-Length'));
-        $this->assertNull($this->client->getHeader('Content-Type'));
+        $this->assertStringEquals('', $this->client->getRawData());
+        $this->assertStringEquals('', $this->client->getHeader('Content-Length'));
+        $this->assertStringEquals('', $this->client->getHeader('Content-Type'));
         $this->assertSame('en', $this->client->getHeader('Accept-Language'));
     }
 
@@ -267,10 +267,10 @@ class ClientTest extends TestCase
         $this->client->setHeaders('Accept-Language', 'en');
         $this->client->resetParameters(true);
         $this->assertSame('GET', $this->client->getMethod());
-        $this->assertNull($this->client->getRawData());
-        $this->assertNull($this->client->getHeader('Content-Length'));
-        $this->assertNull($this->client->getHeader('Content-Type'));
-        $this->assertNull($this->client->getHeader('Accept-Language'));
+        $this->assertStringEquals('', $this->client->getRawData());
+        $this->assertStringEquals('', $this->client->getHeader('Content-Length'));
+        $this->assertStringEquals('', $this->client->getHeader('Content-Type'));
+        $this->assertStringEquals('', $this->client->getHeader('Accept-Language'));
     }
 
     /**

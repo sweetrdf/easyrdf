@@ -49,17 +49,20 @@ class Http
 
     /** Set the HTTP Client object used to fetch RDF data
      *
-     * @param Http\Client|\Zend\Http\Client $httpClient The new HTTP client object
+     * @param mixed $httpClient The new HTTP client object
      *
      * @throws \InvalidArgumentException
      *
-     * @return Http\Client|\Zend\Http\Client The new HTTP client object
+     * @return \EasyRdf\Http\Client|\Zend\Http\Client The new HTTP client object
+     *
+     * @todo adapt datatype of parameter $httpClient (\EasyRdf\Http\Client|\Zend\Http\Client)
      */
     public static function setDefaultHttpClient($httpClient)
     {
-        if (!\is_object($httpClient) ||
-            !($httpClient instanceof \Zend\Http\Client ||
-              $httpClient instanceof Http\Client)) {
+        if (
+            !$httpClient instanceof \Zend\Http\Client
+            && !$httpClient instanceof Http\Client
+        ) {
             throw new \InvalidArgumentException('$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client');
         }
 

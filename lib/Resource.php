@@ -41,6 +41,12 @@ namespace EasyRdf;
  *
  * @copyright  Copyright (c) 2009-2015 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
+ *
+ * PHPStan related:
+ *
+ * @property string $test
+ *
+ * @see https://phpstan.org/writing-php-code/phpdocs-basics#magic-properties
  */
 class Resource implements \ArrayAccess
 {
@@ -109,7 +115,7 @@ class Resource implements \ArrayAccess
      *
      * Returns null if the resource is not a blank node.
      *
-     * @return string The identifer for the bnode
+     * @return string|null The identifer for the bnode
      */
     public function getBNodeId()
     {
@@ -588,7 +594,7 @@ class Resource implements \ArrayAccess
      * may be arbitrary.
      * This method will return null if the resource has no type.
      *
-     * @return resource a type assocated with the resource
+     * @return \EasyRdf\Resource a type assocated with the resource
      */
     public function typeAsResource()
     {
@@ -600,7 +606,7 @@ class Resource implements \ArrayAccess
     /**
      * Get a list of types for a resource, as EasyRdf\Resource
      *
-     * @return resource[]
+     * @return \EasyRdf\Resource[]
      *
      * @throws Exception
      */
@@ -766,9 +772,13 @@ class Resource implements \ArrayAccess
      * @param string $name The name of the property
      *
      * @return int
+     *
+     * @todo Change return type to void, because this violates __unset:void
+     *       see: https://www.php.net/manual/en/language.oop5.overloading.php#object.unset
      */
     public function __unset($name)
     {
+        // currently ignored by phpstan (see phpstan.neon)
         return $this->graph->delete($this->uri, $name);
     }
 

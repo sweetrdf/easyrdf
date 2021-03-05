@@ -110,6 +110,7 @@ class ContainerTest extends TestCase
             'http://www.w3.org/TR/REC-rdf-syntax/'
         );
 
+        /** @var array<int,\EasyRdf\Resource> */
         $favourites = $this->graph->resource('ex:favourite-fruit');
 
         $list = [];
@@ -247,7 +248,7 @@ class ContainerTest extends TestCase
             'Container position must be a positive integer'
         );
         $seq = $this->graph->newBnode('rdf:Seq');
-        isset($seq[0]);
+        $this->assertTrue(isset($seq[0]));
     }
 
     public function testArrayOffsetExistsMinusOne()
@@ -257,7 +258,7 @@ class ContainerTest extends TestCase
             'Container position must be a positive integer'
         );
         $seq = $this->graph->newBnode('rdf:Seq');
-        isset($seq[-1]);
+        $this->assertTrue(isset($seq[-1]));
     }
 
     public function testArrayOffsetExistsNonInteger()
@@ -267,7 +268,7 @@ class ContainerTest extends TestCase
             'Container position must be a positive integer'
         );
         $seq = $this->graph->newBnode('rdf:Seq');
-        isset($seq['foo']);
+        $this->assertTrue(isset($seq['foo']));
     }
 
     public function testArrayOffsetGet()
@@ -298,7 +299,9 @@ class ContainerTest extends TestCase
             'Container position must be a positive integer'
         );
         $seq = $this->graph->newBnode('rdf:Seq');
-        $seq[0];
+
+        // does trigger exception
+        $this->assertNull($seq[0]);
     }
 
     public function testArrayOffsetGetMinusOne()
@@ -308,7 +311,9 @@ class ContainerTest extends TestCase
             'Container position must be a positive integer'
         );
         $seq = $this->graph->newBnode('rdf:Seq');
-        $seq[-1];
+
+        // does trigger exception
+        $this->assertNull($seq[-1]);
     }
 
     public function testArrayOffsetGetNonInteger()
@@ -318,7 +323,9 @@ class ContainerTest extends TestCase
             'Container position must be a positive integer'
         );
         $seq = $this->graph->newBnode('rdf:Seq');
-        $seq['foo'];
+
+        // does trigger exception
+        $this->assertNull($seq['foo']);
     }
 
     public function testArrayOffsetSet()

@@ -58,7 +58,7 @@ class TypeMapper
      *
      * @throws \InvalidArgumentException
      *
-     * @return string The class name (e.g. Model_Foaf_Name)
+     * @return string|null The class name (e.g. Model_Foaf_Name)
      */
     public static function get($type)
     {

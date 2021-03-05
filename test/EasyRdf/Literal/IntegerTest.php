@@ -47,9 +47,9 @@ class IntegerTest extends TestCase
         $literal = new Integer(0);
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
         $this->assertStringEquals('0', $literal);
-        $this->assertInternalType('int', $literal->getValue());
+        $this->assertEquals('integer', \gettype($literal->getValue()));
         $this->assertSame(0, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -58,9 +58,9 @@ class IntegerTest extends TestCase
         $literal = new Integer(1);
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
         $this->assertStringEquals('1', $literal);
-        $this->assertInternalType('int', $literal->getValue());
+        $this->assertEquals('integer', \gettype($literal->getValue()));
         $this->assertSame(1, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -69,9 +69,9 @@ class IntegerTest extends TestCase
         $literal = new Integer('100');
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
         $this->assertStringEquals('100', $literal);
-        $this->assertInternalType('int', $literal->getValue());
+        $this->assertEquals('integer', \gettype($literal->getValue()));
         $this->assertSame(100, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 
@@ -80,9 +80,9 @@ class IntegerTest extends TestCase
         $literal = new Integer('0100');
         $this->assertClass('EasyRdf\Literal\Integer', $literal);
         $this->assertStringEquals('0100', $literal);
-        $this->assertInternalType('int', $literal->getValue());
+        $this->assertEquals('integer', \gettype($literal->getValue()));
         $this->assertSame(100, $literal->getValue());
-        $this->assertNull($literal->getLang());
+        $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:integer', $literal->getDatatype());
     }
 }

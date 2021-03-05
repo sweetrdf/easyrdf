@@ -93,7 +93,7 @@ class Client
     /**
      * The raw post data to send. Could be set by setRawData($data).
      *
-     * @var string
+     * @var string|null
      */
     private $rawPostData = null;
 
@@ -192,7 +192,7 @@ class Client
         $normalizedName = strtolower($name);
 
         // If $value is null or false, unset the header
-        if (null === $value || false === $value) {
+        if (null == $value || false == $value) {
             unset($this->headers[$normalizedName]);
         } else {
             // Else, set the header
@@ -280,7 +280,7 @@ class Client
      *
      * @param string $name
      *
-     * @return string value
+     * @return string|null value
      */
     public function getParameterGet($name)
     {

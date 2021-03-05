@@ -70,8 +70,8 @@ class ParsedUriTest extends TestCase
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('www.ietf.org', $uri->getAuthority());
         $this->assertSame('/rfc/rfc2396.txt', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('http://www.ietf.org/rfc/rfc2396.txt', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -82,8 +82,8 @@ class ParsedUriTest extends TestCase
         $this->assertSame('file', $uri->getScheme());
         $this->assertSame('', $uri->getAuthority());
         $this->assertSame('/etc/hosts', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('file:///etc/hosts', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -94,8 +94,8 @@ class ParsedUriTest extends TestCase
         $this->assertSame('ftp', $uri->getScheme());
         $this->assertSame('ftp.is.co.za', $uri->getAuthority());
         $this->assertSame('/rfc/rfc1808.txt', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('ftp://ftp.is.co.za/rfc/rfc1808.txt', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -107,7 +107,7 @@ class ParsedUriTest extends TestCase
         $this->assertSame('[2001:db8::7]', $uri->getAuthority());
         $this->assertSame('/c=GB', $uri->getPath());
         $this->assertSame('objectClass?one', $uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('ldap://[2001:db8::7]/c=GB?objectClass?one', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -116,10 +116,10 @@ class ParsedUriTest extends TestCase
     {
         $uri = new ParsedUri('mailto:John.Doe@example.com');
         $this->assertSame('mailto', $uri->getScheme());
-        $this->assertNull($uri->getAuthority());
+        $this->assertStringEquals('', $uri->getAuthority());
         $this->assertSame('John.Doe@example.com', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('mailto:John.Doe@example.com', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -128,10 +128,10 @@ class ParsedUriTest extends TestCase
     {
         $uri = new ParsedUri('news:comp.infosystems.www.servers.unix');
         $this->assertSame('news', $uri->getScheme());
-        $this->assertNull($uri->getAuthority());
+        $this->assertStringEquals('', $uri->getAuthority());
         $this->assertSame('comp.infosystems.www.servers.unix', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('news:comp.infosystems.www.servers.unix', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -140,10 +140,10 @@ class ParsedUriTest extends TestCase
     {
         $uri = new ParsedUri('tel:+1-816-555-1212');
         $this->assertSame('tel', $uri->getScheme());
-        $this->assertNull($uri->getAuthority());
+        $this->assertStringEquals('', $uri->getAuthority());
         $this->assertSame('+1-816-555-1212', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('tel:+1-816-555-1212', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -154,8 +154,8 @@ class ParsedUriTest extends TestCase
         $this->assertSame('telnet', $uri->getScheme());
         $this->assertSame('192.0.2.16:80', $uri->getAuthority());
         $this->assertSame('/', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('telnet://192.0.2.16:80/', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -164,10 +164,10 @@ class ParsedUriTest extends TestCase
     {
         $uri = new ParsedUri('urn:oasis:names:specification:docbook:dtd:xml:4.1.2');
         $this->assertSame('urn', $uri->getScheme());
-        $this->assertNull($uri->getAuthority());
+        $this->assertStringEquals('', $uri->getAuthority());
         $this->assertSame('oasis:names:specification:docbook:dtd:xml:4.1.2', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('urn:oasis:names:specification:docbook:dtd:xml:4.1.2', $uri);
         $this->assertTrue($uri->isAbsolute());
     }
@@ -175,11 +175,11 @@ class ParsedUriTest extends TestCase
     public function testParseRelative()
     {
         $uri = new ParsedUri('/foo/bar');
-        $this->assertNull($uri->getScheme());
-        $this->assertNull($uri->getAuthority());
+        $this->assertStringEquals('', $uri->getScheme());
+        $this->assertStringEquals('', $uri->getAuthority());
         $this->assertSame('/foo/bar', $uri->getPath());
-        $this->assertNull($uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getQuery());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('/foo/bar', $uri);
         $this->assertTrue($uri->isRelative());
     }
@@ -190,7 +190,7 @@ class ParsedUriTest extends TestCase
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('www.example.com', $uri->getAuthority());
         $this->assertSame('/foo', $uri->getPath());
-        $this->assertNull($uri->getQuery());
+        $this->assertStringEquals('', $uri->getQuery());
         $this->assertSame('', $uri->getFragment());
         $this->assertStringEquals('http://www.example.com/foo#', $uri);
         $this->assertTrue($uri->isAbsolute());
@@ -203,7 +203,7 @@ class ParsedUriTest extends TestCase
         $this->assertSame('www.example.com', $uri->getAuthority());
         $this->assertSame('/foo', $uri->getPath());
         $this->assertSame('', $uri->getQuery());
-        $this->assertNull($uri->getFragment());
+        $this->assertStringEquals('', $uri->getFragment());
         $this->assertStringEquals('http://www.example.com/foo?', $uri);
         $this->assertTrue($uri->isAbsolute());
     }

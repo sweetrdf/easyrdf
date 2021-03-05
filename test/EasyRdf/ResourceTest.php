@@ -53,7 +53,7 @@ class ResourceTest extends TestCase
     /** @var Graph */
     private $graph;
 
-    /** @var \Test\ClassProxy\EasyRdf\ResourceProxy */
+    /** @var \EasyRdf\Resource */
     private $resource;
 
     /** @var string|\EasyRdf\Resource */
@@ -132,7 +132,7 @@ class ResourceTest extends TestCase
     public function testGetBNodeIdForUri()
     {
         $nonbnode = new Resource('http://www.exaple.com/');
-        $this->assertNull($nonbnode->getBNodeId());
+        $this->assertStringEquals('', $nonbnode->getBNodeId());
     }
 
     public function testPrefix()
@@ -144,7 +144,7 @@ class ResourceTest extends TestCase
     public function testUnknownPrefix()
     {
         $unknown = new Resource('http://example.com/foo');
-        $this->assertNull($unknown->prefix());
+        $this->assertStringEquals('', $unknown->prefix());
     }
 
     public function testShorten()
@@ -156,7 +156,7 @@ class ResourceTest extends TestCase
     public function testShortenUnknown()
     {
         $unknown = new Resource('http://example.com/foo');
-        $this->assertNull($unknown->shorten());
+        $this->assertStringEquals('', $unknown->shorten());
     }
 
     public function testLocalnameWithSlash()
@@ -180,7 +180,7 @@ class ResourceTest extends TestCase
     public function testLocalnameWithNoPath()
     {
         $res = new Resource('http://example.com/');
-        $this->assertNull($res->localName());
+        $this->assertStringEquals('', $res->localName());
     }
 
     public function testParseUri()
@@ -488,9 +488,7 @@ class ResourceTest extends TestCase
     public function testGetLiteralForResource()
     {
         $this->setupTestGraph();
-        $this->assertNull(
-            $this->resource->getLiteral('rdf:type')
-        );
+        $this->assertStringEquals('', $this->resource->getLiteral('rdf:type'));
     }
 
     public function testGetResource()
@@ -871,10 +869,7 @@ class ResourceTest extends TestCase
         $this->assertNull(
             $homepage1->get('^foaf:homepage')
         );
-        $this->assertSame(
-            $this->resource,
-            $homepage2->get('^foaf:homepage')
-        );
+        $this->assertEquals($this->resource, $homepage2->get('^foaf:homepage'));
     }
 
     public function testSetNullKey()
@@ -1264,12 +1259,9 @@ class ResourceTest extends TestCase
 
     public function testMagicGetNonExistent()
     {
-        $this->setupTestGraph();
+        $resource = (new Graph())->resource('http://example.com/#me');
         RdfNamespace::setDefault('rdf');
-        $this->assertStringEquals(
-            null,
-            $this->resource->foobar
-        );
+        $this->assertStringEquals(null, $resource->test);
     }
 
     public function testMagicSet()

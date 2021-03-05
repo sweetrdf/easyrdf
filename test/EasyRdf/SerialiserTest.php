@@ -60,13 +60,13 @@ class SerialiserTest extends TestCase
 
     public function testSerialise()
     {
-        $this->assertTrue($this->serialiser->serialise($this->graph, 'php'));
+        $this->assertTrue(\is_string($this->serialiser->serialise($this->graph, 'php')));
     }
 
     public function testSerialiseFormatObject()
     {
         $format = Format::getFormat('json');
-        $this->assertTrue($this->serialiser->serialise($this->graph, $format));
+        $this->assertTrue(\is_string($this->serialiser->serialise($this->graph, $format)));
     }
 
     public function testSerialiseNullFormat()
