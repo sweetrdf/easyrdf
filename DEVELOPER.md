@@ -1,6 +1,6 @@
 # Developers
 
-Please also read (CONTRIBUTING.md)[CONTRIBUTING.md].
+Please also read [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## .editorconfig
 
