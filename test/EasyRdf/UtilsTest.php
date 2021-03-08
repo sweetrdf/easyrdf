@@ -357,6 +357,9 @@ class UtilsTest extends TestCase
         $this->assertContains('cat', Utils::execCommandPipe('ls', ['/bin/']));
     }
 
+    /**
+     * @group linux
+     */
     public function testExecCommandPipeLsWithDir()
     {
         $output = Utils::execCommandPipe('ls', null, null, '/bin');
