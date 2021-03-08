@@ -78,9 +78,11 @@ echo "My name is: ".$me->get('foaf:name')."\n";
 
 ## Contributing
 
-We welcome any contributions. For further information please read [CONTRIBUTING.md](/CONTRIBUTING.md).
+**Contributions are welcome!** Please read [CONTRIBUTING.md](/CONTRIBUTING.md) for further information.
 
 For further information about extending / hack EasyRdf please read [DEVELOPER.md](/DEVELOPER.md).
+
+Further mainainers are possible, please send an email to [@k00ni](https://github.com/k00ni).
 
 ## Running Examples
 
@@ -97,21 +99,15 @@ Then open the following URL in your browser: http://localhost:8080/
 
 EasyRdf was in maintenance mode since 2017 ([link](https://github.com/easyrdf/easyrdf/issues/282)) and not actively maintained since. There were 6+ pull requests pending at that time with fixes and new features. Its sad to see another RDF PHP project die slowly, so i decided to clean house and give the code a new home ([old fork](https://github.com/sweetyrdf/easyrdf), [further info](https://github.com/easyrdf/easyrdf/issues/320)). A few months in late 2020 EasyRdf was actively improved (me being a co-maintainer for a while), but that stopped and decay began again.
 
-I decided to abondon my [old fork](https://github.com/sweetyrdf/easyrdf) to make use of latest EasyRdf improvements. Therefore this Github repository was created.
+I decided to abandon my [old fork](https://github.com/sweetyrdf/easyrdf) to make use of latest EasyRdf improvements. Therefore this Github repository was created as a replacement for `sweetyrdf/easyrdf`.
 
 #### What can you expect as a user?
 
-This fork aims to be a drop-in replacement for the `easyrdf/easyrdf` package, which means, you can use it without changing your code. But you should still read the notes of the latest release, to make sure nothing unexpected happens after an update.
+This fork (v1.\*) aims to be a drop-in replacement for the `easyrdf/easyrdf` package, which means, you can use it **without changing your code**. *But you should still read the notes of the latest release, to make sure nothing unexpected happens after an update.*
 
 #### What can you expect as an EasyRdf developer?
 
-This repository is set up in a way to lower the maintenance overhead in comparison to the original version.
-
-Furthermore, this repository is held by an organization instead of a user. This allows more flexible maintenance like add further maintainer or helper.
-
-**Contributions are welcome!** Please read [CONTRIBUTING.md](/CONTRIBUTING.md) for further information.
-
-Further mainainers are possible, please send an email to [@k00ni](https://github.com/k00ni).
+This repository is set up in a way to lower the maintenance overhead in comparison to the original version. Test related tool was partly replaced with more lightweight solutions. Furthermore this repository is held by an organization instead of a user, which allows more flexible maintenance.
 
 ## Licensing
 
