@@ -126,3 +126,12 @@ function executeExample($name, array $params = [])
 
     return $stdout;
 }
+
+/**
+ * Checks if script is running on Linux or not.
+ * If not, it assumes it runs on Windows.
+ */
+function isLinux(): bool
+{
+    return '/' === DIRECTORY_SEPARATOR;
+}
