@@ -773,6 +773,7 @@ RDF;
         //  dump as text/turtle
         $turtle = $graph->serialise('turtle');
 
-        $this->assertEquals(readFixture('turtle/gh115-nested-namespaces.ttl'), $turtle);
+        $fixture = readFixture('turtle/gh115-nested-namespaces.ttl', true);
+        $this->assertEquals($fixture, $turtle);
     }
 }

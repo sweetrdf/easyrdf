@@ -52,20 +52,21 @@ function fixturePath($name)
 /**
  * Helper function: read fixture data from file
  *
- * @param string $name fixture file name
- *
- * @return string Fixture data
+ * @param bool $overrideLineEnding overrides line endings with default for
+ *                                 current operating system (by using PHP_EOL constant)
  */
-function readFixture($name)
+function readFixture(string $name, bool $overrideLineEnding = false): string
 {
     $content = file_get_contents(fixturePath($name));
 
-    /*
-     * We use \n as line ending in our fixture files.
-     * This change replaces them by the default line ending of the operating system.
-     * If we are on Windows and use \n some tests will fail.
-     */
-    $content = str_replace("\n", PHP_EOL, $content);
+    if ($overrideLineEnding) {
+        /*
+         * We use \n as line ending in our fixture files.
+         * This change replaces them by the default line ending of the operating system.
+         * If we are on Windows and use \n some tests will fail.
+         */
+        $content = str_replace("\n", \PHP_EOL, $content);
+    }
 
     return $content;
 }

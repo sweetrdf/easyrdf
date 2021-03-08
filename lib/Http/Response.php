@@ -282,7 +282,6 @@ class Response
         if ($matches && 2 === \count($matches)) {
             list($headerLines, $body) = $matches;
         } else {
-            var_dump($matches);
             throw new Exception('Failed to parse HTTP response.');
         }
 

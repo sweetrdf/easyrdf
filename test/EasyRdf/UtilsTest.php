@@ -355,19 +355,21 @@ class UtilsTest extends TestCase
     public function testExecCommandPipeLs()
     {
         $output = Utils::execCommandPipe('ls', ['/bin/']);
-        $this->assertContains('cat', explode(PHP_EOL, $output));
+
+        // TODO remove message
+        $this->assertContains('cat', explode(\PHP_EOL, $output), 'Output: '. $output);
     }
 
     public function testExecCommandPipeLsWithDir()
     {
         $output = Utils::execCommandPipe('ls', null, null, '/bin');
-        $this->assertContains('rm', explode(PHP_EOL, $output));
+        $this->assertContains('rm', explode(\PHP_EOL, $output));
     }
 
     public function testExecCommandPipeEcho()
     {
         $output = Utils::execCommandPipe('echo', 'Test Message');
-        $this->assertSame("Test Message".PHP_EOL, $output);
+        $this->assertSame('Test Message'.\PHP_EOL, $output);
     }
 
     public function testExecCommandPipeCat()
