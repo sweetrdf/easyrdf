@@ -58,7 +58,16 @@ function fixturePath($name)
  */
 function readFixture($name)
 {
-    return file_get_contents(fixturePath($name));
+    $content = file_get_contents(fixturePath($name));
+
+    /*
+     * We use \n as line ending in our fixture files.
+     * This change replaces them by the default line ending of the operating system.
+     * If we are on Windows and use \n some tests will fail.
+     */
+    $content = str_replace("\n", PHP_EOL, $content);
+
+    return $content;
 }
 
 /**
