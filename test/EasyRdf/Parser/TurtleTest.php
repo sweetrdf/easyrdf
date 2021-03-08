@@ -256,12 +256,18 @@ class TurtleTest extends TestCase
 
     // Removed tests 14-16 because they take a long time to run
 
+    /**
+     * @group linux
+     */
     public function testCase17()
     {
         // simple long literal
         $this->turtleTestCase('test-17');
     }
 
+    /**
+     * @group linux
+     */
     public function testCase18()
     {
         // long literals with escapes

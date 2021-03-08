@@ -753,6 +753,8 @@ class TurtleTest extends TestCase
 
     /**
      * @see https://github.com/easyrdf/easyrdf/issues/115
+     *
+     * @group linux
      */
     public function testIssue115()
     {
