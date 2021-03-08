@@ -162,22 +162,10 @@ class GraphTest extends TestCase
         $doc = $graph->get('foaf:PersonalProfileDocument', '^rdf:type');
         $this->assertClass('EasyRdf\Resource', $doc);
 
-        if (isLinux()) {
-            $this->assertStringContainsString(
-                'fixtures/foaf.rdf',
-                $doc->getUri()
-            );
-        } else {
-            /*
-             * windows only
-             * $doc->getUri() may look like:
-             * file://D:\a\easyrdf\easyrdf\test\fixtures\foaf.rdf
-             */
-            $this->assertStringContainsString(
-                'fixtures\foaf.rdf',
-                $doc->getUri()
-            );
-        }
+        $this->assertStringContainsString(
+            'fixtures'.\DIRECTORY_SEPARATOR.'foaf.rdf',
+            $doc->getUri()
+        );
     }
 
     public function testParseUnknownFormat()
