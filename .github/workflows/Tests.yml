@@ -4,7 +4,7 @@ on: push
 
 jobs:
     linux-tests:
-        name: Linux Tests on PHP ${{ matrix.php-versions }}
+        name: Linux-Tests with PHP ${{ matrix.php-versions }}
         runs-on: ubuntu-latest
 
         strategy:
@@ -32,7 +32,7 @@ jobs:
                 run: vendor/bin/phpunit
 
     windows-tests:
-        name: Windows Tests on PHP ${{ matrix.php-versions }}
+        name: Windows-Tests with PHP ${{ matrix.php-versions }}
         runs-on: windows-2019
 
         strategy:

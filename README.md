@@ -46,14 +46,14 @@ echo "My name is: ".$me->get('foaf:name')."\n";
 ## Features
 
 * No required external dependencies upon other libraries (PEAR, Zend, etc...)
-* Extensive unit tests written using `phpunit`
+* Library runs in Linux and Windows environments
+* Extensive unit tests written using PHPUnit
 * Built-in parsers and serialisers: RDF/JSON, N-Triples, RDF/XML, Turtle
 * Optional parsing support for: [ARC2](https://github.com/semsol/arc2/), [rapper](http://librdf.org/raptor/rapper.html)
 * Optional support for `Zend\Http\Client`
 * Type mapper - resources of type `foaf:Person` can be mapped into PHP object of class `Foaf_Person`
 * Support for visualisation of graphs using [GraphViz](https://www.graphviz.org/)
 * Comes with a number of examples
-
 
 ## List of Examples
 
