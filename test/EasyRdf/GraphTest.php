@@ -167,7 +167,7 @@ class GraphTest extends TestCase
         } else {
             // windows only
             // may look like: file://D:\a\easyrdf\easyrdf\test\fixtures\foaf.rdf
-            $this->assertRegExp('|^file://.+\\fixtures\\foaf\.rdf$|', $doc->getUri());
+            $this->assertRegExp('|^file://.+\\fixtures\\foaf.rdf$|', $doc->getUri());
         }
     }
 

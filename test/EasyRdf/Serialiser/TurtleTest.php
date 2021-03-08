@@ -757,9 +757,9 @@ class TurtleTest extends TestCase
     public function testIssue115()
     {
         $triples = '<http://example.com/id/1> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/dog> .';
-        $triples .= "\r\n".'<http://example.com/id/2> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/cat> .';
-        $triples .= "\r\n".'<http://example.com/id/3> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/bird> .';
-        $triples .= "\r\n".'<http://example.com/id/4> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/reptiles/snake> .'."\r\n";
+        $triples .= "\n".'<http://example.com/id/2> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/cat> .';
+        $triples .= "\n".'<http://example.com/id/3> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/bird> .';
+        $triples .= "\n".'<http://example.com/id/4> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/reptiles/snake> .'."\n";
 
         RdfNamespace::set('id', 'http://example.com/id/');
         RdfNamespace::set('animals', 'http://example.com/ns/animals/');
