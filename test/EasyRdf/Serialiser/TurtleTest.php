@@ -753,13 +753,17 @@ class TurtleTest extends TestCase
 
     /**
      * @see https://github.com/easyrdf/easyrdf/issues/115
+     *
+     * @group linux
      */
     public function testIssue115()
     {
-        $triples = '<http://example.com/id/1> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/dog> .';
-        $triples .= "\n".'<http://example.com/id/2> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/cat> .';
-        $triples .= "\n".'<http://example.com/id/3> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/bird> .';
-        $triples .= "\n".'<http://example.com/id/4> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/reptiles/snake> .'."\n";
+        $triples = <<<RDF
+<http://example.com/id/1> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/dog> .
+<http://example.com/id/2> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/cat> .
+<http://example.com/id/3> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/bird> .
+<http://example.com/id/4> <http://www.w3.org/2000/01/rdf-schema#type> <http://example.com/ns/animals/reptiles/snake> .
+RDF;
 
         RdfNamespace::set('id', 'http://example.com/id/');
         RdfNamespace::set('animals', 'http://example.com/ns/animals/');
@@ -771,7 +775,6 @@ class TurtleTest extends TestCase
         //  dump as text/turtle
         $turtle = $graph->serialise('turtle');
 
-        $fixture = readFixture('turtle/gh115-nested-namespaces.ttl');
-        $this->assertEquals($fixture, $turtle);
+        $this->assertEquals(readFixture('turtle/gh115-nested-namespaces.ttl'), $turtle);
     }
 }

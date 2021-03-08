@@ -163,11 +163,20 @@ class GraphTest extends TestCase
         $this->assertClass('EasyRdf\Resource', $doc);
 
         if (isLinux()) {
-            $this->assertRegExp('|^file://.+/fixtures/foaf\.rdf$|', $doc->getUri());
+            $this->assertStringContainsString(
+                'fixtures/foaf.rdf',
+                $doc->getUri()
+            );
         } else {
-            // windows only
-            // may look like: file://D:\a\easyrdf\easyrdf\test\fixtures\foaf.rdf
-            $this->assertRegExp('|^file://.+\\fixtures\\foaf.rdf$|', $doc->getUri());
+            /*
+             * windows only
+             * $doc->getUri() may look like:
+             * file://D:\a\easyrdf\easyrdf\test\fixtures\foaf.rdf
+             */
+            $this->assertStringContainsString(
+                'fixtures\foaf.rdf',
+                $doc->getUri()
+            );
         }
     }
 

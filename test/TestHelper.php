@@ -133,5 +133,5 @@ function executeExample($name, array $params = [])
  */
 function isLinux(): bool
 {
-    return '/' === DIRECTORY_SEPARATOR;
+    return '/' === \DIRECTORY_SEPARATOR;
 }
