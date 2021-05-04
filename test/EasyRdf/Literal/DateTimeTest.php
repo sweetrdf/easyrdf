@@ -2,6 +2,7 @@
 
 namespace Test\EasyRdf\Literal;
 
+use DateTimeImmutable;
 use EasyRdf\Literal\DateTime;
 use Test\TestCase;
 
@@ -45,6 +46,11 @@ class DateTimeTest extends TestCase
     /** @var DateTime */
     private $dt;
 
+    protected function setUp()
+    {
+        $this->dt = new DateTime('2010-09-08T07:06:05Z');
+    }
+
     public function testConstruct()
     {
         $literal = new DateTime('2011-07-18T18:45:43Z');
@@ -84,6 +90,17 @@ class DateTimeTest extends TestCase
         $this->assertSame('xsd:dateTime', $literal->getDatatype());
     }
 
+    public function testConstructFromDateTimeImmutableUTC()
+    {
+        $dt = new DateTimeImmutable('2010-09-08T07:06:05Z');
+        $literal = new DateTime($dt);
+        $this->assertStringEquals('2010-09-08T07:06:05Z', $literal);
+        $this->assertClass('DateTime', $literal->getValue());
+        $this->assertEquals($dt, $literal->getValue());
+        $this->assertStringEquals('', $literal->getLang());
+        $this->assertSame('xsd:dateTime', $literal->getDatatype());
+    }
+
     public function testParseUTC()
     {
         $literal = DateTime::parse('Mon 18 Jul 2011 18:45:43 UTC');
@@ -100,11 +117,6 @@ class DateTimeTest extends TestCase
         $this->assertClass('DateTime', $literal->getValue());
         $this->assertStringEquals('', $literal->getLang());
         $this->assertSame('xsd:dateTime', $literal->getDatatype());
-    }
-
-    protected function setUp()
-    {
-        $this->dt = new DateTime('2010-09-08T07:06:05Z');
     }
 
     public function testFormat()

@@ -36,6 +36,8 @@ namespace EasyRdf\Literal;
  * @copyright  Copyright (c) 2009-2014 Nicholas J Humfrey
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
+
+use DateTimeInterface;
 use EasyRdf\Literal;
 
 /**
@@ -50,7 +52,7 @@ class Date extends Literal
 {
     /** Constructor for creating a new date literal
      *
-     * If the value is a DateTime object, then it will be converted to the xsd:date format.
+     * If the value is a DateTimeInterface object, then it will be converted to the xsd:date format.
      * If no value is given or is is null, then the current date is used.
      *
      * @see \DateTime
@@ -72,8 +74,8 @@ class Date extends Literal
             $value = new \DateTime('today');
         }
 
-        // Convert DateTime object into string
-        if ($value instanceof \DateTime) {
+        // Convert DateTimeInterface object into string
+        if ($value instanceof DateTimeInterface) {
             $value = $value->format('Y-m-d');
         }
 
