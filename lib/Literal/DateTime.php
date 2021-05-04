@@ -74,7 +74,7 @@ class DateTime extends Date
         }
 
         // workaround for PHP < 7.2: if not used, script will throw "Undefined class constant 'ATOM'"
-        if (defined('\DateTimeInterface::ATOM')) {
+        if (\defined('\DateTimeInterface::ATOM')) {
             $format = DateTimeInterface::ATOM;
         } else {
             $format = \DateTime::ATOM;
