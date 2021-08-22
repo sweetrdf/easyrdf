@@ -227,6 +227,9 @@ class ResultTest extends TestCase
         $this->assertStringEquals('Rose', $first->label);
     }
 
+    /**
+     * @group expensive
+     */
     public function testSelectHugeXml()
     {
         $huge = "<sparql xmlns=\"http://www.w3.org/2005/sparql-results#\">\n";
