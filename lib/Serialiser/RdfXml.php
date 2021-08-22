@@ -56,7 +56,7 @@ class RdfXml extends Serialiser
     private $outputtedResources = [];
 
     /** A constant for the RDF Type property URI */
-    const RDF_XML_LITERAL = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral';
+    public const RDF_XML_LITERAL = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral';
 
     /**
      * Protected method to serialise an object node into an XML object
@@ -237,7 +237,7 @@ class RdfXml extends Serialiser
                 $namespaceStr .= "\n        ";
             }
 
-            if (0 == strlen($prefix)) {
+            if (0 == \strlen($prefix)) {
                 $namespaceStr .= ' xmlns="'.htmlspecialchars($url).'"';
             } else {
                 $namespaceStr .= ' xmlns:'.$prefix.'="'.htmlspecialchars($url).'"';

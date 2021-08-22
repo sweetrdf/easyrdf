@@ -53,9 +53,9 @@ use EasyRdf\RdfNamespace;
  */
 class Rdfa extends Parser
 {
-    const XML_NS = 'http://www.w3.org/XML/1998/namespace';
-    const RDF_XML_LITERAL = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral';
-    const TERM_REGEXP = '/^([a-zA-Z_])([0-9a-zA-Z_\.-]*)$/';
+    public const XML_NS = 'http://www.w3.org/XML/1998/namespace';
+    public const RDF_XML_LITERAL = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral';
+    public const TERM_REGEXP = '/^([a-zA-Z_])([0-9a-zA-Z_\.-]*)$/';
 
     public $debug = false;
 

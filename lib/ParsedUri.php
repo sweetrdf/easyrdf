@@ -55,7 +55,7 @@ class ParsedUri
     private $path = null;
     private $query = null;
 
-    const URI_REGEX = "|^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?|";
+    public const URI_REGEX = "|^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?|";
 
     /** Constructor for creating a new parsed URI
      *

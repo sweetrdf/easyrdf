@@ -52,7 +52,7 @@ class Decimal extends Literal
     /**
      * written according to http://www.w3.org/TR/xmlschema-2/#decimal
      */
-    const DECIMAL_REGEX = '^([+\-]?)(((\d+)?\.(\d+))|((\d+)\.?))$';
+    public const DECIMAL_REGEX = '^([+\-]?)(((\d+)?\.(\d+))|((\d+)\.?))$';
 
     /** Constructor for creating a new decimal literal
      *

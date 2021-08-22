@@ -48,7 +48,7 @@ class GraphStore
     /**
      * Use to reference default graph of triplestore
      */
-    const DEFAULT_GRAPH = 'urn:easyrdf:default-graph';
+    public const DEFAULT_GRAPH = 'urn:easyrdf:default-graph';
 
     /** The address of the GraphStore endpoint */
     private $uri = null;
