@@ -240,31 +240,31 @@ class GraphVizTest extends TestCase
         $this->serialiser->setOnlyLabelled(false);
         $svg = $this->serialiser->serialise($this->graph, 'svg');
 
-        $this->assertMatchesRegularExpression(
+        $this->assertMatchesRegularExpressionPolyfill(
             '|class="node">\s*<title>Rhttp://www.example.com/joe#me</title>|',
             $svg
         );
-        $this->assertMatchesRegularExpression(
+        $this->assertMatchesRegularExpressionPolyfill(
             '|class="node">\s*<title>LJoe Bloggs</title>|',
             $svg
         );
-        $this->assertMatchesRegularExpression(
+        $this->assertMatchesRegularExpressionPolyfill(
             '|class="edge">\s*<title>Rhttp://www.example.com/joe#me&#45;&gt;LJoe Bloggs</title>|',
             $svg
         );
-        $this->assertMatchesRegularExpression(
+        $this->assertMatchesRegularExpressionPolyfill(
             '|class="node">\s*<title>B_:genid1</title>|',
             $svg
         );
-        $this->assertMatchesRegularExpression(
+        $this->assertMatchesRegularExpressionPolyfill(
             '|class="edge">\s*<title>Rhttp://www.example.com/joe#me&#45;&gt;B_:genid1</title>|',
             $svg
         );
-        $this->assertMatchesRegularExpression(
+        $this->assertMatchesRegularExpressionPolyfill(
             '|class="node">\s*<title>LProject Name</title>|',
             $svg
         );
-        $this->assertMatchesRegularExpression(
+        $this->assertMatchesRegularExpressionPolyfill(
             '|class="edge">\s*<title>B_:genid1&#45;&gt;LProject Name</title>|',
             $svg
         );
