@@ -46,7 +46,7 @@ class DateTimeTest extends TestCase
     /** @var DateTime */
     private $dt;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dt = new DateTime('2010-09-08T07:06:05Z');
     }

@@ -59,7 +59,7 @@ class TurtleTest extends TestCase
 
     protected $baseUri;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->turtleParser = new Turtle();
         $this->ntriplesParser = new Ntriples();

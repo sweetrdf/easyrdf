@@ -51,7 +51,7 @@ class JsonLdTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->graph = new Graph('http://example.com/');
         $this->serialiser = new JsonLd();
@@ -84,7 +84,7 @@ class JsonLdTest extends TestCase
         $library->addResource('ex:contains', $book);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         RdfNamespace::resetNamespaces();

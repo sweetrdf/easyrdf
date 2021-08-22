@@ -50,7 +50,7 @@ class FormatTest extends TestCase
     /**
      * Set up the test suite before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->format = Format::register(
             'my',
@@ -61,7 +61,7 @@ class FormatTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Format::unregister('my');
     }
@@ -106,15 +106,15 @@ class FormatTest extends TestCase
     public function testGetHttpAcceptHeader()
     {
         $accept = Format::getHttpAcceptHeader();
-        $this->assertContains('application/json', $accept);
-        $this->assertContains('application/rdf+xml;q=0.8', $accept);
+        $this->assertStringContainsString('application/json', $accept);
+        $this->assertStringContainsString('application/rdf+xml;q=0.8', $accept);
     }
 
     public function testGetHttpAcceptHeaderWithExtra()
     {
         $accept = Format::getHttpAcceptHeader(['extra/header' => 0.5]);
-        $this->assertContains('application/json', $accept);
-        $this->assertContains('extra/header;q=0.5', $accept);
+        $this->assertStringContainsString('application/json', $accept);
+        $this->assertStringContainsString('extra/header;q=0.5', $accept);
     }
 
     public function testGetHttpAcceptHeaderLocale()
@@ -123,7 +123,7 @@ class FormatTest extends TestCase
         setlocale(\LC_NUMERIC, 'fi_FI.UTF-8');
 
         $accept = Format::getHttpAcceptHeader(['extra/header' => 0.5]);
-        $this->assertContains('extra/header;q=0.5', $accept);
+        $this->assertStringContainsString('extra/header;q=0.5', $accept);
 
         setlocale(\LC_NUMERIC, $current_locale);
     }

@@ -44,12 +44,12 @@ use Test\TestCase;
  */
 class TypeMapperTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         TypeMapper::set('rdf:mytype', TypeClassStub::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         TypeMapper::delete('rdf:mytype');
         TypeMapper::delete('foaf:Person');

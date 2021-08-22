@@ -51,7 +51,7 @@ class GraphVizTest extends TestCase
     /** @var GraphViz */
     private $serialiser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         exec('which dot 2>&1', $output, $retval);
         if (0 == $retval) {
@@ -240,31 +240,31 @@ class GraphVizTest extends TestCase
         $this->serialiser->setOnlyLabelled(false);
         $svg = $this->serialiser->serialise($this->graph, 'svg');
 
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '|class="node">\s*<title>Rhttp://www.example.com/joe#me</title>|',
             $svg
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '|class="node">\s*<title>LJoe Bloggs</title>|',
             $svg
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '|class="edge">\s*<title>Rhttp://www.example.com/joe#me&#45;&gt;LJoe Bloggs</title>|',
             $svg
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '|class="node">\s*<title>B_:genid1</title>|',
             $svg
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '|class="edge">\s*<title>Rhttp://www.example.com/joe#me&#45;&gt;B_:genid1</title>|',
             $svg
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '|class="node">\s*<title>LProject Name</title>|',
             $svg
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '|class="edge">\s*<title>B_:genid1&#45;&gt;LProject Name</title>|',
             $svg
         );

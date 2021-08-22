@@ -49,7 +49,7 @@ class RdfPhpTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->graph = new Graph();
         $this->serialiser = new RdfPhp();

@@ -45,13 +45,13 @@ class ContainerTest extends TestCase
     /** @var \EasyRdf\Graph */
     private $graph;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->graph = new Graph();
         RdfNamespace::set('ex', 'http://example.org/');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         RdfNamespace::delete('ex');
     }

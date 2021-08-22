@@ -53,19 +53,19 @@ class RdfXmlTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         RdfNamespace::resetNamespaces();
         RdfNamespace::reset();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->graph = new Graph();
         $this->serialiser = new RdfXml();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         RdfNamespace::resetNamespaces();
         RdfNamespace::reset();
@@ -270,7 +270,7 @@ class RdfXmlTest extends TestCase
         );
 
         $xml = $this->serialiser->serialise($this->graph, 'rdfxml');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<foaf:name xml:lang="en">Joe</foaf:name>',
             $xml
         );
@@ -285,7 +285,7 @@ class RdfXmlTest extends TestCase
         );
 
         $xml = $this->serialiser->serialise($this->graph, 'rdfxml');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<foaf:age rdf:datatype="http://www.w3.org/2001/XMLSchema#int">59</foaf:age>',
             $xml
         );
@@ -300,8 +300,8 @@ class RdfXmlTest extends TestCase
         );
 
         $xml = $this->serialiser->serialise($this->graph, 'rdfxml');
-        $this->assertContains('<ns0:foo>bar</ns0:foo>', $xml);
-        $this->assertContains('xmlns:ns0="http://www.example.com/ns/"', $xml);
+        $this->assertStringContainsString('<ns0:foo>bar</ns0:foo>', $xml);
+        $this->assertStringContainsString('xmlns:ns0="http://www.example.com/ns/"', $xml);
     }
 
     public function testSerialiseRdfXmlWithUnshortenableProperty()
@@ -327,7 +327,7 @@ class RdfXmlTest extends TestCase
         );
 
         $xml = $this->serialiser->serialise($this->graph, 'rdfxml');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<foaf:bio rdf:parseType="Literal"><b>html</b></foaf:bio>',
             $xml
         );

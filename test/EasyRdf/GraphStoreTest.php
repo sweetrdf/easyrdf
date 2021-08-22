@@ -51,7 +51,7 @@ class GraphStoreTest extends TestCase
     /** @var MockClient */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Http::setDefaultHttpClient(
             $this->client = new MockClient()

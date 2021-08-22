@@ -42,8 +42,8 @@ class OpenGraphProtocolTest extends TestCase
     public function testRottenTomatoes()
     {
         $output = executeExample('open_graph_protocol.php');
-        $this->assertContains('<dd><a href="https://www.rottentomatoes.com/m/oceans_eleven"', $output);
-        $this->assertContains('<dt>Title:</dt> <dd>Ocean\'s Eleven (2001)</dd>', $output);
-        $this->assertContains('<dt>Description:</dt>', $output);
+        $this->assertStringContainsString('<dd><a href="https://www.rottentomatoes.com/m/oceans_eleven"', $output);
+        $this->assertStringContainsString('<dt>Title:</dt> <dd>Ocean\'s Eleven</dd>', $output);
+        $this->assertStringContainsString('<dt>Description:</dt>', $output);
     }
 }

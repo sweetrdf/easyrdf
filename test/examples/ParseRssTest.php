@@ -42,8 +42,8 @@ class ParseRssTest extends TestCase
     public function testNoParams()
     {
         $output = executeExample('parse_rss.php');
-        $this->assertContains('<title>EasyRdf RSS 1.0 Parsing example</title>', $output);
-        $this->assertContains('<h1>EasyRdf RSS 1.0 Parsing example</h1>', $output);
+        $this->assertStringContainsString('<title>EasyRdf RSS 1.0 Parsing example</title>', $output);
+        $this->assertStringContainsString('<h1>EasyRdf RSS 1.0 Parsing example</h1>', $output);
     }
 
     public function testPlanetRdf()
@@ -52,15 +52,15 @@ class ParseRssTest extends TestCase
             'parse_rss.php',
             ['uri' => 'http://planetrdf.com/index.rdf']
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<p>Channel: <a href="http://planetrdf.com/">Planet RDF</a></p>',
             $output
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             "<p>Description: It's triples all the way down</p>",
             $output
         );
-        $this->assertContains('<li><a href="https://', $output);
-        $this->assertContains('</a></li>', $output);
+        $this->assertStringContainsString('<li><a href="https://', $output);
+        $this->assertStringContainsString('</a></li>', $output);
     }
 }

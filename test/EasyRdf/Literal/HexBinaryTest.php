@@ -44,7 +44,7 @@ use Test\TestCase;
 
 class HexBinaryTest extends TestCase
 {
-    protected function setup()
+    protected function setUp(): void
     {
         // Reset to built-in parsers
         Format::registerParser('ntriples', 'EasyRdf\Parser\Ntriples');

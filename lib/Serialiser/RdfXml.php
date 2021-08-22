@@ -237,7 +237,7 @@ class RdfXml extends Serialiser
                 $namespaceStr .= "\n        ";
             }
 
-            if (0 === \strlen($prefix)) {
+            if (0 == strlen($prefix)) {
                 $namespaceStr .= ' xmlns="'.htmlspecialchars($url).'"';
             } else {
                 $namespaceStr .= ' xmlns:'.$prefix.'="'.htmlspecialchars($url).'"';

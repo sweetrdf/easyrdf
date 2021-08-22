@@ -50,13 +50,13 @@ class JsonTest extends TestCase
     /** @var Graph */
     protected $graph = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->graph = new Graph();
         $this->serialiser = new Json();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         RdfNamespace::resetNamespaces();

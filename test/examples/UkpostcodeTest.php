@@ -44,8 +44,8 @@ class UkpostcodeTest extends TestCase
     public function testNoParams()
     {
         $output = executeExample('uk_postcode.php');
-        $this->assertContains('<title>EasyRdf UK Postcode Resolver</title>', $output);
-        $this->assertContains('<h1>EasyRdf UK Postcode Resolver</h1>', $output);
+        $this->assertStringContainsString('<title>EasyRdf UK Postcode Resolver</title>', $output);
+        $this->assertStringContainsString('<h1>EasyRdf UK Postcode Resolver</h1>', $output);
     }
 
     public function testW1A1AA()
@@ -54,13 +54,13 @@ class UkpostcodeTest extends TestCase
             'uk_postcode.php',
             ['postcode' => 'W1A 1AA']
         );
-        $this->assertContains('<tr><th>Longitude:</th><td>-0.143799</td></tr>', $output);
-        $this->assertContains('<tr><th>Latitude:</th><td>51.518561</td></tr>', $output);
-        $this->assertContains('<tr><th>Easting:</th><td>528887.0</td></tr>', $output);
-        $this->assertContains('<tr><th>Northing:</th><td>181593.0</td></tr>', $output);
-        $this->assertContains('<tr><th>District:</th><td>City of Westminster</td></tr>', $output);
-        $this->assertContains('<tr><th>Ward:</th><td>West End</td></tr>', $output);
-        $this->assertContains(
+        $this->assertStringContainsString('<tr><th>Longitude:</th><td>-0.143799</td></tr>', $output);
+        $this->assertStringContainsString('<tr><th>Latitude:</th><td>51.518561</td></tr>', $output);
+        $this->assertStringContainsString('<tr><th>Easting:</th><td>528887.0</td></tr>', $output);
+        $this->assertStringContainsString('<tr><th>Northing:</th><td>181593.0</td></tr>', $output);
+        $this->assertStringContainsString('<tr><th>District:</th><td>City of Westminster</td></tr>', $output);
+        $this->assertStringContainsString('<tr><th>Ward:</th><td>West End</td></tr>', $output);
+        $this->assertStringContainsString(
             "src='https://www.openlinkmap.org/small.php?lat=51.518561&lon=-0.143799&zoom=14'",
             $output
         );

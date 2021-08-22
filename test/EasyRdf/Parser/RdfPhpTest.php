@@ -38,7 +38,9 @@ namespace Test\EasyRdf\Parser;
  * @license    https://www.opensource.org/licenses/bsd-license.php
  */
 
+use EasyRdf\Exception as EasyRdfException;
 use EasyRdf\Graph;
+use EasyRdf\Parser\Exception;
 use EasyRdf\Parser\RdfPhp;
 use Test\TestCase;
 
@@ -50,7 +52,7 @@ class RdfPhpTest extends TestCase
     protected $graph = null;
     protected $rdf_data = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->graph = new Graph();
         $this->parser = new RdfPhp();
@@ -119,7 +121,7 @@ class RdfPhpTest extends TestCase
 
     public function testParseUnsupportedFormat()
     {
-        $this->expectException('EasyRdf\Exception');
+        $this->expectException(EasyRdfException::class);
         $this->expectExceptionMessage(
             'EasyRdf\Parser\RdfPhp does not support: unsupportedformat'
         );
@@ -133,51 +135,51 @@ class RdfPhpTest extends TestCase
 
     /**
      * 'foo' is not a valid input for RdfPhp
-     *
-     * @expectedException \Exception
      */
     public function testParseInvalidInput1()
     {
+        $this->expectException(Exception::class);
+
         $this->parser->parse($this->graph, 'foo', 'php', null);
     }
 
     /**
      * list of strings is not a valid input for RdfPhp
-     *
-     * @expectedException \Exception
      */
     public function testParseInvalidInput2()
     {
+        $this->expectException(Exception::class);
+
         $this->parser->parse($this->graph, ['foo', 'bar'], 'php', null);
     }
 
     /**
      * 1-level dictionary of strings is not a valid input for RdfPhp
-     *
-     * @expectedException \Exception
      */
     public function testParseInvalidInput3()
     {
+        $this->expectException(Exception::class);
+
         $this->parser->parse($this->graph, ['foo' => 'bar'], 'php', null);
     }
 
     /**
      * 2-level dictionary of strings is not a valid input for RdfPhp
-     *
-     * @expectedException \Exception
      */
     public function testParseInvalidInput4()
     {
+        $this->expectException(Exception::class);
+
         $this->parser->parse($this->graph, ['foo' => ['bar' => 'baz']], 'php', null);
     }
 
     /**
      * 2-level dictionary of incorrect arrays is not a valid input for RdfPhp
-     *
-     * @expectedException \Exception
      */
     public function testParseInvalidInput5()
     {
+        $this->expectException(Exception::class);
+
         $this->parser->parse($this->graph, ['foo' => ['bar' => ['baz' => 'buzz']]], 'php', null);
     }
 }
