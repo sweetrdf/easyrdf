@@ -43,12 +43,12 @@ use Test\TestCase;
  */
 class LiteralTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         RdfNamespace::set('ex', 'http://www.example.com/');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Literal::deleteDatatypeMapping('ex:mytype');
         RdfNamespace::delete('ex');

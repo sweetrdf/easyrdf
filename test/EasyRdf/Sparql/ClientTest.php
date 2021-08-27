@@ -55,7 +55,7 @@ class ClientTest extends TestCase
     /** @var Client */
     private $sparql;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Http::setDefaultHttpClient(
             $this->client = new MockClient()
@@ -167,7 +167,7 @@ class ClientTest extends TestCase
 
     public function checkHugeQuerySelect($client)
     {
-        $this->assertRegExp('/^query=/', $client->getRawData());
+        $this->assertMatchesRegularExpressionPolyfill('/^query=/', $client->getRawData());
         $this->assertSame('application/x-www-form-urlencoded', $client->getHeader('Content-Type'));
 
         return true;

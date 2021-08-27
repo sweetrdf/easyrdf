@@ -62,7 +62,7 @@ class Result extends \ArrayIterator
     private $parseState = [];
 
     /** A constant for the SPARQL Query Results XML Format namespace */
-    const SPARQL_XML_RESULTS_NS = 'http://www.w3.org/2005/sparql-results#';
+    public const SPARQL_XML_RESULTS_NS = 'http://www.w3.org/2005/sparql-results#';
 
     /** Create a new SPARQL Result object
      *

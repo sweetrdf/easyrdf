@@ -45,7 +45,7 @@ class MockClientTest extends TestCase
     /** @var \Test\EasyRdf\Http\MockClient */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = new MockClient();
     }

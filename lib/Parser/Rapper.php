@@ -49,7 +49,7 @@ class Rapper extends Json
 {
     private $rapperCmd = null;
 
-    const MINIMUM_RAPPER_VERSION = '1.4.17';
+    public const MINIMUM_RAPPER_VERSION = '1.4.17';
 
     /**
      * Constructor

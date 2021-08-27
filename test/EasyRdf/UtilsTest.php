@@ -354,7 +354,7 @@ class UtilsTest extends TestCase
 
     public function testExecCommandPipeLs()
     {
-        $this->assertContains('cat', Utils::execCommandPipe('ls', ['/bin/']));
+        $this->assertStringContainsString('cat', Utils::execCommandPipe('ls', ['/bin/']));
     }
 
     /**

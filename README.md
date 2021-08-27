@@ -7,8 +7,6 @@ For more information about this fork, scroll at the end of this document.
 ---
 
 ![CI](https://github.com/sweetrdf/easyrdf/workflows/Tests/badge.svg)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sweetrdf/easyrdf/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sweetrdf/easyrdf/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/sweetrdf/easyrdf/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sweetrdf/easyrdf/?branch=master)
 
 EasyRdf is a PHP library designed to make it easy to consume and produce [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework).
 It was designed for use in mixed teams of experienced and inexperienced RDF

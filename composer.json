@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": "^7.1|^8.0",
         "ext-dom" : "*",
         "ext-mbstring": "*",
         "ext-pcre": "*",
@@ -33,9 +33,9 @@
         "lib-libxml" : "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16.3",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "ml/json-ld": "^1.0",
-        "phpunit/phpunit": "^7.5",
+        "phpunit/phpunit": "^7.5|^8.5|^9.5",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "semsol/arc2": "^2.4",

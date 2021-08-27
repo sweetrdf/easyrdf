@@ -49,14 +49,14 @@ class RdfNamespaceTest extends TestCase
     /** @var \EasyRdf\Resource */
     private $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         RdfNamespace::setDefault(null);
         $this->graph = new Graph();
         $this->resource = $this->graph->resource('http://xmlns.com/foaf/0.1/name');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         RdfNamespace::delete('po');
         RdfNamespace::reset();

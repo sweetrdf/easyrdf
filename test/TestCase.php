@@ -22,9 +22,29 @@ class TestCase extends FrameworkTestCase
         self::assertSame((string) $str1, (string) $str2, (string) $message);
     }
 
-    // Note: this differs from assertInstanceOf because it disallows subclasses
+    /**
+     * Note: this differs from assertInstanceOf because it disallows subclasses
+     */
     public static function assertClass($class, $object)
     {
         self::assertSame($class, \get_class($object));
+    }
+
+    /**
+     * assertMatchesRegularExpression is not available in lower PHP versions,
+     * therefore this polyfill.
+     *
+     * @todo remove after dropping PHP 7.2 support.
+     */
+    protected function assertMatchesRegularExpressionPolyfill(
+        string $pattern,
+        string $string,
+        string $message = ''
+    ): void {
+        if (method_exists($this, 'assertMatchesRegularExpression')) {
+            $this->assertMatchesRegularExpression($pattern, $string, $message);
+        } else {
+            $this->assertRegExp($pattern, $string, $message);
+        }
     }
 }

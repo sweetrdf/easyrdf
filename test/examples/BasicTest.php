@@ -42,7 +42,7 @@ class BasicTest extends TestCase
     public function testPageRendersCorrectly()
     {
         $output = executeExample('basic.php');
-        $this->assertContains('<title>Basic FOAF example</title>', $output);
-        $this->assertContains('My name is: Nicholas J Humfrey', $output);
+        $this->assertStringContainsString('<title>Basic FOAF example</title>', $output);
+        $this->assertStringContainsString('My name is: Nicholas J Humfrey', $output);
     }
 }
