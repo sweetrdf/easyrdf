@@ -16,7 +16,6 @@ $config
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
-        '@Symfony:risky' => true,
         'phpdoc_summary' => false,
     ])
 ;

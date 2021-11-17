@@ -44,6 +44,7 @@ use EasyRdf\Http;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
 use EasyRdf\Sparql\Client;
+use Exception;
 use Test\EasyRdf\Http\MockClient;
 use Test\TestCase;
 
@@ -538,6 +539,59 @@ class ClientTest extends TestCase
         $this->sparql = new Client('http://localhost:8080/sparql');
 
         $this->sparql->query('test');
+    }
+
+    public function testQueryHttpRedirection()
+    {
+        $this->client->addMock(
+            'GET',
+            '/sparql?query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
+            '',
+            [
+                'status' => 301,
+                'headers' => ['Location' => 'http://localhost:8080/query'],
+            ]
+        );
+        $this->client->addMock(
+            'GET',
+            '/query?query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
+            readFixture('sparql_select_all.xml'),
+            [
+                'headers' => ['Content-Type' => 'application/sparql-results+xml'],
+            ]
+        );
+        $result = $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
+        $this->assertCount(14, $result);
+    }
+
+    public function testQueryCircularHttpRedirection()
+    {
+        $this->client->addMock(
+            'GET',
+            '/sparql?query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
+            '',
+            [
+                'status' => 301,
+                'headers' => ['Location' => 'http://localhost:8080/query'],
+            ]
+        );
+
+        $this->client->addMock(
+            'GET',
+            '/query?query=SELECT+%2A+WHERE+%7B%3Fs+%3Fp+%3Fo%7D',
+            '',
+            [
+                'status' => 301,
+                'headers' => ['Location' => 'http://localhost:8080/sparql'],
+            ]
+        );
+
+        try {
+            $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
+            throw new Exception('This should have thrown an error');
+        } catch (Http\Exception $e) {
+            $this->assertEquals('Circular redirection', $e->getMessage());
+        }
     }
 
     private static function parseAcceptHeader($accept_str)
