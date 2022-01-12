@@ -171,11 +171,13 @@ class Response
     {
         $body = $this->body;
 
-        if ('chunked' === strtolower($this->getHeader('transfer-encoding'))) {
+        $transferEncoding = $this->getHeader('transfer-encoding') ?? '';
+        if ('chunked' === strtolower($transferEncoding)) {
             $body = self::decodeChunkedBody($body);
         }
 
-        $contentEncoding = strtolower($this->getHeader('content-encoding'));
+        $contentEncoding = $this->getHeader('content-encoding') ?? '';
+        $contentEncoding = strtolower($contentEncoding);
 
         if ('gzip' === $contentEncoding) {
             $body = self::decodeGzip($body);

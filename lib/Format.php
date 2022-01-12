@@ -263,6 +263,7 @@ class Format
         }
 
         // Then try and guess by the first 1024 bytes of content
+        $data = $data ?? '';
         $short = substr($data, 0, 1024);
         if (preg_match('/^\s*\{/', $short)) {
             return self::getFormat('json');
