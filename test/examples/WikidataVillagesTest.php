@@ -46,8 +46,7 @@ class WikidataVillagesTest extends TestCase
         $output = executeExample('wikidata_villages.php');
         $this->assertStringContainsString('<title>EasyRdf Village Info Example</title>', $output);
         $this->assertStringContainsString('<h1>EasyRdf Village Info Example</h1>', $output);
-        $this->assertStringContainsString('?id=Q33980">Ceres</a></li>', $output);
-        $this->assertStringContainsString('?id=Q1011990">Strathkinness</a></li>', $output);
+        $this->assertStringContainsString('?id=Q1983048">Abercrombie</a></li>', $output);
     }
 
     public function testCeres()
