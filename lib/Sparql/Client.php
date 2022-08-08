@@ -69,7 +69,6 @@ class Client
      */
     public function __construct($queryUri, $updateUri = null)
     {
-        $queryUri = $queryUri ?? '';
         $this->queryUri = $queryUri;
 
         $parseUrlResult = parse_url($queryUri, \PHP_URL_QUERY) ?? '';

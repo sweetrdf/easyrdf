@@ -588,7 +588,7 @@ class Rdfa extends Parser
                 foreach ($this->processUriList($node, $context, $property) as $prop) {
                     if ($node->hasAttribute('inlist')) {
                         $this->addToList($listMapping, $prop, $value);
-                    } elseif (!empty($subject)) {
+                    } elseif (null != $subject && '' != $subject) {
                         $this->addTriple($subject, $prop, $value);
                     }
                 }

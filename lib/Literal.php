@@ -130,11 +130,11 @@ class Literal
      */
     public static function setDatatypeMapping($datatype, $class)
     {
-        if (!\is_string($datatype) || null == $datatype || '' == $datatype) {
+        if (!is_string($datatype) || (is_string($datatype) && 0 == strlen($datatype))) {
             throw new \InvalidArgumentException('$datatype should be a string and cannot be null or empty');
         }
 
-        if (!\is_string($class) || null == $class || '' == $class) {
+        if (!is_string($class) || (is_string($class) && 0 == strlen($class))) {
             throw new \InvalidArgumentException('$class should be a string and cannot be null or empty');
         }
 
@@ -151,7 +151,7 @@ class Literal
      */
     public static function deleteDatatypeMapping($datatype)
     {
-        if (!\is_string($datatype) || null == $datatype || '' == $datatype) {
+        if (!is_string($datatype) || (is_string($datatype) && 0 == strlen($datatype))) {
             throw new \InvalidArgumentException('$datatype should be a string and cannot be null or empty');
         }
 
@@ -206,7 +206,7 @@ class Literal
         if ($this->datatype) {
             if (\is_object($this->datatype)) {
                 // Convert objects to strings
-                $this->datatype = (string) ($this->datatype);
+                $this->datatype = (string) $this->datatype;
             } else {
                 // Expand shortened URIs (CURIEs)
                 $this->datatype = RdfNamespace::expand($this->datatype);

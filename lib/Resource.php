@@ -65,7 +65,7 @@ class Resource implements \ArrayAccess
      */
     public function __construct($uri, $graph = null)
     {
-        if (!\is_string($uri) || null == $uri || '' == $uri) {
+        if (!is_string($uri) || (is_string($uri) && 0 == strlen($uri))) {
             throw new \InvalidArgumentException('$uri should be a string and cannot be null or empty');
         }
 

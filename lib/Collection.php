@@ -233,6 +233,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      *
      * Example: isset($list[2])
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         if (\is_int($offset) && $offset > 0) {
@@ -268,6 +269,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      * @todo Change return type to void, because this violates offsetSet:void
      *       see: https://php.net/manual/en/arrayaccess.offsetset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (null === $offset) {
@@ -302,6 +304,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      *
      * Example: unset($seq[2]);
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if (\is_int($offset) && $offset > 0) {

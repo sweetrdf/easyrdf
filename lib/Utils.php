@@ -205,7 +205,7 @@ class Utils
 
     /** Clean up and split a mime-type up into its parts
      *
-     * @param string $mimeType A MIME Type, optionally with parameters
+     * @param string|null $mimeType A MIME Type, optionally with parameters
      *
      * @return array $type, $parameters
      */
@@ -231,10 +231,10 @@ class Utils
      * and throwing an exception if anything is written to STDERR or the
      * process returns non-zero.
      *
-     * @param string $command The command to execute
-     * @param array  $args    Optional list of arguments to pass to the command
-     * @param string $input   Optional buffer to send to the command
-     * @param string $dir     Path to directory to run command in (defaults to /tmp)
+     * @param string            $command The command to execute
+     * @param array|string|null $args    Optional list of arguments to pass to the command
+     * @param string            $input   Optional buffer to send to the command
+     * @param string            $dir     Path to directory to run command in (defaults to /tmp)
      *
      * @throws Exception
      *
@@ -275,7 +275,7 @@ class Utils
             );
         } else {
             $fullCommand = escapeshellcmd($command);
-            if (null != $args) {
+            if (is_string($args)) {
                 $fullCommand .= ' '.escapeshellcmd($args);
             }
         }

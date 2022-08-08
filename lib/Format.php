@@ -148,7 +148,7 @@ class Format
      */
     public static function getFormat($query)
     {
-        if (!\is_string($query) || null == $query || '' == $query) {
+        if (!is_string($query) || (is_string($query) && 0 == strlen($query))) {
             throw new \InvalidArgumentException('$query should be a string and cannot be null or empty');
         }
 
@@ -184,7 +184,7 @@ class Format
         $mimeTypes = [],
         $extensions = []
     ) {
-        if (!\is_string($name) || null == $name || '' == $name) {
+        if (!is_string($name) || (is_string($name) && 0 == strlen($name))) {
             throw new \InvalidArgumentException('$name should be a string and cannot be null or empty');
         }
 
@@ -241,8 +241,8 @@ class Format
      *
      * If the document format is not recognised, null is returned.
      *
-     * @param string|array $data     The document data
-     * @param string       $filename Optional filename
+     * @param string|array|null $data     The document data
+     * @param string            $filename Optional filename
      *
      * @return self|null New format object
      */

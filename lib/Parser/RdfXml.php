@@ -60,8 +60,8 @@ class RdfXml extends Parser
     private $sStack;
     private $sCount;
 
-    /** @var \XMLParser|resource */
-    private $xmlParser;
+    /** @var \XMLParser|resource|null */
+    private $xmlParser = null;
 
     /**
      * Constructor
