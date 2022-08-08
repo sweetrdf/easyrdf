@@ -230,12 +230,15 @@ class RdfXml extends Serialiser
 
         // iterate through namepsaces array prefix and output a string.
         $namespaceStr = '';
-        foreach ($this->prefixes as $prefix => $count) {
+        $prefixes = array_keys($this->prefixes);
+        foreach ($prefixes as $prefix) {
             $url = RdfNamespace::get($prefix);
 
             if (\strlen($namespaceStr)) {
                 $namespaceStr .= "\n        ";
             }
+
+            $prefix = trim($prefix);
 
             if (0 == \strlen($prefix)) {
                 $namespaceStr .= ' xmlns="'.htmlspecialchars($url, ENT_COMPAT).'"';
