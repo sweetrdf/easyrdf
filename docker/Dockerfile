@@ -1,11 +1,8 @@
-FROM php:7.4-cli
+FROM php:8.1-cli
 
 RUN apt-get update && \
     apt-get install -y git graphviz libicu-dev libzip-dev make nano net-tools raptor2-utils wget zip zlib1g-dev
 
-# workaround for error during install
-# see: https://github.com/geerlingguy/ansible-role-java/issues/64
-RUN mkdir /usr/share/man/man1/
 RUN apt-get install -y openjdk-11-jre
 
 RUN docker-php-ext-install intl zip && docker-php-ext-enable intl zip
