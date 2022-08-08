@@ -74,6 +74,11 @@ class SerialiseTest extends TestCase
             ['format' => 'php']
         );
         $this->assertStringContainsString('<title>EasyRdf Serialiser Example</title>', $output);
-        $this->assertStringContainsString('value&#039; =&gt; &#039;http://xmlns.com/foaf/0.1/Person', $output);
+
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->assertStringContainsString('value&#039; =&gt; &#039;http://xmlns.com/foaf/0.1/Person', $output);
+        } else {
+            $this->assertStringContainsString("'value' =&gt; 'http://xmlns.com/foaf/0.1/Person',", $output);
+        }
     }
 }
