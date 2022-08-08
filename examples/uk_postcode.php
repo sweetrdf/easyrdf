@@ -58,7 +58,6 @@
             echo '<tr><th>Easting:</th><td>'.$res->get('sr:easting')."</td></tr>\n";
             echo '<tr><th>Northing:</th><td>'.$res->get('sr:northing')."</td></tr>\n";
             echo '<tr><th>District:</th><td>'.$res->get('postcode:district')->label()."</td></tr>\n";
-            echo '<tr><th>Ward:</th><td>'.$res->get('postcode:ward')->label()."</td></tr>\n";
             echo "</table>\n";
 
             echo "<div style='clear: both'></div>\n";

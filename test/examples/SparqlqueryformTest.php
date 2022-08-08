@@ -59,13 +59,12 @@ class SparqlqueryformTest extends TestCase
                     'SELECT * WHERE {'.
                     '  ?country rdf:type dbo:Country . '.
                     '  ?country rdfs:label ?label .'.
-                    '  ?country dct:subject dbc:Member_states_of_the_United_Nations .'.
                     '  FILTER ( lang(?label) = "en" ) '.
-                    '} ORDER BY ?label LIMIT 100',
+                    '} ORDER BY ?label LIMIT 5',
             ]
         );
-        $this->assertStringContainsString('>http://dbpedia.org/resource/China</a>', $output);
-        $this->assertStringContainsString('>&quot;China&quot;@en</span>', $output);
+        $this->assertStringContainsString('>http://dbpedia.org/resource/10th_century</a>', $output);
+        $this->assertStringContainsString('>&quot;10th century&quot;@en</span>', $output);
     }
 
     public function testDbpediaCountriesText()
@@ -78,14 +77,13 @@ class SparqlqueryformTest extends TestCase
                     'SELECT * WHERE {'.
                     '  ?country rdf:type dbo:Country . '.
                     '  ?country rdfs:label ?label .'.
-                    '  ?country dct:subject dbc:Member_states_of_the_United_Nations .'.
                     '  FILTER ( lang(?label) = "en" ) '.
-                    '} ORDER BY ?label LIMIT 100',
+                    '} ORDER BY ?label LIMIT 5',
                 'text' => 1,
             ]
         );
 
-        $this->assertStringContainsString('| http://dbpedia.org/resource/China', $output);
-        $this->assertStringContainsString('| &quot;China&quot;@en', $output);
+        $this->assertStringContainsString('| http://dbpedia.org/resource/10th_century', $output);
+        $this->assertStringContainsString('| &quot;10th century&quot;@en', $output);
     }
 }

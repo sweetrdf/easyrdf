@@ -39,9 +39,8 @@
         'SELECT * WHERE {'.
         '  ?country rdf:type dbo:Country .'.
         '  ?country rdfs:label ?label .'.
-        '  ?country dct:subject dbc:Member_states_of_the_United_Nations .'.
         '  FILTER ( lang(?label) = "en" )'.
-        '} ORDER BY ?label'
+        '} ORDER BY ?label LIMIT 10'
     );
     foreach ($result as $row) {
         echo '<li>'.link_to($row->label, $row->country)."</li>\n";
