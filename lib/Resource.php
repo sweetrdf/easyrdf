@@ -65,7 +65,7 @@ class Resource implements \ArrayAccess
      */
     public function __construct($uri, $graph = null)
     {
-        if (!\is_string($uri) || null == $uri || '' == $uri) {
+        if (!is_string($uri) || (is_string($uri) && 0 == strlen($uri))) {
             throw new \InvalidArgumentException('$uri should be a string and cannot be null or empty');
         }
 
@@ -197,7 +197,8 @@ class Resource implements \ArrayAccess
                 throw new \InvalidArgumentException('$options should use valid attribute names as keys');
             }
 
-            $html .= ' '.htmlspecialchars($key).'="'.
+            // PHP 8.1 info: https://php.watch/versions/8.1/html-entity-default-value-changes
+            $html .= ' '.htmlspecialchars($key, ENT_COMPAT).'="'.
                          htmlspecialchars($value).'"';
         }
         $html .= '>'.htmlspecialchars($text).'</a>';
@@ -796,6 +797,7 @@ class Resource implements \ArrayAccess
      *
      * @return bool true on success or false on failure
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->__isset($offset);
@@ -813,6 +815,7 @@ class Resource implements \ArrayAccess
      *
      * @return mixed can return all value types
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->__get($offset);
@@ -831,6 +834,7 @@ class Resource implements \ArrayAccess
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->__set($offset, $value);
@@ -848,6 +852,7 @@ class Resource implements \ArrayAccess
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->__unset($offset);

@@ -1,24 +1,24 @@
 <?php
-    /**
-     * No RDF, just test EasyRdf\Http\Client
-     *
-     * This example does nothing but test EasyRdf's build in HTTP client.
-     * It demonstrates setting Accept headers and displays the response
-     * headers and body.
-     *
-     * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
-     * @license    http://unlicense.org/
-     */
-    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
-    require_once __DIR__.'/html_tag_helpers.php';
+/**
+ * No RDF, just test EasyRdf\Http\Client
+ *
+ * This example does nothing but test EasyRdf's build in HTTP client.
+ * It demonstrates setting Accept headers and displays the response
+ * headers and body.
+ *
+ * @copyright  Copyright (c) 2009-2020 Nicholas J Humfrey
+ * @license    http://unlicense.org/
+ */
+require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+require_once __DIR__.'/html_tag_helpers.php';
 
-    $accept_options = [
-      'text/html' => 'text/html',
-      'application/rdf+xml' => 'application/rdf+xml',
-      'application/xhtml+xml' => 'application/xhtml+xml',
-      'application/json' => 'application/json',
-      'text/turtle' => 'text/turtle',
-    ];
+$accept_options = [
+    'text/html' => 'text/html',
+    'application/rdf+xml' => 'application/rdf+xml',
+    'application/xhtml+xml' => 'application/xhtml+xml',
+    'application/json' => 'application/json',
+    'text/turtle' => 'text/turtle',
+];
 ?>
 <html>
 <head>
@@ -41,10 +41,10 @@
 <?php echo form_end_tag(); ?>
 
 <?php
-    if (isset($_REQUEST['uri'])) {
-        $client = new \EasyRdf\Http\Client($_REQUEST['uri']);
-        $client->setHeaders('Accept', $_REQUEST['accept']);
-        $response = $client->request(); ?>
+        if (isset($_REQUEST['uri'])) {
+            $client = new \EasyRdf\Http\Client($_REQUEST['uri']);
+            $client->setHeaders('Accept', $_REQUEST['accept']);
+            $response = $client->request(); ?>
 
     <p class="status">
     <b>Status</b>: <?php echo $response->getStatus(); ?><br />
@@ -54,23 +54,23 @@
 
     <p class="headers">
     <?php
-        foreach ($response->getHeaders() as $name => $value) {
-            echo "<b>$name</b>: $value<br />\n";
-        } ?>
+            foreach ($response->getHeaders() as $name => $value) {
+                echo "<b>$name</b>: $value<br />\n";
+            } ?>
     </p>
 
     <p class="body">
       <?php
-        if (defined('ENT_SUBSTITUTE')) {
-            // This is needed for PHP 5.4+
-            echo nl2br(htmlentities($response->getBody(), \ENT_SUBSTITUTE | \ENT_QUOTES));
-        } else {
-            echo nl2br(htmlentities($response->getBody()));
-        } ?>
+            if (defined('ENT_SUBSTITUTE')) {
+                // This is needed for PHP 5.4+
+                echo nl2br(htmlentities($response->getBody(), \ENT_SUBSTITUTE | \ENT_QUOTES));
+            } else {
+                echo nl2br(htmlentities($response->getBody()));
+            } ?>
     </p>
 
 <?php
-    }
+        }
 ?>
 
 </body>

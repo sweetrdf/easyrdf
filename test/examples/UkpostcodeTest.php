@@ -59,7 +59,6 @@ class UkpostcodeTest extends TestCase
         $this->assertStringContainsString('<tr><th>Easting:</th><td>528887.0</td></tr>', $output);
         $this->assertStringContainsString('<tr><th>Northing:</th><td>181593.0</td></tr>', $output);
         $this->assertStringContainsString('<tr><th>District:</th><td>City of Westminster</td></tr>', $output);
-        $this->assertStringContainsString('<tr><th>Ward:</th><td>West End</td></tr>', $output);
         $this->assertStringContainsString(
             "src='https://www.openlinkmap.org/small.php?lat=51.518561&lon=-0.143799&zoom=14'",
             $output

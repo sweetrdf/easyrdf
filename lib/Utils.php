@@ -205,12 +205,13 @@ class Utils
 
     /** Clean up and split a mime-type up into its parts
      *
-     * @param string $mimeType A MIME Type, optionally with parameters
+     * @param string|null $mimeType A MIME Type, optionally with parameters
      *
      * @return array $type, $parameters
      */
     public static function parseMimeType($mimeType)
     {
+        $mimeType = $mimeType ?? '';
         $parts = explode(';', strtolower($mimeType));
         $type = trim(array_shift($parts));
         $params = [];
@@ -230,10 +231,10 @@ class Utils
      * and throwing an exception if anything is written to STDERR or the
      * process returns non-zero.
      *
-     * @param string $command The command to execute
-     * @param array  $args    Optional list of arguments to pass to the command
-     * @param string $input   Optional buffer to send to the command
-     * @param string $dir     Path to directory to run command in (defaults to /tmp)
+     * @param string            $command The command to execute
+     * @param array|string|null $args    Optional list of arguments to pass to the command
+     * @param string            $input   Optional buffer to send to the command
+     * @param string            $dir     Path to directory to run command in (defaults to /tmp)
      *
      * @throws Exception
      *
@@ -241,6 +242,8 @@ class Utils
      */
     public static function execCommandPipe($command, $args = null, $input = null, $dir = null)
     {
+        $command = (string) $command;
+
         $descriptorspec = [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
@@ -253,13 +256,26 @@ class Utils
         }
 
         if (\is_array($args)) {
+            /*
+             * PHP 8.1 change
+             * avoids error
+             *      Deprecated: escapeshellcmd(): Passing null to parameter #1 ($command) of type string
+             *                  is deprecated in /var/www/html/lib/Utils.php on line 263
+             */
+            $entries = [];
+            foreach (array_merge([$command], $args) as $entry) {
+                if (is_string($entry)) {
+                    $entries[] = $entry;
+                }
+            }
+
             $fullCommand = implode(
                 ' ',
-                array_map('escapeshellcmd', array_merge([$command], $args))
+                array_map('escapeshellcmd', $entries)
             );
         } else {
             $fullCommand = escapeshellcmd($command);
-            if (null != $args) {
+            if (is_string($args)) {
                 $fullCommand .= ' '.escapeshellcmd($args);
             }
         }

@@ -70,6 +70,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      */
+    #[\ReturnTypeWillChange]
     public function seek($position)
     {
         if (\is_int($position) && $position > 0) {
@@ -86,6 +87,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
     /** Rewind the iterator back to the start of the container (item 1)
      *
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->position = 1;
@@ -95,6 +97,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      *
      * @return mixed The current item
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->get('rdf:_'.$this->position);
@@ -104,6 +107,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      *
      * @return int The current position
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->position;
@@ -112,6 +116,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
     /** Move forward to next item in the container
      *
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->position;
@@ -121,6 +126,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      *
      * @return bool True if the current position is valid
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->hasProperty('rdf:_'.$this->position);
@@ -133,6 +139,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      *
      * @return int The number of items in the container
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         $pos = 1;
@@ -165,6 +172,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      *
      * Example: isset($seq[2])
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         if (\is_int($offset) && $offset > 0) {
@@ -197,6 +205,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      * @todo Change return type to void, because this violates offsetSet:void
      *       see: https://php.net/manual/en/arrayaccess.offsetset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (\is_int($offset) && $offset > 0) {
@@ -220,6 +229,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      * @todo Change return type to void, because this violates offsetUnset:void
      *       see: https://php.net/manual/en/arrayaccess.offsetunset.php
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if (\is_int($offset) && $offset > 0) {

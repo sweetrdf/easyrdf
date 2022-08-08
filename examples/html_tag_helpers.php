@@ -65,7 +65,7 @@ function tag($name, $options = [], $open = false)
 function content_tag($name, $content = null, $options = [])
 {
     return "<$name".tag_options($options).'>'.
-           htmlspecialchars($content)."</$name>";
+           htmlspecialchars($content ?? '')."</$name>";
 }
 
 function link_to($text, $uri = null, $options = [])

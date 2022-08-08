@@ -46,23 +46,7 @@ class BasicSparqlTest extends TestCase
         $this->assertStringContainsString('<h1>EasyRdf Basic Sparql Example</h1>', $output);
         $this->assertStringContainsString('<h2>List of countries</h2>', $output);
         $this->assertStringContainsString(
-            '<li><a href="http://dbpedia.org/resource/China">China</a></li>',
-            $output
-        );
-        $this->assertStringContainsString(
-            '<li><a href="http://dbpedia.org/resource/India">India</a></li>',
-            $output
-        );
-        $this->assertStringContainsString(
-            '<li><a href="http://dbpedia.org/resource/United_States">United States</a></li>',
-            $output
-        );
-        $this->assertStringContainsString(
-            '<li><a href="http://dbpedia.org/resource/United_Kingdom">United Kingdom</a></li>',
-            $output
-        );
-        $this->assertStringContainsString(
-            '<li><a href="http://dbpedia.org/resource/Zimbabwe">Zimbabwe</a></li>',
+            '<li><a href="http://dbpedia.org/resource/1_in_60_rule">1 in 60 rule</a></li>',
             $output
         );
         $this->assertMatchesRegularExpressionPolyfill('|Total number of countries: (\d+)|', $output);

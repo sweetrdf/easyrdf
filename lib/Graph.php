@@ -554,8 +554,8 @@ class Graph
 
                 // Fix ordering and remove unknown keys
                 $value = [
-                    'type' => (string) ($value['type']),
-                    'value' => (string) ($value['value']),
+                    'type' => (string) $value['type'],
+                    'value' => (string) $value['value'],
                     'lang' => isset($value['lang']) ? (string) ($value['lang']) : null,
                     'datatype' => isset($value['datatype']) ? (string) ($value['datatype']) : null,
                 ];

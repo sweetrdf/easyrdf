@@ -71,7 +71,9 @@ class Client
     {
         $this->queryUri = $queryUri;
 
-        if (0 < strlen(parse_url($queryUri, \PHP_URL_QUERY))) {
+        $parseUrlResult = parse_url($queryUri, \PHP_URL_QUERY) ?? '';
+
+        if (0 < strlen($parseUrlResult)) {
             $this->queryUri_has_params = true;
         } else {
             $this->queryUri_has_params = false;
@@ -194,7 +196,7 @@ class Client
 
     public function insert($data, $graphUri = null)
     {
-        //$this->updateData('INSET',
+        // $this->updateData('INSET',
         $query = 'INSERT DATA {';
         if ($graphUri) {
             $query .= "GRAPH <$graphUri> {";
@@ -252,14 +254,14 @@ class Client
             $location = $response->getHeader('Location');
             if ($location && !\in_array($location, $previousRedirections)) {
                 switch ($type) {
-                case 'query':
-                    $previousRedirections[] = $this->queryUri;
-                    $this->queryUri = $location;
-                    break;
-                case 'update':
-                    $previousRedirections[] = $this->updateUri;
-                    $this->updateUri = $location;
-                    break;
+                    case 'query':
+                        $previousRedirections[] = $this->queryUri;
+                        $this->queryUri = $location;
+                        break;
+                    case 'update':
+                        $previousRedirections[] = $this->updateUri;
+                        $this->updateUri = $location;
+                        break;
                 }
                 $previousRedirections[] = $query;
 

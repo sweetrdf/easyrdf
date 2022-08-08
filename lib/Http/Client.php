@@ -491,7 +491,7 @@ class Client
             // If we got redirected, look for the Location header
             if ($response->isRedirect() &&
                    ($location = $response->getHeader('location'))
-               ) {
+            ) {
                 // Avoid problems with buggy servers that add whitespace at the
                 // end of some headers (See ZF-11283)
                 $location = trim($location);

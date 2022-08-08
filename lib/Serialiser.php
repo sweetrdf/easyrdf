@@ -44,6 +44,9 @@ namespace EasyRdf;
  */
 abstract class Serialiser
 {
+    /**
+     * @var array<string,bool>
+     */
     protected $prefixes = [];
 
     /**
@@ -99,7 +102,7 @@ abstract class Serialiser
      * @param Graph         $graph  an EasyRdf\Graph object
      * @param Format|string $format the name of the format to convert to
      *
-     * @return string|array the RDF in the new desired format
+     * @return string the RDF in the new desired format
      */
     abstract public function serialise(Graph $graph, $format, array $options = []);
 }

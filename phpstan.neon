@@ -13,7 +13,6 @@ parameters:
     paths:
         - examples
         - lib
-        - test
 
     parallel:
         maximumNumberOfProcesses: 1

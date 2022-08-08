@@ -148,6 +148,7 @@ class RapperTest extends TestCase
         $this->expectExceptionMessage(
             'Error while executing command rapper'
         );
+
         $this->parser->parse(
             $this->graph,
             $this->rdf_data,

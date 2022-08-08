@@ -2,7 +2,7 @@
 
 namespace EasyRdf\Serialiser;
 
-    /*
+/*
  * EasyRdf
  *
  * LICENSE
@@ -79,11 +79,11 @@ class RdfXml extends Serialiser
             $tag = "{$indent}<{$property}";
             if ($obj->isBNode()) {
                 if ($alreadyOutput || $rpcount > 1 || 0 == $pcount) {
-                    $tag .= ' rdf:nodeID="'.htmlspecialchars($obj->getBNodeId()).'"';
+                    $tag .= ' rdf:nodeID="'.htmlspecialchars($obj->getBNodeId(), ENT_COMPAT).'"';
                 }
             } else {
                 if ($alreadyOutput || 1 != $rpcount || 0 == $pcount) {
-                    $tag .= ' rdf:resource="'.htmlspecialchars($obj->getURI()).'"';
+                    $tag .= ' rdf:resource="'.htmlspecialchars($obj->getURI(), ENT_COMPAT).'"';
                 }
             }
 
@@ -105,17 +105,17 @@ class RdfXml extends Serialiser
                     $atrributes .= ' rdf:parseType="Literal"';
                     $value = (string) $obj;
                 } else {
-                    $datatype = htmlspecialchars($datatype);
+                    $datatype = htmlspecialchars($datatype, ENT_COMPAT);
                     $atrributes .= " rdf:datatype=\"$datatype\"";
                 }
             } elseif ($obj->getLang()) {
                 $atrributes .= ' xml:lang="'.
-                               htmlspecialchars($obj->getLang()).'"';
+                               htmlspecialchars($obj->getLang(), ENT_COMPAT).'"';
             }
 
             // Escape the value
             if (!isset($value)) {
-                $value = htmlspecialchars((string) $obj);
+                $value = htmlspecialchars((string) $obj, ENT_COMPAT);
             }
 
             return "{$indent}<{$property}{$atrributes}>{$value}</{$property}>\n";
@@ -155,10 +155,10 @@ class RdfXml extends Serialiser
         $xml = "\n$indent<$type";
         if ($res->isBNode()) {
             if ($showNodeId) {
-                $xml .= ' rdf:nodeID="'.htmlspecialchars($res->getBNodeId()).'"';
+                $xml .= ' rdf:nodeID="'.htmlspecialchars($res->getBNodeId(), ENT_COMPAT).'"';
             }
         } else {
-            $xml .= ' rdf:about="'.htmlspecialchars($res->getUri()).'"';
+            $xml .= ' rdf:about="'.htmlspecialchars($res->getUri(), ENT_COMPAT).'"';
         }
         $xml .= ">\n";
 
@@ -230,17 +230,20 @@ class RdfXml extends Serialiser
 
         // iterate through namepsaces array prefix and output a string.
         $namespaceStr = '';
-        foreach ($this->prefixes as $prefix => $count) {
+        $prefixes = array_keys($this->prefixes);
+        foreach ($prefixes as $prefix) {
             $url = RdfNamespace::get($prefix);
 
             if (\strlen($namespaceStr)) {
                 $namespaceStr .= "\n        ";
             }
 
+            $prefix = trim($prefix);
+
             if (0 == \strlen($prefix)) {
-                $namespaceStr .= ' xmlns="'.htmlspecialchars($url).'"';
+                $namespaceStr .= ' xmlns="'.htmlspecialchars($url, ENT_COMPAT).'"';
             } else {
-                $namespaceStr .= ' xmlns:'.$prefix.'="'.htmlspecialchars($url).'"';
+                $namespaceStr .= ' xmlns:'.$prefix.'="'.htmlspecialchars($url, ENT_COMPAT).'"';
             }
         }
 

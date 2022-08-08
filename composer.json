@@ -36,8 +36,8 @@
         "friendsofphp/php-cs-fixer": "^3.0",
         "ml/json-ld": "^1.0",
         "phpunit/phpunit": "^7.5|^8.5|^9.5",
-        "phpstan/phpstan": "^0.12",
-        "phpstan/phpstan-phpunit": "^0.12",
+        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
         "semsol/arc2": "^2.4",
         "zendframework/zend-http": "^2.3"
     },
