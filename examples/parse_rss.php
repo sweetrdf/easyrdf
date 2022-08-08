@@ -1,25 +1,25 @@
 <?php
-    /**
-     * Parse an RSS 1.0 feed and display titles
-     *
-     * The example demonstrates fetching an RSS 1.0 feed from the
-     * web and then parsing as RDF/XML. The channel is found by getting
-     * the first object of type rss:channel (a file should only contain
-     * a single RSS channel).
-     *
-     * In RSS 1.0, the list of items in the feed are listed by relating
-     * the rss:channel to the rss:items using an rdf:Seq. In EasyRdf
-     * this maps into an EasyRdf\Container object, which can be
-     * iterated over using a foreach() loop.
-     *
-     * Note that this example only works with RSS 1.0 and no
-     * other version (0.90, 1.1 and 2.0) as they are not RDF.
-     *
-     * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
-     * @license    http://unlicense.org/
-     */
-    require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
-    require_once __DIR__.'/html_tag_helpers.php';
+/**
+ * Parse an RSS 1.0 feed and display titles
+ *
+ * The example demonstrates fetching an RSS 1.0 feed from the
+ * web and then parsing as RDF/XML. The channel is found by getting
+ * the first object of type rss:channel (a file should only contain
+ * a single RSS channel).
+ *
+ * In RSS 1.0, the list of items in the feed are listed by relating
+ * the rss:channel to the rss:items using an rdf:Seq. In EasyRdf
+ * this maps into an EasyRdf\Container object, which can be
+ * iterated over using a foreach() loop.
+ *
+ * Note that this example only works with RSS 1.0 and no
+ * other version (0.90, 1.1 and 2.0) as they are not RDF.
+ *
+ * @copyright  Copyright (c) 2013-2014 Nicholas J Humfrey
+ * @license    http://unlicense.org/
+ */
+require_once realpath(__DIR__.'/..').'/vendor/autoload.php';
+require_once __DIR__.'/html_tag_helpers.php';
 ?>
 <html>
 <head>
@@ -35,19 +35,19 @@
 <?php echo form_end_tag(); ?>
 
 <?php
-    if (isset($_REQUEST['uri'])) {
-        $graph = \EasyRdf\Graph::newAndLoad($_REQUEST['uri'], 'rdfxml');
-        $channel = $graph->get('rss:channel', '^rdf:type');
+if (isset($_REQUEST['uri'])) {
+    $graph = \EasyRdf\Graph::newAndLoad($_REQUEST['uri'], 'rdfxml');
+    $channel = $graph->get('rss:channel', '^rdf:type');
 
-        echo '<p>Channel: '.link_to($channel->label(), $channel->get('rss:link'))."</p>\n";
-        echo '<p>Description: '.$channel->get('rss:description')."</p>\n";
+    echo '<p>Channel: '.link_to($channel->label(), $channel->get('rss:link'))."</p>\n";
+    echo '<p>Description: '.$channel->get('rss:description')."</p>\n";
 
-        echo "<ol>\n";
-        foreach ($channel->get('rss:items') as $item) {
-            echo '<li>'.link_to($item->get('rss:title'), $item)."</li>\n";
-        }
-        echo "</ol>\n";
+    echo "<ol>\n";
+    foreach ($channel->get('rss:items') as $item) {
+        echo '<li>'.link_to($item->get('rss:title'), $item)."</li>\n";
     }
+    echo "</ol>\n";
+}
 ?>
 </body>
 </html>

@@ -196,7 +196,7 @@ class Client
 
     public function insert($data, $graphUri = null)
     {
-        //$this->updateData('INSET',
+        // $this->updateData('INSET',
         $query = 'INSERT DATA {';
         if ($graphUri) {
             $query .= "GRAPH <$graphUri> {";
@@ -254,14 +254,14 @@ class Client
             $location = $response->getHeader('Location');
             if ($location && !\in_array($location, $previousRedirections)) {
                 switch ($type) {
-                case 'query':
-                    $previousRedirections[] = $this->queryUri;
-                    $this->queryUri = $location;
-                    break;
-                case 'update':
-                    $previousRedirections[] = $this->updateUri;
-                    $this->updateUri = $location;
-                    break;
+                    case 'query':
+                        $previousRedirections[] = $this->queryUri;
+                        $this->queryUri = $location;
+                        break;
+                    case 'update':
+                        $previousRedirections[] = $this->updateUri;
+                        $this->updateUri = $location;
+                        break;
                 }
                 $previousRedirections[] = $query;
 

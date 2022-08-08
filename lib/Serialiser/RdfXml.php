@@ -2,7 +2,7 @@
 
 namespace EasyRdf\Serialiser;
 
-    /*
+/*
  * EasyRdf
  *
  * LICENSE
