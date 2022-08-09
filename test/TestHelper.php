@@ -126,3 +126,11 @@ function executeExample($name, array $params = [])
 
     return $stdout;
 }
+
+/**
+ * Checks if an internet connection is possible.
+ */
+function weAreOnline(): bool
+{
+    return is_resource(fsockopen('www.wikipedia.org', 80));
+}

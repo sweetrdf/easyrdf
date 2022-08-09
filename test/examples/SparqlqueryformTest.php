@@ -41,6 +41,15 @@ use Test\TestCase;
  */
 class SparqlqueryformTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (false == weAreOnline()) {
+            $this->markTestSkipped('Test skipped due to no internet connection.');
+        }
+    }
+
     public function testNoParams()
     {
         $output = executeExample('sparql_queryform.php');
