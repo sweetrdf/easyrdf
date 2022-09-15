@@ -163,9 +163,9 @@ class Ntriples extends Serialiser
      *
      * @param array|object $value An associative array or an object
      *
-     * @throws Exception
-     *
      * @return string The RDF value serialised to N-Triples
+     *
+     * @throws Exception
      */
     public function serialiseValue($value)
     {

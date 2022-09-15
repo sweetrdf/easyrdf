@@ -117,9 +117,9 @@ class Utils
      * @param string $format   Either 'html' or 'text'
      * @param string $color    The colour of the text
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string
+     *
+     * @throws \InvalidArgumentException
      */
     public static function dumpResourceValue($resource, $format = 'html', $color = 'blue')
     {
@@ -165,9 +165,9 @@ class Utils
      * @param string $format  Either 'html' or 'text'
      * @param string $color   The colour of the text
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string
+     *
+     * @throws \InvalidArgumentException
      */
     public static function dumpLiteralValue($literal, $format = 'html', $color = 'black')
     {
@@ -236,9 +236,9 @@ class Utils
      * @param string            $input   Optional buffer to send to the command
      * @param string            $dir     Path to directory to run command in (defaults to /tmp)
      *
-     * @throws Exception
-     *
      * @return string The result of the command, printed to STDOUT
+     *
+     * @throws Exception
      */
     public static function execCommandPipe($command, $args = null, $input = null, $dir = null)
     {

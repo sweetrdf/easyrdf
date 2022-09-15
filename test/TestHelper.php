@@ -73,9 +73,9 @@ function readFixture($name)
  * @param string $name   the name of the example to run
  * @param array  $params query string parameters to pass to the script
  *
- * @throws Exception
- *
  * @return string The resulting webpage (everything printed to STDOUT)
+ *
+ * @throws Exception
  */
 function executeExample($name, array $params = [])
 {

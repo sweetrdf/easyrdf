@@ -273,9 +273,9 @@ class Response
      *
      * @param string $responseStr
      *
-     * @throws \EasyRdf\Exception
-     *
      * @return self
+     *
+     * @throws \EasyRdf\Exception
      */
     public static function fromString($responseStr)
     {
@@ -324,9 +324,9 @@ class Response
      *
      * @param string $body
      *
-     * @throws \EasyRdf\Exception
-     *
      * @return string
+     *
+     * @throws \EasyRdf\Exception
      */
     public static function decodeChunkedBody($body)
     {
@@ -352,9 +352,9 @@ class Response
      *
      * @param string $body
      *
-     * @throws Exception
-     *
      * @return string
+     *
+     * @throws Exception
      */
     public static function decodeGzip($body)
     {
@@ -372,9 +372,9 @@ class Response
      *
      * @param string $body
      *
-     * @throws Exception
-     *
      * @return string
+     *
+     * @throws Exception
      */
     public static function decodeDeflate($body)
     {

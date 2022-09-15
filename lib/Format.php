@@ -173,9 +173,9 @@ class Format
      * @param array|string $mimeTypes  One or more mime types for the format
      * @param array|string $extensions One or more extensions (file suffix)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return self New Format object
+     *
+     * @throws \InvalidArgumentException
      */
     public static function register(
         $name,
@@ -294,6 +294,7 @@ class Format
      * @param string $name The name of the format
      *
      * @see    Format::register()
+     *
      * @ignore
      */
     public function __construct($name)
@@ -324,9 +325,9 @@ class Format
      *
      * @param string $label The new label for the format
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string|null
+     *
+     * @throws \InvalidArgumentException
      */
     public function setLabel($label)
     {
@@ -354,9 +355,9 @@ class Format
      *
      * @param string $uri The new URI for the format
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string|null
+     *
+     * @throws \InvalidArgumentException
      */
     public function setUri($uri)
     {
@@ -474,9 +475,9 @@ class Format
 
     /** Create a new parser to parse this format
      *
-     * @throws Exception
-     *
      * @return object The new parser object
+     *
+     * @throws Exception
      */
     public function newParser()
     {
@@ -517,9 +518,9 @@ class Format
 
     /** Create a new serialiser to parse this format
      *
-     * @throws Exception
-     *
      * @return object The new serialiser object
+     *
+     * @throws Exception
      */
     public function newSerialiser()
     {

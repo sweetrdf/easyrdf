@@ -69,9 +69,9 @@ class Arc extends RdfPhp
      * @param string              $format  the format of the input data
      * @param string              $baseUri the base URI of the data being parsed
      *
-     * @throws \EasyRdf\Exception
-     *
      * @return int The number of triples added to the graph
+     *
+     * @throws \EasyRdf\Exception
      */
     public function parse($graph, $data, $format, $baseUri)
     {

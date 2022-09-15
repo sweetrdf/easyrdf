@@ -85,9 +85,9 @@ class Turtle extends Ntriples
      * @param string $format  the format of the input data
      * @param string $baseUri the base URI of the data being parsed
      *
-     * @throws \EasyRdf\Exception
-     *
      * @return int The number of triples added to the graph
+     *
+     * @throws \EasyRdf\Exception
      */
     public function parse($graph, $data, $format, $baseUri)
     {
@@ -655,9 +655,10 @@ class Turtle extends Ntriples
      *
      * @param string $closingCharacter The type of quote to use (either ' or ")
      *
+     * @return string
+     *
      * @throws Exception
      *
-     * @return string
      * @ignore
      */
     protected function parseString($closingCharacter)
@@ -694,9 +695,10 @@ class Turtle extends Ntriples
      *
      * @param string $closingCharacter The type of quote to use (either ' or ")
      *
+     * @return string
+     *
      * @throws Exception
      *
-     * @return string
      * @ignore
      */
     protected function parseLongString($closingCharacter)

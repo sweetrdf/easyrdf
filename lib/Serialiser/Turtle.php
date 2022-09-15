@@ -174,9 +174,9 @@ class Turtle extends Serialiser
      *
      * @param \EasyRdf\Resource|\EasyRdf\Literal $object
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string
+     *
+     * @throws \InvalidArgumentException
      */
     public function serialiseObject($object)
     {

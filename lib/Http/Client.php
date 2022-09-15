@@ -126,9 +126,9 @@ class Client
      *
      * @param string $uri
      *
-     * @throws \InvalidArgumentException
-     *
      * @return self
+     *
+     * @throws \InvalidArgumentException
      */
     public function setUri($uri)
     {
@@ -382,9 +382,9 @@ class Client
      *
      * @param string|null $method
      *
-     * @throws \EasyRdf\Exception
-     *
      * @return Response
+     *
+     * @throws \EasyRdf\Exception
      */
     public function request($method = null)
     {
