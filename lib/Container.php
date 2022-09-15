@@ -186,6 +186,7 @@ class Container extends Resource implements \ArrayAccess, \Countable, \SeekableI
      *
      * Example: $item = $seq[2];
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (\is_int($offset) && $offset > 0) {
