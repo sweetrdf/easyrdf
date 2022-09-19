@@ -56,9 +56,9 @@ class TypeMapper
      *
      * @param string $type The RDF type (e.g. foaf:Person)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string|null The class name (e.g. Model_Foaf_Name)
+     *
+     * @throws \InvalidArgumentException
      */
     public static function get($type)
     {
@@ -79,9 +79,9 @@ class TypeMapper
      * @param string $type  The RDF type (e.g. foaf:Person)
      * @param string $class The PHP class name (e.g. Model_Foaf_Name)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string The PHP class name
+     *
+     * @throws \InvalidArgumentException
      */
     public static function set($type, $class)
     {
@@ -130,9 +130,9 @@ class TypeMapper
      *
      * @param string $class The resource full class name (e.g. \MyCompany\Resource)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string The default Resource class
+     *
+     * @throws \InvalidArgumentException
      */
     public static function setDefaultResourceClass($class)
     {

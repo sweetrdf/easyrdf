@@ -249,6 +249,7 @@ class Collection extends Resource implements \ArrayAccess, \Countable, \Seekable
      *
      * Example: $item = $list[2];
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (\is_int($offset) && $offset > 0) {

@@ -163,9 +163,9 @@ class Result extends \ArrayIterator
      *
      * @param string $format Either 'text' or 'html'
      *
-     * @throws Exception
-     *
      * @return string
+     *
+     * @throws Exception
      */
     public function dump($format = 'html')
     {

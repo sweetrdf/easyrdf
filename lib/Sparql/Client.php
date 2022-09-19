@@ -106,6 +106,7 @@ class Client
 
     /**
      * @depredated
+     *
      * @ignore
      */
     public function getUri()

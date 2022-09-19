@@ -61,10 +61,10 @@ class JsonLd extends Parser
      * @param string $format  the format of the input data
      * @param string $baseUri the base URI of the data being parsed
      *
+     * @return int The number of triples added to the graph
+     *
      * @throws Exception
      * @throws \EasyRdf\Exception
-     *
-     * @return int The number of triples added to the graph
      */
     public function parse($graph, $data, $format, $baseUri)
     {

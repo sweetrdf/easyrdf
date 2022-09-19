@@ -143,9 +143,9 @@ class RdfNamespace
      *
      * @param string $prefix The namespace prefix (eg 'foaf')
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string|null The namespace URI (eg 'http://xmlns.com/foaf/0.1/')
+     *
+     * @throws \InvalidArgumentException
      */
     public static function get($prefix)
     {
@@ -320,9 +320,9 @@ class RdfNamespace
      * @param string|\EasyRdf\Resource $uri             The full URI (eg 'http://xmlns.com/foaf/0.1/name')
      * @param bool                     $createNamespace If true, a new namespace will be created
      *
-     * @throws \InvalidArgumentException
-     *
      * @return array|null The split URI (eg 'foaf', 'name') or null
+     *
+     * @throws \InvalidArgumentException
      */
     public static function splitUri($uri, $createNamespace = false)
     {
@@ -411,9 +411,9 @@ class RdfNamespace
      *
      * @param string $shortUri The short URI (eg 'foaf:name')
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string The full URI (eg 'http://xmlns.com/foaf/0.1/name')
+     *
+     * @throws \InvalidArgumentException
      */
     public static function expand($shortUri)
     {

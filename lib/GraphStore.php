@@ -245,9 +245,9 @@ class GraphStore
      *
      * @param string $uriRef The URI of graph to be added to
      *
-     * @throws Exception
-     *
      * @return Http\Response The response from the graph store
+     *
+     * @throws Exception
      */
     public function delete($uriRef)
     {

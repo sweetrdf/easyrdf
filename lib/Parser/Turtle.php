@@ -85,9 +85,9 @@ class Turtle extends Ntriples
      * @param string $format  the format of the input data
      * @param string $baseUri the base URI of the data being parsed
      *
-     * @throws \EasyRdf\Exception
-     *
      * @return int The number of triples added to the graph
+     *
+     * @throws \EasyRdf\Exception
      */
     public function parse($graph, $data, $format, $baseUri)
     {
@@ -655,9 +655,10 @@ class Turtle extends Ntriples
      *
      * @param string $closingCharacter The type of quote to use (either ' or ")
      *
+     * @return string
+     *
      * @throws Exception
      *
-     * @return string
      * @ignore
      */
     protected function parseString($closingCharacter)
@@ -694,9 +695,10 @@ class Turtle extends Ntriples
      *
      * @param string $closingCharacter The type of quote to use (either ' or ")
      *
+     * @return string
+     *
      * @throws Exception
      *
-     * @return string
      * @ignore
      */
     protected function parseLongString($closingCharacter)
@@ -1183,23 +1185,14 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isPrefixStartChar($c)
     {
+        // ord - Convert the first byte of a string to a value between 0 and 255
         $o = \ord($c);
 
         return
             $o >= 0x41 && $o <= 0x5A ||     // A-Z
             $o >= 0x61 && $o <= 0x7A ||     // a-z
             $o >= 0x00C0 && $o <= 0x00D6 ||
-            $o >= 0x00D8 && $o <= 0x00F6 ||
-            $o >= 0x00F8 && $o <= 0x02FF ||
-            $o >= 0x0370 && $o <= 0x037D ||
-            $o >= 0x037F && $o <= 0x1FFF ||
-            $o >= 0x200C && $o <= 0x200D ||
-            $o >= 0x2070 && $o <= 0x218F ||
-            $o >= 0x2C00 && $o <= 0x2FEF ||
-            $o >= 0x3001 && $o <= 0xD7FF ||
-            $o >= 0xF900 && $o <= 0xFDCF ||
-            $o >= 0xFDF0 && $o <= 0xFFFD ||
-            $o >= 0x10000 && $o <= 0xEFFFF;
+            $o >= 0x00D8 && $o <= 0x00F6;
     }
 
     /** @ignore */
@@ -1217,15 +1210,14 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isNameChar($c)
     {
+        // ord - Convert the first byte of a string to a value between 0 and 255
         $o = \ord($c);
 
         return
             self::isNameStartChar($c) ||
             $o >= 0x30 && $o <= 0x39 ||     // 0-9
             '-' == $c ||
-            0x00B7 == $o ||
-            $o >= 0x0300 && $o <= 0x036F ||
-            $o >= 0x203F && $o <= 0x2040;
+            0x00B7 == $o;
     }
 
     /** @ignore */

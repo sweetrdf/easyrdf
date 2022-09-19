@@ -138,9 +138,9 @@ class Graph
      * @param string $uri   The URI of the resource
      * @param mixed  $types RDF type of a new resource (e.g. foaf:Person)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return \EasyRdf\Resource
+     *
+     * @throws \InvalidArgumentException
      */
     public function resource($uri = null, $types = [])
     {
@@ -228,9 +228,9 @@ class Graph
      * @param string $format Optional format of the data
      * @param string $uri    The URI of the data to load
      *
-     * @throws Exception
-     *
      * @return int The number of triples added to the graph
+     *
+     * @throws Exception
      */
     public function parse($data, $format = null, $uri = null)
     {
@@ -288,10 +288,10 @@ class Graph
      * @param string $uri    The URI of the data to load
      * @param string $format Optional format of the data (eg. rdfxml or text/turtle)
      *
+     * @return int The number of triples added to the graph
+     *
      * @throws Exception
      * @throws Http\Exception
-     *
-     * @return int The number of triples added to the graph
      */
     public function load($uri = null, $format = null)
     {
@@ -596,9 +596,9 @@ class Graph
      * @param string                              $type         The type of value to filter by (e.g. literal or resource)
      * @param string                              $lang         The language to filter by (e.g. en)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return mixed A value associated with the property
+     *
+     * @throws \InvalidArgumentException
      */
     public function get($resource, $propertyPath, $type = null, $lang = null)
     {
@@ -772,9 +772,9 @@ class Graph
      * @param string                        $type         The type of value to filter by (e.g. literal)
      * @param string                        $lang         The language to filter by (e.g. en)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return array An array of values associated with the property
+     *
+     * @throws \InvalidArgumentException
      */
     public function all($resource, $propertyPath, $type = null, $lang = null)
     {
@@ -1080,9 +1080,9 @@ class Graph
      * @param string|\EasyRdf\Resource|null $property The name of the property (e.g. foaf:name)
      * @param mixed                         $value    The value to delete (null to delete all values)
      *
-     * @throws \InvalidArgumentException
-     *
      * @return int The number of values deleted
+     *
+     * @throws \InvalidArgumentException
      */
     public function delete($resource, $property, $value = null)
     {

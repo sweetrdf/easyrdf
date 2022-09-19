@@ -51,9 +51,9 @@ class Http
      *
      * @param mixed $httpClient The new HTTP client object
      *
-     * @throws \InvalidArgumentException
-     *
      * @return \EasyRdf\Http\Client|\Zend\Http\Client The new HTTP client object
+     *
+     * @throws \InvalidArgumentException
      *
      * @todo adapt datatype of parameter $httpClient (\EasyRdf\Http\Client|\Zend\Http\Client)
      */

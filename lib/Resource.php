@@ -180,9 +180,9 @@ class Resource implements \ArrayAccess
      * @param string $text    text for the link
      * @param array  $options Associative array of attributes for the anchor tag
      *
-     * @throws \InvalidArgumentException
-     *
      * @return string The HTML link string
+     *
+     * @throws \InvalidArgumentException
      */
     public function htmlLink($text = null, $options = [])
     {
