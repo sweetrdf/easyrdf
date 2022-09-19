@@ -1193,18 +1193,6 @@ class Turtle extends Ntriples
             $o >= 0x61 && $o <= 0x7A ||     // a-z
             $o >= 0x00C0 && $o <= 0x00D6 ||
             $o >= 0x00D8 && $o <= 0x00F6;
-        // commented out, because PHPStan complained.
-        // what is also weird is, that 0x0370 stands for 880, but $o is always between 0 and 255
-        /*$o >= 0x00F8 && $o <= 0x02FF ||
-        $o >= 0x0370 && $o <= 0x037D ||
-        $o >= 0x037F && $o <= 0x1FFF ||
-        $o >= 0x200C && $o <= 0x200D ||
-        $o >= 0x2070 && $o <= 0x218F ||
-        $o >= 0x2C00 && $o <= 0x2FEF ||
-        $o >= 0x3001 && $o <= 0xD7FF ||
-        $o >= 0xF900 && $o <= 0xFDCF;
-        $o >= 0xFDF0 && $o <= 0xFFFD ||
-        $o >= 0x10000 && $o <= 0xEFFFF*/
     }
 
     /** @ignore */
@@ -1230,10 +1218,6 @@ class Turtle extends Ntriples
             $o >= 0x30 && $o <= 0x39 ||     // 0-9
             '-' == $c ||
             0x00B7 == $o;
-        // commented out, because PHPStan complained.
-        // what is also weird is, that 0x0300 stands for 768, but $o is always between 0 and 255
-        // $o >= 0x0300 && $o <= 0x036F
-        // $o >= 0x203F && $o <= 0x2040;
     }
 
     /** @ignore */
