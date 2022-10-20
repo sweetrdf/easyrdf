@@ -41,6 +41,15 @@ use Test\TestCase;
  */
 class WikidataVillagesTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (false == weAreOnline()) {
+            $this->markTestSkipped('Test skipped due to no internet connection.');
+        }
+    }
+
     public function testIndex()
     {
         $output = executeExample('wikidata_villages.php');

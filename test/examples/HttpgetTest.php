@@ -41,6 +41,15 @@ use Test\TestCase;
  */
 class HttpgetTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (false == weAreOnline()) {
+            $this->markTestSkipped('Test skipped due to no internet connection.');
+        }
+    }
+
     public function testNoParams()
     {
         $output = executeExample('httpget.php');
