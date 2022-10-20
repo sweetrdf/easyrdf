@@ -1,12 +1,12 @@
 # EasyRdf (Fork)
 
----
-
-🚀 This is a fork of EasyRdf which I maintain in my spare time. My objective is to keep EasyRdf alive and usable on latest PHP versions. Code is more or less maintained but not developement any further. If you wanna participate, feel free to open a pull request! For more information about this fork, scroll at the end of this document.
-
----
-
 ![CI](https://github.com/sweetrdf/easyrdf/workflows/Tests/badge.svg)
+
+## About this fork 🚀
+
+This is a fork of EasyRdf which I maintain in my spare time. My objective is to keep EasyRdf alive and usable on latest PHP versions. Code is more or less maintained but not developement any further. If you wanna participate, feel free to open a pull request! For more information about this fork, scroll at the end of this document.
+
+## About EasyRdf
 
 EasyRdf is a PHP library designed to make it easy to consume and produce [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework).
 It was designed for use in mixed teams of experienced and inexperienced RDF
@@ -93,11 +93,11 @@ php -S localhost:8080 -t examples
 
 Then open the following URL in your browser: http://localhost:8080/
 
-## Why this fork?
+## Why this fork? (written in late 2020)
 
-EasyRdf was in maintenance mode since 2017 ([link](https://github.com/easyrdf/easyrdf/issues/282)) and not actively maintained since. There were 6+ pull requests pending at that time with fixes and new features. Its sad to see another RDF PHP project die slowly, so i decided to clean house and give the code a new home ([old fork](https://github.com/sweetyrdf/easyrdf), [further info](https://github.com/easyrdf/easyrdf/issues/320)). A few months in late 2020 EasyRdf was actively improved (me being a co-maintainer for a while), but that stopped and decay began again.
+EasyRdf was in maintenance mode since 2017 ([link](https://github.com/easyrdf/easyrdf/issues/282)) and not actively maintained since. There were 6+ pull requests pending at that time with fixes and new features. Its sad to see another RDF PHP project die slowly, so I decided to clean house and give the code a new home ([further info](https://github.com/easyrdf/easyrdf/issues/320)). A few months in late 2020 EasyRdf was actively improved (me being a co-maintainer for a while), but that stopped and decay began again. It was a frustating time, lets leave it at that.
 
-I decided to abandon my [old fork](https://github.com/sweetyrdf/easyrdf) to make use of latest EasyRdf improvements. Therefore this Github repository was created as a replacement for `sweetyrdf/easyrdf`.
+In the end I decided to abandon my old fork and start fresh with latest EasyRdf improvements in this repository.
 
 #### What can you expect as a user?
 
@@ -106,6 +106,10 @@ This fork (v1.\*) aims to be a drop-in replacement for the `easyrdf/easyrdf` pac
 #### What can you expect as an EasyRdf developer?
 
 This repository is set up in a way to lower the maintenance overhead in comparison to the original version. Test related tool was partly replaced with more lightweight solutions. Furthermore this repository is held by an organization instead of a user, which allows more flexible maintenance.
+
+#### Whats next? Whats my plan?
+
+As stated above, main objective is to keep EasyRdf's legecay code up to date and compatible with latest PHP versions. I welcome pull requests and try to react as fast as possible. If there are useful pull requests in easyrdf/easyrdf (and I have time to spare), I will picked them up and integrate them here (for instance https://github.com/sweetrdf/easyrdf/pull/9, https://github.com/sweetrdf/easyrdf/pull/14).
 
 ## Licensing
 
