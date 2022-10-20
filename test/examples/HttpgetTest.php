@@ -68,37 +68,4 @@ class HttpgetTest extends TestCase
             $output
         );
     }
-
-    public function testHtml()
-    {
-        $output = executeExample(
-            'httpget.php',
-            [
-                'uri' => 'http://tomheath.com/id/me',
-                'accept' => 'text/html',
-            ]
-        );
-        $this->assertStringContainsString('<title>Test EasyRdf HTTP Client Get</title>', $output);
-        $this->assertStringContainsString('<h1>Test EasyRdf HTTP Client Get</h1>', $output);
-        $this->assertStringContainsString('<b>Content-type</b>: text/html', $output);
-        $this->assertStringContainsString('&lt;h1&gt;Home - Tom Heath&lt;/h1&gt;', $output);
-    }
-
-    public function testRdfXml()
-    {
-        $output = executeExample(
-            'httpget.php',
-            [
-                'uri' => 'http://tomheath.com/id/me',
-                'accept' => 'application/rdf+xml',
-            ]
-        );
-        $this->assertStringContainsString('<title>Test EasyRdf HTTP Client Get</title>', $output);
-        $this->assertStringContainsString('<h1>Test EasyRdf HTTP Client Get</h1>', $output);
-        $this->assertStringContainsString('<b>Content-type</b>: application/rdf+xml', $output);
-        $this->assertStringContainsString(
-            '&lt;foaf:Person rdf:about=&quot;http://tomheath.com/id/me&quot;&gt;',
-            $output
-        );
-    }
 }
