@@ -111,7 +111,7 @@ class RdfPhp extends Parser
 
                 foreach ($objects as $i => $object) {
                     if (!\is_array($object) || !isset($object['type']) || !isset($object['value'])) {
-                        throw new Exception("expected array with 'type' and 'value' keys as value of "."'{$orig_subject}' -> '{$property}' -> '{$i}' node");
+                        throw new Exception("expected array with 'type' and 'value' keys as value of '{$orig_subject}' -> '{$property}' -> '{$i}' node");
                     }
 
                     if ('bnode' === $object['type']) {

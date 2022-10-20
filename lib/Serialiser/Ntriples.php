@@ -180,7 +180,7 @@ class Ntriples extends Serialiser
             if (isset($value['lang'])) {
                 $lang = $this->escapeString($value['lang']);
 
-                return '"'.$escaped.'"'.'@'.$lang;
+                return '"'.$escaped.'"@'.$lang;
             } elseif (isset($value['datatype'])) {
                 $datatype = $this->escapeString($value['datatype']);
 

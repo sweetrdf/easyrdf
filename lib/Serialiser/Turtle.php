@@ -185,7 +185,7 @@ class Turtle extends Serialiser
         } elseif ($object instanceof Literal) {
             return $this->serialiseLiteral($object);
         } else {
-            throw new \InvalidArgumentException('serialiseObject() requires $object to be '.'of type EasyRdf\Resource or EasyRdf\Literal');
+            throw new \InvalidArgumentException('serialiseObject() requires $object to be of type EasyRdf\Resource or EasyRdf\Literal');
         }
     }
 
