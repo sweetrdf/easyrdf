@@ -43,7 +43,6 @@ use EasyRdf\Graph;
 use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Serialiser\Turtle;
-use InvalidArgumentException;
 use Test\TestCase;
 
 class TurtleTest extends TestCase
@@ -252,7 +251,7 @@ class TurtleTest extends TestCase
 
     public function testSerialiseObjectUnknown()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'serialiseObject() requires $object to be of type EasyRdf\Resource or EasyRdf\Literal'
         );

@@ -38,7 +38,6 @@ namespace Test\EasyRdf;
  */
 
 use EasyRdf\Http;
-use InvalidArgumentException;
 use Test\EasyRdf\Http\MockClient;
 use Test\TestCase;
 
@@ -64,7 +63,7 @@ class HttpTest extends TestCase
 
     public function testSetDefaultHttpClientNull()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client'
         );
@@ -73,7 +72,7 @@ class HttpTest extends TestCase
 
     public function testSetDefaultHttpClientString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client'
         );

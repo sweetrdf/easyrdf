@@ -5,7 +5,6 @@ namespace Test\EasyRdf;
 use EasyRdf\Format;
 use EasyRdf\Graph;
 use EasyRdf\Parser;
-use InvalidArgumentException;
 use Test\EasyRdf\Parser\MockParser;
 use Test\TestCase;
 
@@ -88,7 +87,7 @@ class ParserTest extends TestCase
 
     public function testParseNullGraph()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$graph should be an EasyRdf\Graph object and cannot be null'
         );
@@ -97,7 +96,7 @@ class ParserTest extends TestCase
 
     public function testParseNonObjectGraph()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$graph should be an EasyRdf\Graph object and cannot be null'
         );
@@ -106,7 +105,7 @@ class ParserTest extends TestCase
 
     public function testParseNonGraph()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$graph should be an EasyRdf\Graph object and cannot be null'
         );
@@ -129,7 +128,7 @@ class ParserTest extends TestCase
 
     public function testParseNullFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$format cannot be null or empty'
         );
@@ -138,7 +137,7 @@ class ParserTest extends TestCase
 
     public function testParseEmptyFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$format cannot be null or empty'
         );
@@ -147,7 +146,7 @@ class ParserTest extends TestCase
 
     public function testParseBadObjectFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$format should be a string or an EasyRdf\Format object'
         );
@@ -156,7 +155,7 @@ class ParserTest extends TestCase
 
     public function testParseIntegerFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$format should be a string or an EasyRdf\Format object'
         );
@@ -165,7 +164,7 @@ class ParserTest extends TestCase
 
     public function testParseNonStringBaseUri()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$baseUri should be a string'
         );

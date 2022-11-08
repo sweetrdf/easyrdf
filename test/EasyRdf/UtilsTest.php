@@ -6,7 +6,6 @@ use EasyRdf\Exception;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
 use EasyRdf\Utils;
-use InvalidArgumentException;
 use Test\TestCase;
 
 /**
@@ -198,7 +197,7 @@ class UtilsTest extends TestCase
 
     public function testDumpResourceValueWithIllegalColor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('$color must be a legal color code or name');
 
         Utils::dumpResourceValue(

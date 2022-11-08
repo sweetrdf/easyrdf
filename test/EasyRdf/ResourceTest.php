@@ -44,7 +44,6 @@ use EasyRdf\Http;
 use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
-use InvalidArgumentException;
 use Test\EasyRdf\Http\MockClient;
 use Test\TestCase;
 
@@ -70,7 +69,7 @@ class ResourceTest extends TestCase
 
     public function testConstructNullUri()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$uri should be a string and cannot be null or empty'
         );
@@ -79,7 +78,7 @@ class ResourceTest extends TestCase
 
     public function testConstructEmptyUri()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$uri should be a string and cannot be null or empty'
         );
@@ -88,7 +87,7 @@ class ResourceTest extends TestCase
 
     public function testConstructNonStringUri()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$uri should be a string and cannot be null or empty'
         );
@@ -97,7 +96,7 @@ class ResourceTest extends TestCase
 
     public function testConstructBadGraph()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('$graph should be an EasyRdf\Graph object');
         new Resource('http://www.example.com/', $this);
     }
@@ -226,7 +225,7 @@ class ResourceTest extends TestCase
 
     public function testHtmlLinkInjectJavascript()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$options should use valid attribute names as keys'
         );
@@ -449,7 +448,7 @@ class ResourceTest extends TestCase
     public function testGetNullKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath should be a string, array or EasyRdf\Resource and cannot be null'
         );
@@ -459,7 +458,7 @@ class ResourceTest extends TestCase
     public function testGetEmptyKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath cannot be an empty string'
         );
@@ -469,7 +468,7 @@ class ResourceTest extends TestCase
     public function testGetNonStringKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath should be a string, array or EasyRdf\Resource and cannot be null'
         );
@@ -560,7 +559,7 @@ class ResourceTest extends TestCase
     public function testAllNullKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -570,7 +569,7 @@ class ResourceTest extends TestCase
     public function testAllEmptyKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath cannot be an empty string'
         );
@@ -580,7 +579,7 @@ class ResourceTest extends TestCase
     public function testAllNonStringKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -725,7 +724,7 @@ class ResourceTest extends TestCase
     public function testAddNullKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -735,7 +734,7 @@ class ResourceTest extends TestCase
     public function testAddEmptyKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property cannot be an empty string'
         );
@@ -745,7 +744,7 @@ class ResourceTest extends TestCase
     public function testAddNonStringKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -790,7 +789,7 @@ class ResourceTest extends TestCase
     public function testDeleteNullKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -800,7 +799,7 @@ class ResourceTest extends TestCase
     public function testDeleteEmptyKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property cannot be an empty string'
         );
@@ -810,7 +809,7 @@ class ResourceTest extends TestCase
     public function testDeleteNonStringKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -875,7 +874,7 @@ class ResourceTest extends TestCase
     public function testSetNullKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -885,7 +884,7 @@ class ResourceTest extends TestCase
     public function testSetEmptyKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property cannot be an empty string'
         );
@@ -895,7 +894,7 @@ class ResourceTest extends TestCase
     public function testSetNonStringKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$property should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -982,7 +981,7 @@ class ResourceTest extends TestCase
     public function testJoinNullKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );
@@ -992,7 +991,7 @@ class ResourceTest extends TestCase
     public function testJoinEmptyKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath cannot be an empty string'
         );
@@ -1002,7 +1001,7 @@ class ResourceTest extends TestCase
     public function testJoinNonStringKey()
     {
         $this->setupTestGraph();
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             '$propertyPath should be a string or EasyRdf\Resource and cannot be null'
         );

@@ -75,7 +75,7 @@ class Date extends Literal
         }
 
         // Convert DateTimeInterface object into string
-        if ($value instanceof DateTimeInterface) {
+        if ($value instanceof \DateTimeInterface) {
             $value = $value->format('Y-m-d');
         }
 

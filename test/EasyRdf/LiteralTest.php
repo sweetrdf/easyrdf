@@ -5,7 +5,6 @@ namespace Test\EasyRdf;
 use EasyRdf\Literal;
 use EasyRdf\ParsedUri;
 use EasyRdf\RdfNamespace;
-use Exception;
 use Test\TestCase;
 
 /**
@@ -199,7 +198,7 @@ class LiteralTest extends TestCase
             $this->assertSame('1.5', $literal->getValue());
 
             setlocale(\LC_NUMERIC, $current_locale);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             setlocale(\LC_NUMERIC, $current_locale);
             throw $e;
         }

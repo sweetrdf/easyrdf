@@ -4,7 +4,6 @@ namespace Test\EasyRdf;
 
 use EasyRdf\Format;
 use EasyRdf\Graph;
-use InvalidArgumentException;
 use Test\EasyRdf\Serialiser\MockSerialiser;
 use Test\TestCase;
 
@@ -71,7 +70,7 @@ class SerialiserTest extends TestCase
 
     public function testSerialiseNullFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('$format cannot be null or empty');
 
         $this->serialiser->serialise($this->graph, null);
@@ -79,7 +78,7 @@ class SerialiserTest extends TestCase
 
     public function testSerialiseEmptyFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('$format cannot be null or empty');
 
         $this->serialiser->serialise($this->graph, '');
@@ -87,7 +86,7 @@ class SerialiserTest extends TestCase
 
     public function testSerialiseBadObjectFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('$format should be a string or an EasyRdf\Format object');
 
         $this->serialiser->serialise($this->graph, $this);
@@ -95,7 +94,7 @@ class SerialiserTest extends TestCase
 
     public function testSerialiseIntegerFormat()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('$format should be a string or an EasyRdf\Format object');
 
         $this->serialiser->serialise($this->graph, 1);

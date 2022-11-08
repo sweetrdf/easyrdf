@@ -44,7 +44,6 @@ use EasyRdf\Http;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
 use EasyRdf\Sparql\Client;
-use Exception;
 use Test\EasyRdf\Http\MockClient;
 use Test\TestCase;
 
@@ -588,7 +587,7 @@ class ClientTest extends TestCase
 
         try {
             $this->sparql->query('SELECT * WHERE {?s ?p ?o}');
-            throw new Exception('This should have thrown an error');
+            throw new \Exception('This should have thrown an error');
         } catch (Http\Exception $e) {
             $this->assertEquals('Circular redirection', $e->getMessage());
         }

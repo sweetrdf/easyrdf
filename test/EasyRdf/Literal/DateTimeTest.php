@@ -2,7 +2,6 @@
 
 namespace Test\EasyRdf\Literal;
 
-use DateTimeImmutable;
 use EasyRdf\Literal\DateTime;
 use Test\TestCase;
 
@@ -92,7 +91,7 @@ class DateTimeTest extends TestCase
 
     public function testConstructFromDateTimeImmutableUTC()
     {
-        $dt = new DateTimeImmutable('2010-09-08T07:06:05Z');
+        $dt = new \DateTimeImmutable('2010-09-08T07:06:05Z');
         $literal = new DateTime($dt);
         $this->assertStringEquals('2010-09-08T07:06:05Z', $literal);
         $this->assertClass('DateTime', $literal->getValue());
