@@ -24,6 +24,9 @@
             "role": "Maintainer, Developer"
         }
     ],
+    "replace": {
+        "easyrdf/easyrdf":"1.0.*|1.1.*"
+    },
     "require": {
         "php": "^7.1|^8.0",
         "ext-dom" : "*",
