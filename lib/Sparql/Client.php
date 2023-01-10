@@ -324,7 +324,7 @@ class Client
      * @param string $processed_query
      * @param string $type            Should be either "query" or "update"
      *
-     * @return Http\Response|\Zend\Http\Response
+     * @return Http\Response|\Zend\Http\Response|\Laminas\Http\Client
      *
      * @throws Exception
      */
@@ -396,10 +396,10 @@ class Client
             throw new Exception('unexpected request-type: '.$type);
         }
 
-        if ($client instanceof \Zend\Http\Client) {
-            return $client->send();
-        } else {
+        if ($client instanceof Http\Client) {
             return $client->request();
+        } else {
+            return $client->send();
         }
     }
 
@@ -428,7 +428,7 @@ class Client
     }
 
     /**
-     * Proxy function to allow usage of our Client as well as Zend\Http v2.
+     * Proxy function to allow usage of our Client as well as Zend\Http v2 and Laminas\Http.
      *
      * Zend\Http\Client only accepts an array as first parameter, but our Client wants a name-value pair.
      *
@@ -438,10 +438,10 @@ class Client
      */
     protected function setHeaders($client, $name, $value)
     {
-        if ($client instanceof \Zend\Http\Client) {
-            $client->setHeaders([$name => $value]);
-        } else {
+        if ($client instanceof Http\Client) {
             $client->setHeaders($name, $value);
+        } else {
+            $client->setHeaders([$name => $value]);
         }
     }
 }
