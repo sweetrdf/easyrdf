@@ -44,14 +44,18 @@ namespace EasyRdf;
  */
 class Http
 {
-    /** The default HTTP Client object */
+    /**
+     * The default HTTP Client object
+     *
+     * @var Http\Client|\Zend\Http\Client|\Laminas\Http\Client|null
+     */
     private static $defaultHttpClient = null;
 
     /** Set the HTTP Client object used to fetch RDF data
      *
      * @param mixed $httpClient The new HTTP client object
      *
-     * @return \EasyRdf\Http\Client|\Zend\Http\Client The new HTTP client object
+     * @return \EasyRdf\Http\Client|\Zend\Http\Client|\Laminas\Http\Client The new HTTP client object
      *
      * @throws \InvalidArgumentException
      *
@@ -60,13 +64,22 @@ class Http
     public static function setDefaultHttpClient($httpClient)
     {
         if (
-            !$httpClient instanceof \Zend\Http\Client
-            && !$httpClient instanceof Http\Client
+            $httpClient instanceof \Zend\Http\Client
+            || $httpClient instanceof Http\Client
+            /*
+             * PHPStan always complains:
+             *      Instanceof between mixed and Laminas\Http\Client will always evaluate to false.
+             *
+             * Thats why it is ignored, to get full coverage.
+             * The complaint makes no sense, because it only complains about this class and not others.
+             */
+            /* @phpstan-ignore-next-line */
+            || $httpClient instanceof \Laminas\Http\Client
         ) {
-            throw new \InvalidArgumentException('$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client');
+            return self::$defaultHttpClient = $httpClient;
         }
 
-        return self::$defaultHttpClient = $httpClient;
+        throw new \InvalidArgumentException('$httpClient should be an object of class Zend\Http\Client or EasyRdf\Http\Client');
     }
 
     /** Get the HTTP Client object used to fetch RDF data
@@ -74,7 +87,7 @@ class Http
      * If no HTTP Client has previously been set, then a new
      * default (EasyRdf\Http\Client) client will be created.
      *
-     * @return Http\Client|\Zend\Http\Client The HTTP client object
+     * @return Http\Client|\Zend\Http\Client|\Laminas\Http\Client The HTTP client object
      */
     public static function getDefaultHttpClient()
     {
