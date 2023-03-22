@@ -69,7 +69,10 @@ class Ntriples extends Serialiser
      * that they are not replaced as multiple characters down below.
      * - Characters from 127 to 255 - These are replaced with their unicode
      * representation using a normal str_replace because fail to match in
-     * preg_replace_callback.
+     * preg_replace_callback. This takes place here because otherwise, they
+     * might be confused with multibyte characters if it takes place before the
+     * two steps above. And it takes place after the above two steps, in order
+     * to avoid replacing them as multiple characters.
      * - Characters from 32 to 126 - These are not escaped as they are printable
      * characters. However, the double quote (\") is escaped above as it is a
      * special character in N-Triples.
