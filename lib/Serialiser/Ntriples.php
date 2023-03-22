@@ -49,27 +49,140 @@ use EasyRdf\Serialiser;
  */
 class Ntriples extends Serialiser
 {
-    private $escChars = [];   // Character encoding cache
 
     /**
-     * @ignore
+     * Escapes a string literal according to the N-Triples specification.
+     *
+     * The sequence with which the characters are replaced is important.
+     *
+     * The sequence of replacements is:
+     * - Backslash (\) - Escape character. It is escaped first so that we do not
+     *  double escape other sequences that contain a backslash.
+     * - Control characters (0-31) and DEL (127) - except \t, \n, \r and \".
+     *  These are replaced with their unicode representation using a normal
+     *  str_replace because they break preg_replace_callback.
+     * - 8-byte characters - These are replaced with their unicode
+     * representation using a preg_replace_callback. They are replaced first so
+     * that they are not replaced as multiple characters down below.
+     * - 4-byte characters - These are replaced with their unicode
+     * representation using a preg_replace_callback. They are replaced next so
+     * that they are not replaced as multiple characters down below.
+     * - Characters from 127 to 255 - These are replaced with their unicode
+     * representation using a normal str_replace because fail to match in
+     * preg_replace_callback.
+     * - Characters from 32 to 126 - These are not escaped as they are printable
+     * characters. However, the double quote (\") is escaped above as it is a
+     * special character in N-Triples.
+     *
+     * @see https://www.w3.org/TR/n-triples/#n-triples-grammar
+     *
+     * @param string $str
+     *   The string to escape.
+     *
+     * @return string
+     *   The escaped string.
      */
     protected function escapeString($str)
     {
-        $result = '';
-        $strLen = mb_strlen($str, 'UTF-8');
-
-        for ($i = 0; $i < $strLen; ++$i) {
-            $c = mb_substr($str, $i, 1, 'UTF-8');
-
-            if (!isset($this->escChars[$c])) {
-                $this->escChars[$c] = $this->escapedChar($c);
-            }
-
-            $result .= $this->escChars[$c];
+        // Escape the "\" character so that we do not double escape it.
+        $str = str_replace('\\', '\\\\', $str);
+        // List of characters indexed by their printed representation.
+        $special_control_chrs = [];
+        foreach (range(0, 31) as $i) {
+            $special_control_chrs[chr($i)] = $this->unicodeChar($i);
         }
 
-        return $result;
+        // However, "\t", "\n", "\r" and "\"" are allowed.
+        $special_control_chrs[chr(9)] = '\t';
+        $special_control_chrs[chr(10)] = '\n';
+        $special_control_chrs[chr(13)] = '\r';
+        $special_control_chrs[chr(34)] = '\\"';
+
+        // Handle also the DEL character.
+        $special_control_chrs[chr(127)] = $this->unicodeChar(127);
+
+        $str = str_replace(array_keys($special_control_chrs), array_values($special_control_chrs), $str);
+
+        // Handle all 8-byte characters first so that they are not replaced
+        // as multiple characters down below.
+        if (preg_match('/[\x{10000}-\x{10FFFF}]/u', $str)) {
+            $str = preg_replace_callback(
+                '/[\x{10000}-\x{10FFFF}]/u',
+                function ($matches) {
+                    $match = $this->unicodeCharNo($matches[0]);
+                    return $this->unicodeChar($match, 8);
+                },
+                $str
+            );
+        }
+
+        // Handle all 4-byte characters next, so that they are not replaced
+        // as multiple characters down below.
+        if (preg_match('/[\x{7F}-\x{FFFF}]/u', $str)) {
+            $str = preg_replace_callback(
+                '/[\x{7F}-\x{FFFF}]/u',
+                function ($matches) {
+                    $match = $this->unicodeCharNo($matches[0]);
+                    return $this->unicodeChar($match);
+                },
+                $str
+            );
+        }
+
+        // Replace characters from 127 to 255 with their unicode representation.
+        // This is done after the 4-byte characters so that we do not replace
+        // them as multiple characters.
+        $replacements = [];
+        foreach (range(127, 255) as $i) {
+            $replacements[chr($i)] = $this->unicodeChar($i);
+        }
+        $str = str_replace(array_keys($replacements), array_values($replacements), $str);
+
+        // Handle the rest of the characters. From 32 to 126, except 34 (\)
+        // which we escaped earlier.
+        if (preg_match('/[\x{32}-\x{5B}\x{5D}-\x{7E}]/u', $str)) {
+            $str = preg_replace_callback(
+                '/[\x{32}-\x{5B}\x{5D}-\x{7E}]/u',
+                function ($matches) {
+                    $match = $this->unicodeCharNo($matches[0]);
+                    $replacements = [
+                        9 => '\t',
+                        10 => '\n',
+                        13 => '\r',
+                        34 => '\\"',
+                    ];
+
+                    if ($match === 92) {
+                        return $matches[0];
+                    }
+
+                    if (isset($replacements[$match])) {
+                        return $replacements[$match];
+                    }
+
+                    // Printable characters remain the same.
+                    if ($match >= 32 && $match <= 126 && $match !== 34) {
+                        return $matches[0];
+                    }
+
+                    if ($match <= 0x10FFFF) {
+                        return $this->unicodeChar($match);
+                    }
+
+                    else {
+                        return $this->unicodeChar($match, 8);
+                    }
+                },
+                $str
+            );
+        }
+
+        return $str;
+    }
+
+    private function unicodeChar($unicode_number, $pad = 4)
+    {
+        return ($pad === 4 ? '\\u' : '\\U') . sprintf('%0'.$pad.'X', $unicode_number);
     }
 
     /**
@@ -85,61 +198,22 @@ class Ntriples extends Serialiser
                 break;
             case 2: /* 110##### 10###### = 192+x 128+x */
                 $r = ((\ord($cUtf[0]) - 192) * 64) +
-                     (\ord($cUtf[1]) - 128);
+                    (\ord($cUtf[1]) - 128);
                 break;
             case 3: /* 1110#### 10###### 10###### = 224+x 128+x 128+x */
                 $r = ((\ord($cUtf[0]) - 224) * 4096) +
-                     ((\ord($cUtf[1]) - 128) * 64) +
-                     (\ord($cUtf[2]) - 128);
+                    ((\ord($cUtf[1]) - 128) * 64) +
+                    (\ord($cUtf[2]) - 128);
                 break;
             case 4: /* 1111#### 10###### 10###### 10###### = 240+x 128+x 128+x 128+x */
                 $r = ((\ord($cUtf[0]) - 240) * 262144) +
-                     ((\ord($cUtf[1]) - 128) * 4096) +
-                     ((\ord($cUtf[2]) - 128) * 64) +
-                     (\ord($cUtf[3]) - 128);
+                    ((\ord($cUtf[1]) - 128) * 4096) +
+                    ((\ord($cUtf[2]) - 128) * 64) +
+                    (\ord($cUtf[3]) - 128);
                 break;
         }
 
         return $r;
-    }
-
-    /**
-     * @ignore
-     */
-    protected function escapedChar($c)
-    {
-        $no = $this->unicodeCharNo($c);
-
-        /* see http://www.w3.org/TR/rdf-testcases/#ntrip_strings */
-        if ($no < 9) {
-            return '\\u'.sprintf('%04X', $no);  /* #x0-#x8 (0-8) */
-        } elseif (9 == $no) {
-            return '\t';                          /* #x9 (9) */
-        } elseif (10 == $no) {
-            return '\n';                          /* #xA (10) */
-        } elseif ($no < 13) {
-            return '\\u'.sprintf('%04X', $no);  /* #xB-#xC (11-12) */
-        } elseif (13 == $no) {
-            return '\r';                          /* #xD (13) */
-        } elseif ($no < 32) {
-            return '\\u'.sprintf('%04X', $no);  /* #xE-#x1F (14-31) */
-        } elseif ($no < 34) {
-            return $c;                            /* #x20-#x21 (32-33) */
-        } elseif (34 == $no) {
-            return '\"';                          /* #x22 (34) */
-        } elseif ($no < 92) {
-            return $c;                            /* #x23-#x5B (35-91) */
-        } elseif (92 == $no) {
-            return '\\\\'; // double backslash    /* #x5C (92) */
-        } elseif ($no < 127) {
-            return $c;                            /* #x5D-#x7E (93-126) */
-        } elseif ($no < 65536) {
-            return '\\u'.sprintf('%04X', $no);  /* #x7F-#xFFFF (128-65535) */
-        } elseif ($no < 1114112) {
-            return '\\U'.sprintf('%08X', $no);  /* #x10000-#x10FFFF (65536-1114111) */
-        } else {
-            return '';                            /* not defined => ignore */
-        }
     }
 
     /**
