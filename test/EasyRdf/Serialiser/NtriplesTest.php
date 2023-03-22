@@ -304,4 +304,32 @@ class NtriplesTest extends TestCase
             $this->assertEquals($expected, $actual);
         }
     }
+
+    /**
+     * Tests combinations of control characters and multibyte characters.
+     */
+    public function testMixedWithControlCharacters()
+    {
+        $serializer = new Ntriples();
+        $string = chr(0) . 'a' . chr(31) . '位' . chr(127);
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+
+        $this->assertEquals('"\u0000a\u001F\u4F4D\u007F"', $actual);
+    }
+
+    /**
+     * Tests that random sequences are not confused with multibyte characters.
+     */
+    public function testUintendedMultibyteCharacter()
+    {
+        $serializer = new Ntriples();
+        // Ensure that when the sequence from \xC1 to \xCF are interpreted as
+        // separate characters and not confused with multibyte characters.
+        $string = "\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF";
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+
+        $this->assertEquals('"\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF"', $actual);
+    }
 }
