@@ -57,25 +57,25 @@ class Ntriples extends Serialiser
      *
      * The sequence of replacements is:
      * - Backslash (\) - Escape character. It is escaped first so that we do not
-     *  double escape other sequences that contain a backslash.
+     *   double escape other sequences that contain a backslash.
      * - Control characters (0-31) and DEL (127) - except \t, \n, \r and \".
-     *  These are replaced with their unicode representation using a normal
-     *  str_replace because they break preg_replace_callback.
+     *   These are replaced with their unicode representation using a normal
+     *   str_replace because they break preg_replace_callback.
      * - 8-byte characters - These are replaced with their unicode
-     * representation using a preg_replace_callback. They are replaced first so
-     * that they are not replaced as multiple characters down below.
+     *   representation using a preg_replace_callback. They are replaced first
+     *   so that they are not replaced as multiple characters down below.
      * - 4-byte characters - These are replaced with their unicode
-     * representation using a preg_replace_callback. They are replaced next so
-     * that they are not replaced as multiple characters down below.
+     *   representation using a preg_replace_callback. They are replaced next so
+     *   that they are not replaced as multiple characters down below.
      * - Characters from 127 to 255 - These are replaced with their unicode
-     * representation using a normal str_replace because fail to match in
-     * preg_replace_callback. This takes place here because otherwise, they
-     * might be confused with multibyte characters if it takes place before the
-     * two steps above. And it takes place after the above two steps, in order
-     * to avoid replacing them as multiple characters.
+     *   representation using a normal str_replace because fail to match in
+     *   preg_replace_callback. This takes place here because otherwise, they
+     *   might be confused with multibyte characters if it takes place before
+     *   the two steps above. And it takes place after the above two steps, in
+     *   order to avoid replacing them as multiple characters.
      * - Characters from 32 to 126 - These are not escaped as they are printable
-     * characters. However, the double quote (\") is escaped above as it is a
-     * special character in N-Triples.
+     *   characters. However, the double quote (\") is escaped above as it is a
+     *   special character in N-Triples.
      *
      * @see https://www.w3.org/TR/n-triples/#n-triples-grammar
      *
@@ -87,10 +87,11 @@ class Ntriples extends Serialiser
      */
     protected function escapeString($str)
     {
-        // Escape the "\" character so that we do not double escape it.
-        $str = str_replace('\\', '\\\\', $str);
         // List of characters indexed by their printed representation.
-        $special_control_chrs = [];
+        // Initialize it with the ['\\' => '\\\\'] in order to first replace the
+        // '\\' character.
+        $special_control_chrs = [chr(92) => '\\\\'];
+
         foreach (range(0, 31) as $i) {
             $special_control_chrs[chr($i)] = $this->unicodeChar($i);
         }
@@ -172,9 +173,7 @@ class Ntriples extends Serialiser
                         return $this->unicodeChar($match);
                     }
 
-                    else {
-                        return $this->unicodeChar($match, 8);
-                    }
+                    return $this->unicodeChar($match, 8);
                 },
                 $str
             );
