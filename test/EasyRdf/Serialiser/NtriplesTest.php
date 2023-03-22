@@ -311,11 +311,14 @@ class NtriplesTest extends TestCase
     public function testMixedWithControlCharacters()
     {
         $serializer = new Ntriples();
-        $string = chr(0) . 'a' . chr(31) . '位' . chr(127);
+        // Include the NULL byte, a character, a control character,
+        // a multibyte character, a character, and a character outside the BMP.
+        $string = chr(0) . 'a' . chr(31) . '位' . chr(127) . '𐀐';
+
         $literal = new Literal($string);
         $actual = $serializer->serialiseValue($literal);
 
-        $this->assertEquals('"\u0000a\u001F\u4F4D\u007F"', $actual);
+        $this->assertEquals('"\u0000a\u001F\u4F4D\u007F\U00010010"', $actual);
     }
 
     /**
