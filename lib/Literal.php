@@ -56,7 +56,11 @@ class Literal
     /** @ignore The language of the literal (e.g. 'en') */
     protected $lang = null;
 
-    /** @ignore The datatype URI of the literal */
+    /**
+     * The datatype URI of the literal
+     *
+     * @var string|\EasyRdf\ParsedUri|null
+     */
     protected $datatype = null;
 
     /** Create a new literal object
@@ -191,9 +195,9 @@ class Literal
 
     /** Constructor for creating a new literal
      *
-     * @param string $value    The value of the literal
-     * @param string $lang     The natural language of the literal or null (e.g. 'en')
-     * @param string $datatype The datatype of the literal or null (e.g. 'xsd:string')
+     * @param string|float                   $value    The value of the literal
+     * @param string                         $lang     The natural language of the literal or null (e.g. 'en')
+     * @param string|\EasyRdf\ParsedUri|null $datatype The datatype of the literal or null (e.g. 'xsd:string')
      *
      * @return Literal
      */
