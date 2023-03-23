@@ -191,9 +191,9 @@ class Literal
 
     /** Constructor for creating a new literal
      *
-     * @param string $value    The value of the literal
-     * @param string $lang     The natural language of the literal or null (e.g. 'en')
-     * @param string $datatype The datatype of the literal or null (e.g. 'xsd:string')
+     * @param mixed              $value     The value of the literal
+     * @param string             $lang      The natural language of the literal or null (e.g. 'en')
+     * @param string|object|null ?$datatype The datatype of the literal or null (e.g. 'xsd:string')
      *
      * @return Literal
      */
