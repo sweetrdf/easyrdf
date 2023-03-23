@@ -324,7 +324,7 @@ class NtriplesTest extends TestCase
     /**
      * Tests that random sequences are not confused with multibyte characters.
      */
-    public function testUintendedMultibyteCharacter()
+    public function testUnintendedMultibyteCharacter()
     {
         $serializer = new Ntriples();
         // Ensure that when the sequence from \xC1 to \xCF are interpreted as
