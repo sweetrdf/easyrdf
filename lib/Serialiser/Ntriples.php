@@ -55,7 +55,7 @@ class Ntriples extends Serialiser
     /**
      * @var array<string,string>
      */
-    protected array $escapeControlCharacters = [];
+    protected $escapeControlCharacters = [];
 
     /**
      * Escapes a string literal according to the N-Triples specification.
