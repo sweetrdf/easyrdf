@@ -50,6 +50,11 @@ use EasyRdf\Serialiser;
 class Ntriples extends Serialiser
 {
     /**
+     * @var array list of control characters that are escaped
+     */
+    protected $escapeControlCharacters = [];
+
+    /**
      * Escapes a string literal according to the N-Triples specification.
      *
      * The sequence with which the characters are replaced is important.
@@ -84,24 +89,7 @@ class Ntriples extends Serialiser
      */
     protected function escapeString($str)
     {
-        // List of characters indexed by their printed representation.
-        // Initialize it with the ['\\' => '\\\\'] in order to first replace the
-        // '\\' character.
-        $special_control_chrs = [chr(92) => '\\\\'];
-
-        foreach (range(0, 31) as $i) {
-            $special_control_chrs[chr($i)] = $this->unicodeChar($i);
-        }
-
-        // However, "\t", "\n", "\r" and "\"" are allowed.
-        $special_control_chrs[chr(9)] = '\t';
-        $special_control_chrs[chr(10)] = '\n';
-        $special_control_chrs[chr(13)] = '\r';
-        $special_control_chrs[chr(34)] = '\\"';
-
-        // Handle also the DEL character.
-        $special_control_chrs[chr(127)] = $this->unicodeChar(127);
-
+        $special_control_chrs = $this->getEscapeControlCharacters();
         $str = str_replace(array_keys($special_control_chrs), array_values($special_control_chrs), $str);
 
         // Handle all 8-byte characters first so that they are not replaced
@@ -110,9 +98,7 @@ class Ntriples extends Serialiser
             $str = preg_replace_callback(
                 '/[\x{10000}-\x{10FFFF}]/u',
                 function ($matches) {
-                    $match = $this->unicodeCharNo($matches[0]);
-
-                    return $this->unicodeChar($match, 8);
+                    return $this->unicodeChar($this->unicodeCharNo($matches[0]), 8);
                 },
                 $str
             );
@@ -124,9 +110,7 @@ class Ntriples extends Serialiser
             $str = preg_replace_callback(
                 '/[\x{7F}-\x{FFFF}]/u',
                 function ($matches) {
-                    $match = $this->unicodeCharNo($matches[0]);
-
-                    return $this->unicodeChar($match);
+                    return $this->unicodeChar($this->unicodeCharNo($matches[0]));
                 },
                 $str
             );
@@ -298,5 +282,35 @@ class Ntriples extends Serialiser
         } else {
             throw new Exception(__CLASS__." does not support: $format");
         }
+    }
+
+    /**
+     * Returns the list of control characters to escape.
+     *
+     * @return array the list of control characters to escape
+     */
+    private function getEscapeControlCharacters(): array
+    {
+        if (empty($this->escapeControlCharacters)) {
+            // List of characters indexed by their printed representation.
+            // Initialize it with the ['\\' => '\\\\'] in order to first replace the
+            // '\\' character.
+            $this->escapeControlCharacters = [chr(92) => '\\\\'];
+
+            foreach (range(0, 31) as $i) {
+                $this->escapeControlCharacters[chr($i)] = $this->unicodeChar($i);
+            }
+
+            // However, "\t", "\n", "\r" and "\"" are allowed.
+            $this->escapeControlCharacters[chr(9)] = '\t';
+            $this->escapeControlCharacters[chr(10)] = '\n';
+            $this->escapeControlCharacters[chr(13)] = '\r';
+            $this->escapeControlCharacters[chr(34)] = '\\"';
+
+            // Handle also the DEL character.
+            $this->escapeControlCharacters[chr(127)] = $this->unicodeChar(127);
+        }
+
+        return $this->escapeControlCharacters;
     }
 }
