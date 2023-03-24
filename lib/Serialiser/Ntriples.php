@@ -49,7 +49,6 @@ use EasyRdf\Serialiser;
  */
 class Ntriples extends Serialiser
 {
-
     /**
      * Escapes a string literal according to the N-Triples specification.
      *
@@ -79,11 +78,9 @@ class Ntriples extends Serialiser
      *
      * @see https://www.w3.org/TR/n-triples/#n-triples-grammar
      *
-     * @param string $str
-     *   The string to escape.
+     * @param string $str The string to escape
      *
-     * @return string
-     *   The escaped string.
+     * @return string The escaped string
      */
     protected function escapeString($str)
     {
@@ -114,6 +111,7 @@ class Ntriples extends Serialiser
                 '/[\x{10000}-\x{10FFFF}]/u',
                 function ($matches) {
                     $match = $this->unicodeCharNo($matches[0]);
+
                     return $this->unicodeChar($match, 8);
                 },
                 $str
@@ -127,6 +125,7 @@ class Ntriples extends Serialiser
                 '/[\x{7F}-\x{FFFF}]/u',
                 function ($matches) {
                     $match = $this->unicodeCharNo($matches[0]);
+
                     return $this->unicodeChar($match);
                 },
                 $str
@@ -156,7 +155,7 @@ class Ntriples extends Serialiser
                         34 => '\\"',
                     ];
 
-                    if ($match === 92) {
+                    if (92 === $match) {
                         return $matches[0];
                     }
 
@@ -165,7 +164,7 @@ class Ntriples extends Serialiser
                     }
 
                     // Printable characters remain the same.
-                    if ($match >= 32 && $match <= 126 && $match !== 34) {
+                    if ($match >= 32 && $match <= 126 && 34 !== $match) {
                         return $matches[0];
                     }
 
@@ -184,7 +183,7 @@ class Ntriples extends Serialiser
 
     private function unicodeChar($unicode_number, $pad = 4)
     {
-        return ($pad === 4 ? '\\u' : '\\U') . sprintf('%0'.$pad.'X', $unicode_number);
+        return (4 === $pad ? '\\u' : '\\U').sprintf('%0'.$pad.'X', $unicode_number);
     }
 
     /**
