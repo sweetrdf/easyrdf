@@ -50,9 +50,7 @@ use EasyRdf\Serialiser;
 class Ntriples extends Serialiser
 {
     /**
-     * @var array list of control characters that are escaped
-     */
-    /**
+     * List of control characters that are escaped.
      * @var array<string,string>
      */
     protected $escapeControlCharacters = [];
