@@ -51,6 +51,7 @@ class Ntriples extends Serialiser
 {
     /**
      * List of control characters that are escaped.
+     *
      * @var array<string,string>
      */
     protected $escapeControlCharacters = [];
