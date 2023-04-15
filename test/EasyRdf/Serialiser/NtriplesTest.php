@@ -313,8 +313,7 @@ class NtriplesTest extends TestCase
         $serializer = new Ntriples();
         // Include the NULL byte, a character, a control character,
         // a multibyte character, a character, and a character outside the BMP.
-        $string = chr(0).'a'.chr(31).'位'.chr(127).'𐀐';
-
+        $string = utf8_encode(chr(0).'a'.chr(31)).'位'.utf8_encode(chr(127)).'𐀐';
         $literal = new Literal($string);
         $actual = $serializer->serialiseValue($literal);
 
@@ -330,10 +329,18 @@ class NtriplesTest extends TestCase
         // Ensure that when the sequence from \xC1 to \xCF are interpreted as
         // separate characters and not confused with multibyte characters.
         $string = "\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF";
+        // Converts the string to 'ÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ'.
+        $string = utf8_encode($string);
         $literal = new Literal($string);
         $actual = $serializer->serialiseValue($literal);
+        $expected = '"\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF"';
+        $this->assertEquals($expected, $actual);
 
-        $this->assertEquals('"\u00C1\u00C2\u00C3\u00C4\u00C5\u00C6\u00C7\u00C8\u00C9\u00CA\u00CB\u00CC\u00CD\u00CE\u00CF"', $actual);
+        // Retry by directly inputing the UTF-8 sequence.
+        $string = 'ÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
