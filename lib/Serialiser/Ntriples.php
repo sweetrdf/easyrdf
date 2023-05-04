@@ -39,6 +39,7 @@ namespace EasyRdf\Serialiser;
 use EasyRdf\Exception;
 use EasyRdf\Graph;
 use EasyRdf\Serialiser;
+use rdfHelpers\NtriplesUtil;
 
 /**
  * Class to serialise an EasyRdf\Graph to N-Triples
@@ -237,7 +238,7 @@ class Ntriples extends Serialiser
         if ('uri' == $value['type'] || 'bnode' == $value['type']) {
             return $this->serialiseResource($value['value']);
         } elseif ('literal' == $value['type']) {
-            $escaped = $this->escapeString($value['value']);
+            $escaped = NtriplesUtil::escapeLiteral($value['value']);
             if (isset($value['lang'])) {
                 $lang = $this->escapeString($value['lang']);
 
