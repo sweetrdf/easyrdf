@@ -86,14 +86,13 @@ class NtriplesArray extends Ntriples
         foreach ($graph->toRdfPhp() as $resource => $properties) {
             foreach ($properties as $property => $values) {
                 foreach ($values as $value) {
-                    array_push(
-                        $triples,
+                        $triples[] =
                         [
                             's' => $this->serialiseResource($resource),
                             'p' => '<'.$this->escapeString($property).'>',
                             'o' => $this->serialiseValue($value),
                         ]
-                    );
+                    ;
                 }
             }
         }

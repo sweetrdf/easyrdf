@@ -44,10 +44,10 @@ use Test\TestCase;
 class ArcTest extends TestCase
 {
     /** @var Arc */
-    protected $parser = null;
+    protected $parser;
     /** @var Graph */
-    protected $graph = null;
-    protected $data = null;
+    protected $graph;
+    protected $data;
 
     protected function setUp(): void
     {

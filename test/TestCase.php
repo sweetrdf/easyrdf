@@ -27,7 +27,7 @@ class TestCase extends FrameworkTestCase
      */
     public static function assertClass($class, $object)
     {
-        self::assertSame($class, \get_class($object));
+        self::assertSame($class, $object::class);
     }
 
     /**

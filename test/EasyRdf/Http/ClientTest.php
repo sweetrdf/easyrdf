@@ -48,7 +48,7 @@ class ClientTest extends TestCase
      *
      * @var Client
      */
-    protected $client = null;
+    protected $client;
 
     /**
      * Set up the test suite before each test

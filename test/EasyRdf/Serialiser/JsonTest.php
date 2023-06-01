@@ -46,9 +46,9 @@ use Test\TestCase;
 class JsonTest extends TestCase
 {
     /** @var Json */
-    protected $serialiser = null;
+    protected $serialiser;
     /** @var Graph */
-    protected $graph = null;
+    protected $graph;
 
     protected function setUp(): void
     {
