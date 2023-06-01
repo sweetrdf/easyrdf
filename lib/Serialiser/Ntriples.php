@@ -124,7 +124,7 @@ class Ntriples extends Serialiser
         // them as multiple characters.
         $replacements = [];
         foreach (range(127, 255) as $i) {
-            $replacements[chr($i)] = $this->unicodeChar($i);
+            $replacements[\chr($i)] = $this->unicodeChar($i);
         }
         $str = str_replace(array_keys($replacements), array_values($replacements), $str);
 
@@ -298,20 +298,20 @@ class Ntriples extends Serialiser
             // List of characters indexed by their printed representation.
             // Initialize it with the ['\\' => '\\\\'] in order to first replace the
             // '\\' character.
-            $this->escapeControlCharacters = [chr(92) => '\\\\'];
+            $this->escapeControlCharacters = [\chr(92) => '\\\\'];
 
             foreach (range(0, 31) as $i) {
-                $this->escapeControlCharacters[chr($i)] = $this->unicodeChar($i);
+                $this->escapeControlCharacters[\chr($i)] = $this->unicodeChar($i);
             }
 
             // However, "\t", "\n", "\r" and "\"" are allowed.
-            $this->escapeControlCharacters[chr(9)] = '\t';
-            $this->escapeControlCharacters[chr(10)] = '\n';
-            $this->escapeControlCharacters[chr(13)] = '\r';
-            $this->escapeControlCharacters[chr(34)] = '\\"';
+            $this->escapeControlCharacters[\chr(9)] = '\t';
+            $this->escapeControlCharacters[\chr(10)] = '\n';
+            $this->escapeControlCharacters[\chr(13)] = '\r';
+            $this->escapeControlCharacters[\chr(34)] = '\\"';
 
             // Handle also the DEL character.
-            $this->escapeControlCharacters[chr(127)] = $this->unicodeChar(127);
+            $this->escapeControlCharacters[\chr(127)] = $this->unicodeChar(127);
         }
 
         return $this->escapeControlCharacters;

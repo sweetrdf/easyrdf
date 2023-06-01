@@ -313,7 +313,7 @@ class NtriplesTest extends TestCase
         $serializer = new Ntriples();
         // Include the NULL byte, a character, a control character,
         // a multibyte character, a character, and a character outside the BMP.
-        $string = utf8_encode(chr(0).'a'.chr(31)).'位'.utf8_encode(chr(127)).'𐀐';
+        $string = utf8_encode(\chr(0).'a'.\chr(31)).'位'.utf8_encode(\chr(127)).'𐀐';
         $literal = new Literal($string);
         $actual = $serializer->serialiseValue($literal);
         $this->assertEquals('"'.$string.'"', $actual);
