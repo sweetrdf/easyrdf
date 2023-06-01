@@ -46,10 +46,10 @@ use Test\TestCase;
 class RdfXmlTest extends TestCase
 {
     /** @var RdfXml */
-    protected $parser = null;
+    protected $parser;
     /** @var Graph */
-    protected $graph = null;
-    protected $rdf_data = null;
+    protected $graph;
+    protected $rdf_data;
 
     protected function setUp(): void
     {

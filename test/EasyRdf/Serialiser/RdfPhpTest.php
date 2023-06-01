@@ -45,9 +45,9 @@ use Test\TestCase;
 class RdfPhpTest extends TestCase
 {
     /** @var RdfPhp */
-    protected $serialiser = null;
+    protected $serialiser;
     /** @var Graph */
-    protected $graph = null;
+    protected $graph;
 
     protected function setUp(): void
     {

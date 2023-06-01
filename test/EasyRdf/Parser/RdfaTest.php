@@ -45,11 +45,11 @@ use Test\TestCase;
 class RdfaTest extends TestCase
 {
     /** @var Rdfa */
-    protected $rdfaParser = null;
+    protected $rdfaParser;
     /** @var Ntriples */
-    protected $ntriplesParser = null;
+    protected $ntriplesParser;
     protected $baseUri;
-    protected $graph = null;
+    protected $graph;
 
     protected function setUp(): void
     {

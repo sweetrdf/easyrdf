@@ -49,9 +49,9 @@ use Test\TestCase;
 class NtriplesTest extends TestCase
 {
     /** @var Ntriples */
-    protected $serialiser = null;
+    protected $serialiser;
     /** @var Graph */
-    protected $graph = null;
+    protected $graph;
 
     protected function setUp(): void
     {

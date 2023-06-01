@@ -47,10 +47,10 @@ use Test\TestCase;
 class RdfPhpTest extends TestCase
 {
     /** @var RdfPhp */
-    protected $parser = null;
+    protected $parser;
     /** @var Graph */
-    protected $graph = null;
-    protected $rdf_data = null;
+    protected $graph;
+    protected $rdf_data;
 
     protected function setUp(): void
     {

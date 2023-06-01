@@ -44,10 +44,10 @@ use Test\TestCase;
 class RapperTest extends TestCase
 {
     /** @var Rapper */
-    protected $parser = null;
+    protected $parser;
     /** @var Graph */
-    protected $graph = null;
-    protected $rdf_data = null;
+    protected $graph;
+    protected $rdf_data;
 
     protected function setUp(): void
     {

@@ -49,9 +49,9 @@ use Test\TestCase;
 class RdfXmlTest extends TestCase
 {
     /** @var RdfXml */
-    protected $serialiser = null;
+    protected $serialiser;
     /** @var Graph */
-    protected $graph = null;
+    protected $graph;
 
     public static function setUpBeforeClass(): void
     {
