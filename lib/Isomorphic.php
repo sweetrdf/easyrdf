@@ -152,13 +152,11 @@ class Isomorphic
                     }
 
                     if ($subjectIsBnode || $objectIsBnode) {
-                            $anonStatements[] =
-                            [
-                                ['type' => $subjectIsBnode ? 'bnode' : 'uri', 'value' => $subject],
-                                ['type' => 'uri', 'value' => $property],
-                                $value,
-                            ]
-                        ;
+                        $anonStatements[] = [
+                            ['type' => $subjectIsBnode ? 'bnode' : 'uri', 'value' => $subject],
+                            ['type' => 'uri', 'value' => $property],
+                            $value,
+                        ];
                     }
                 }
             }
