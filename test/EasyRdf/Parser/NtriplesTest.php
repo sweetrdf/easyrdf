@@ -45,10 +45,10 @@ use Test\TestCase;
 class NtriplesTest extends TestCase
 {
     /** @var Ntriples */
-    protected $parser = null;
+    protected $parser;
     /** @var Graph */
-    protected $graph = null;
-    protected $nt_data = null;
+    protected $graph;
+    protected $nt_data;
 
     protected function setUp(): void
     {

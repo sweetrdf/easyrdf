@@ -52,10 +52,10 @@ use Test\TestCase;
 class JsonLdTest extends TestCase
 {
     /** @var JsonLd */
-    protected $parser = null;
+    protected $parser;
 
     /** @var Graph */
-    protected $graph = null;
+    protected $graph;
 
     protected function setUp(): void
     {

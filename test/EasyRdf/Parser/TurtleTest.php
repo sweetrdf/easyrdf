@@ -52,10 +52,10 @@ Format::registerSerialiser('ntriples-array', NtriplesArray::class);
 class TurtleTest extends TestCase
 {
     /** @var Turtle */
-    protected $turtleParser = null;
+    protected $turtleParser;
 
     /** @var Ntriples */
-    protected $ntriplesParser = null;
+    protected $ntriplesParser;
 
     protected $baseUri;
 

@@ -48,9 +48,9 @@ use Test\TestCase;
 class TurtleTest extends TestCase
 {
     /** @var Turtle */
-    protected $serialiser = null;
+    protected $serialiser;
     /** @var Graph */
-    protected $graph = null;
+    protected $graph;
 
     protected function setUp(): void
     {
