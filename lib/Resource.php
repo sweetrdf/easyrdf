@@ -735,12 +735,10 @@ class Resource implements \ArrayAccess
      *
      * @param string $name  The name of the property
      * @param string $value The value for the property
-     *
-     * @return int
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
-        return $this->graph->set($this->uri, $name, $value);
+        $this->graph->set($this->uri, $name, $value);
     }
 
     /** Magic method to check if a property exists
