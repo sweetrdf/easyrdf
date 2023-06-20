@@ -1707,10 +1707,12 @@ class Graph
      *
      * @param string $name  The name of the property
      * @param string $value The value for the property
+     *
+     * @return int
      */
-    public function __set($name, $value): void
+    public function __set($name, $value)
     {
-        $this->set($this->uri, $name, $value);
+        return $this->set($this->uri, $name, $value);
     }
 
     /** Magic method to check if a property exists
