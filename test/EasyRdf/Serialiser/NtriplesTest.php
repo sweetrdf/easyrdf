@@ -291,8 +291,8 @@ class NtriplesTest extends TestCase
     public function testIssue219Unicode()
     {
         $pairs = [
-            '位' => '"\u4F4D"',
-            'Дуглас Адамс' => '"\u0414\u0443\u0433\u043B\u0430\u0441 \u0410\u0434\u0430\u043C\u0441"',
+            '位' => '"位"',
+            'Дуглас Адамс' => '"Дуглас Адамс"',
         ];
 
         $serializer = new Ntriples();
@@ -303,5 +303,147 @@ class NtriplesTest extends TestCase
 
             $this->assertEquals($expected, $actual);
         }
+    }
+
+    /**
+     * Tests combinations of control characters and multibyte characters.
+     */
+    public function testMixedWithControlCharacters()
+    {
+        $serializer = new Ntriples();
+        // Include the NULL byte, a character, a control character,
+        // a multibyte character, a character, and a character outside the BMP.
+        $string = utf8_encode(\chr(0).'a'.\chr(31)).'位'.utf8_encode(\chr(127)).'𐀐';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $this->assertEquals('"'.$string.'"', $actual);
+    }
+
+    /**
+     * Tests that random sequences are not confused with multibyte characters.
+     */
+    public function testUnintendedMultibyteCharacter()
+    {
+        $serializer = new Ntriples();
+        // Ensure that when the sequence from \xC1 to \xCF are interpreted as
+        // separate characters and not confused with multibyte characters.
+        $string = "\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF";
+        // Converts the string to 'ÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ'.
+        $string = utf8_encode($string);
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"ÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ"';
+        $this->assertEquals($expected, $actual);
+
+        // Retry by directly inputing the UTF-8 sequence.
+        $string = 'ÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the basic Latin characters from U+0020 to U+007E.
+     */
+    public function testVisibleLatinCharacters()
+    {
+        $serializer = new Ntriples();
+        $string = '!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"!\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"';
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the Latin-1 Supplement characters from U+00A0 to U+00FF.
+     */
+    public function testLatin1SupplementCharacters()
+    {
+        $serializer = new Ntriples();
+        $string = '¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"';
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the Latin Extended-A characters from U+0100 to U+017F.
+     */
+    public function testLatinExtendedACharacters()
+    {
+        $serializer = new Ntriples();
+        $string = 'ĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"ĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſ"';
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the Latin Extended-B, Non-European & historic Latin characters.
+     */
+    public function testLatinExtendedBCharacters()
+    {
+        // Test characters from U+0180 to U+01BF.
+        $serializer = new Ntriples();
+        $string = 'ƀƁƂƃƄƅƆƇƈƉƊƋƌƍƎƏƐƑƒƓƔƕƖƗƘƙƚƛƜƝƞƟƠơƢƣƤƥƦƧƨƩƪƫƬƭƮƯưƱƲƳƴƵƶƷƸƹƺƻƼƽƾƿ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"ƀƁƂƃƄƅƆƇƈƉƊƋƌƍƎƏƐƑƒƓƔƕƖƗƘƙƚƛƜƝƞƟƠơƢƣƤƥƦƧƨƩƪƫƬƭƮƯưƱƲƳƴƵƶƷƸƹƺƻƼƽƾƿ"';
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the Latin Extended B, African clicks.
+     */
+    public function testLatinExtendedBAfricanClicks()
+    {
+        $serializer = new Ntriples();
+        $string = 'ǀǁǂǃ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"ǀǁǂǃ"';
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the Latin Extended B - Croatian, Pinyin, Phonetic & historic letters.
+     */
+    public function testLatinExtendedBCroatianPinyinPhoneticHistoric()
+    {
+        $serializer = new Ntriples();
+        $string = 'ǄǅǆǇǈǉǊǋǌǍǎǏǐǑǒǓǔǕǖǗǘǙǚǛǜǝǞǟǠǡǢǣǤǥǦǧǨǩǪǫǬǭǮǯǰǱǲǳǴǵǶǷǸǹǺǻǼǽǾǿ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"ǄǅǆǇǈǉǊǋǌǍǎǏǐǑǒǓǔǕǖǗǘǙǚǛǜǝǞǟǠǡǢǣǤǥǦǧǨǩǪǫǬǭǮǯǰǱǲǳǴǵǶǷǸǹǺǻǼǽǾǿ"';
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the Latin Extended B - Slovenian & Croatian, Romanian & Misc.
+     */
+    public function testLatinExtendedBSlovenianCroatianRomanianMisc()
+    {
+        $serializer = new Ntriples();
+        $string = 'ȀȁȂȃȄȅȆȇȈȉȊȋȌȍȎȏȐȑȒȓȔȕȖȗȘșȚțȜȝȞȟȠȡȢȣȤȥȦȧȨȩ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"ȀȁȂȃȄȅȆȇȈȉȊȋȌȍȎȏȐȑȒȓȔȕȖȗȘșȚțȜȝȞȟȠȡȢȣȤȥȦȧȨȩ"';
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the Latin Extended B - Livonian, Sinology & Misc.
+     */
+    public function testLatinExtendedBLivonianSinologyMisc()
+    {
+        $serializer = new Ntriples();
+        $string = 'ȦȧȨȩȪȫȬȭȮȯȰȱȲȳȴȵȶȷȸȹȺȻȼȽȾȿɀɁɂɃɄɅɆɇɈɉɊɋɌɍɎɏ';
+        $literal = new Literal($string);
+        $actual = $serializer->serialiseValue($literal);
+        $expected = '"ȦȧȨȩȪȫȬȭȮȯȰȱȲȳȴȵȶȷȸȹȺȻȼȽȾȿɀɁɂɃɄɅɆɇɈɉɊɋɌɍɎɏ"';
+        $this->assertEquals($expected, $actual);
     }
 }
