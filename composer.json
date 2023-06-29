@@ -56,7 +56,8 @@
             "test/TestHelper.php"
         ],
         "psr-4": {
-            "Test\\": "test/"
+            "Test\\": "test/",
+            "Tests\\": "tests/"
         }
     }
 }
