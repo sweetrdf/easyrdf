@@ -44,9 +44,15 @@ date_default_timezone_set('UTC');
  *
  * @return string Path to the fixture file
  */
-function fixturePath($name)
+function fixturePath(string $name): string
 {
-    return __DIR__.\DIRECTORY_SEPARATOR.'fixtures'.\DIRECTORY_SEPARATOR.$name;
+    return ROOT_PATH
+        .\DIRECTORY_SEPARATOR
+        .'test'
+        .\DIRECTORY_SEPARATOR
+        .'fixtures'
+        .\DIRECTORY_SEPARATOR
+        .$name;
 }
 
 /**
@@ -55,10 +61,17 @@ function fixturePath($name)
  * @param string $name fixture file name
  *
  * @return string Fixture data
+ *
+ * @throws \Exception if file does not exist
  */
-function readFixture($name)
+function readFixture(string $name): string
 {
-    return file_get_contents(fixturePath($name));
+    $path = fixturePath($name);
+    if (file_exists($path)) {
+        return file_get_contents($path);
+    }
+
+    throw new Exception('File does not exist: '.$path);
 }
 
 /**
