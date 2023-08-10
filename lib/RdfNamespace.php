@@ -144,7 +144,9 @@ class RdfNamespace
     /**
      * @param string $prefix
      *
-     * @throws \InvalidArgumentException if prefix is not a string with at least 1 character
+     * @throws \InvalidArgumentException if prefix is not a string
+     * @throws \InvalidArgumentException if prefix does not match RDFXML-QName specification
+     * @throws \LogicException           if preg_match returned false when checking the given prefix
      */
     private static function verifyPrefix($prefix): void
     {
