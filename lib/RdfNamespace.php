@@ -109,7 +109,7 @@ class RdfNamespace
     ];
 
     /**
-     * @var array<string,string>|null Array with prefixes as key and related IRI as value.
+     * @var array<string,string>|null array with prefixes as key and related IRI as value
      */
     private static array|null $namespaces = null;
 
@@ -148,7 +148,7 @@ class RdfNamespace
      */
     private static function verifyPrefix($prefix): void
     {
-        if (is_string($prefix) && 0 < strlen($prefix)) {
+        if (\is_string($prefix) && '' !== $prefix) {
             // prefix        ::= Name minus ":"                   // see: http://www.w3.org/TR/REC-xml-names/#NT-NCName
             // Name          ::= NameStartChar (NameChar)*        // see: http://www.w3.org/TR/REC-xml/#NT-Name
             // NameStartChar ::= ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] |
@@ -219,7 +219,7 @@ class RdfNamespace
     {
         self::verifyPrefix($prefix);
 
-        if (is_string($long) && 0 < strlen($long)) {
+        if (\is_string($long) && '' !== $long) {
             $prefix = strtolower($prefix);
 
             $namespaces = self::namespaces();
