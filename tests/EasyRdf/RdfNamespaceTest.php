@@ -138,9 +138,7 @@ class RdfNamespaceTest extends TestCase
     public function testGetNonAlphanumeric()
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage(
-            '$prefix should only contain alpha-numeric characters'
-        );
+        $this->expectExceptionMessage('$prefix should match RDFXML-QName specification. got: /K.O/');
         RdfNamespace::get('/K.O/');
     }
 
@@ -682,5 +680,16 @@ class RdfNamespaceTest extends TestCase
             '',
             RdfNamespace::shorten('http://example.org/bar/baz')
         );
+    }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/issues/32
+     */
+    public function testIssue32HyphenInName()
+    {
+        $url = 'http://example.org/dash#';
+
+        RdfNamespace::set('foo-bar', $url);
+        $this->assertSame($url, RdfNamespace::get('foo-bar'));
     }
 }

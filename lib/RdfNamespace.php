@@ -108,7 +108,10 @@ class RdfNamespace
         'xsd' => 'http://www.w3.org/2001/XMLSchema#',
     ];
 
-    private static $namespaces;
+    /**
+     * @var array<string,string>|null Array with prefixes as key and related IRI as value.
+     */
+    private static array|null $namespaces = null;
 
     private static $default;
 
@@ -139,54 +142,13 @@ class RdfNamespace
     }
 
     /**
-     * Return a namespace given its prefix.
+     * @param string $prefix
      *
-     * @param string $prefix The namespace prefix (eg 'foaf')
-     *
-     * @return string|null The namespace URI (eg 'http://xmlns.com/foaf/0.1/')
-     *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if prefix is not a string with at least 1 character
      */
-    public static function get($prefix)
+    private static function verifyPrefix($prefix): void
     {
-        // TODO fix PHPStan error by rethinking datatype of parameter(s)
-        // @phpstan-ignore-next-line
-        if (!\is_string($prefix) || null === $prefix) {
-            throw new \InvalidArgumentException('$prefix should be a string and cannot be null or empty');
-        }
-
-        if (preg_match('/\W/', $prefix)) {
-            throw new \InvalidArgumentException('$prefix should only contain alpha-numeric characters');
-        }
-
-        $prefix = strtolower($prefix);
-        $namespaces = self::namespaces();
-
-        if (\array_key_exists($prefix, $namespaces)) {
-            return $namespaces[$prefix];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Register a new namespace.
-     *
-     * @param string $prefix The namespace prefix (eg 'foaf')
-     * @param string $long   The namespace URI (eg 'http://xmlns.com/foaf/0.1/')
-     *
-     * @throws \LogicException
-     * @throws \InvalidArgumentException
-     */
-    public static function set($prefix, $long)
-    {
-        // TODO fix PHPStan error by rethinking datatype of parameter(s)
-        // @phpstan-ignore-next-line
-        if (!\is_string($prefix) || null === $prefix) {
-            throw new \InvalidArgumentException('$prefix should be a string and cannot be null or empty');
-        }
-
-        if ('' !== $prefix) {
+        if (is_string($prefix) && 0 < strlen($prefix)) {
             // prefix        ::= Name minus ":"                   // see: http://www.w3.org/TR/REC-xml-names/#NT-NCName
             // Name          ::= NameStartChar (NameChar)*        // see: http://www.w3.org/TR/REC-xml/#NT-Name
             // NameStartChar ::= ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] |
@@ -214,20 +176,59 @@ class RdfNamespace
             if (0 === $match_result) {
                 throw new \InvalidArgumentException("\$prefix should match RDFXML-QName specification. got: {$prefix}");
             }
+        } elseif ('' === $prefix) {
+            // empty prefix
+        } else {
+            throw new \InvalidArgumentException('$prefix should be a string and cannot be null or empty');
         }
+    }
 
-        // TODO fix PHPStan error by rethinking datatype of parameter(s)
-        // @phpstan-ignore-next-line
-        if (!\is_string($long) || null === $long || '' === $long) {
-            throw new \InvalidArgumentException('$long should be a string and cannot be null or empty');
-        }
+    /**
+     * Return a namespace given its prefix.
+     *
+     * @param string $prefix The namespace prefix (eg 'foaf')
+     *
+     * @return string|null The namespace URI (eg 'http://xmlns.com/foaf/0.1/')
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function get($prefix)
+    {
+        self::verifyPrefix($prefix);
 
         $prefix = strtolower($prefix);
-
         $namespaces = self::namespaces();
-        $namespaces[$prefix] = $long;
 
-        self::$namespaces = $namespaces;
+        if (\array_key_exists($prefix, $namespaces)) {
+            return $namespaces[$prefix];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Register a new namespace.
+     *
+     * @param string $prefix The namespace prefix (eg 'foaf')
+     * @param string $long   The namespace URI (eg 'http://xmlns.com/foaf/0.1/')
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    public static function set($prefix, $long)
+    {
+        self::verifyPrefix($prefix);
+
+        if (is_string($long) && 0 < strlen($long)) {
+            $prefix = strtolower($prefix);
+
+            $namespaces = self::namespaces();
+            $namespaces[$prefix] = $long;
+
+            self::$namespaces = $namespaces;
+        } else {
+            throw new \InvalidArgumentException('$long should be a string and cannot be null or empty');
+        }
     }
 
     /**
