@@ -287,11 +287,7 @@ class RdfNamespace
      */
     public static function delete($prefix)
     {
-        // TODO fix PHPStan error by rethinking datatype of parameter(s)
-        // @phpstan-ignore-next-line
-        if (!\is_string($prefix) || null === $prefix || '' === $prefix) {
-            throw new \InvalidArgumentException('$prefix should be a string and cannot be null or empty');
-        }
+        self::verifyPrefix($prefix);
 
         $prefix = strtolower($prefix);
         self::namespaces();  // make sure, that self::$namespaces is initialized

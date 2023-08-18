@@ -234,11 +234,14 @@ class RdfNamespaceTest extends TestCase
 
     public function testDeleteEmptyNamespace()
     {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage(
-            '$prefix should be a string and cannot be null or empty'
-        );
+        $ns = 'http://empty/namespace';
+        RdfNamespace::set('', $ns);
+
+        $this->assertEquals($ns, RdfNamespace::get(''));
+
         RdfNamespace::delete('');
+
+        $this->assertNull(RdfNamespace::get(''));
     }
 
     public function testDeleteNullNamespace()
