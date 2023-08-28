@@ -45,8 +45,6 @@ class MockClient extends Client
     private $mocks = [];
 
     /**
-     * @param null $method
-     *
      * @return Response
      *
      * @throws \EasyRdf\Exception
