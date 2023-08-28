@@ -20,6 +20,7 @@ class MockParser extends Parser
     public function parse($graph, $data, $format, $baseUri): bool
     {
         parent::checkParseParams($graph, $data, $format, $baseUri);
+
         // Parsing goes here
         return true;
     }
