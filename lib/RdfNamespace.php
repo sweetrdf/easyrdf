@@ -121,7 +121,7 @@ class RdfNamespace
     /**
      * Return all the namespaces registered
      *
-     * @return array associative array of all the namespaces
+     * @return array<string,string> Associative array of all the namespaces. Key is prefix, value is long URI.
      */
     public static function namespaces()
     {
@@ -319,7 +319,7 @@ class RdfNamespace
      * @param string|\EasyRdf\Resource $uri             The full URI (eg 'http://xmlns.com/foaf/0.1/name')
      * @param bool                     $createNamespace If true, a new namespace will be created
      *
-     * @return array|null The split URI (eg 'foaf', 'name') or null
+     * @return array{string,string}|null The split URI (eg 'foaf', 'name') or null
      *
      * @throws \InvalidArgumentException
      */
@@ -334,7 +334,7 @@ class RdfNamespace
 
         if (\is_object($uri) && ($uri instanceof Resource)) {
             $uri = $uri->getUri();
-        } elseif (!\is_string($uri)) {
+        } elseif (false === \is_string($uri)) {
             throw new \InvalidArgumentException('$uri should be a string or EasyRdf\Resource');
         }
 
@@ -412,27 +412,25 @@ class RdfNamespace
      *
      * @return string The full URI (eg 'http://xmlns.com/foaf/0.1/name')
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException if $shortUri is not a string or null or empty string
      */
     public static function expand($shortUri)
     {
-        if (!\is_string($shortUri) || '' === $shortUri) {
+        if (\is_string($shortUri) && '' !== $shortUri) {
+            if ('a' === $shortUri) {
+                return self::namespaces()['rdf'].'type';
+            } elseif (preg_match('/^([\w\-]+?):([\w\-]+)$/', $shortUri, $matches)) {
+                $long = self::get($matches[1]);
+                if ($long) {
+                    return $long.$matches[2];
+                }
+            } elseif (1 === preg_match('/^([\w\-]+)$/', $shortUri) && isset(self::$default)) {
+                return self::$default.$shortUri;
+            }
+
+            return $shortUri;
+        } else {
             throw new \InvalidArgumentException('$shortUri should be a string and cannot be null or empty');
         }
-
-        if ('a' === $shortUri) {
-            $namespaces = self::namespaces();
-
-            return $namespaces['rdf'].'type';
-        } elseif (preg_match('/^(\w+?):([\w\-]+)$/', $shortUri, $matches)) {
-            $long = self::get($matches[1]);
-            if ($long) {
-                return $long.$matches[2];
-            }
-        } elseif (preg_match('/^(\w+)$/', $shortUri) && isset(self::$default)) {
-            return self::$default.$shortUri;
-        }
-
-        return $shortUri;
     }
 }

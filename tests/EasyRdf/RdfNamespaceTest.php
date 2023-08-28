@@ -663,6 +663,16 @@ class RdfNamespaceTest extends TestCase
     }
 
     /**
+     * @see https://github.com/sweetrdf/easyrdf/issues/32#issuecomment-1678073874
+     */
+    public function testExpandStringContainsHyphen()
+    {
+        RdfNamespace::set('foo-bar', 'http://long/uri/');
+
+        $this->assertEquals('http://long/uri/12', RdfNamespace::expand('foo-bar:12'));
+    }
+
+    /**
      * @see https://github.com/easyrdf/easyrdf/issues/185
      */
     public function testIssue185DashInPrefix()
