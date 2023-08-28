@@ -21,6 +21,7 @@ class MockSerialiser extends Serialiser
     public function serialise(Graph $graph, $format, array $options = []): string
     {
         parent::checkSerialiseParams($format);
+
         // Serialising goes here
         return '';
     }
