@@ -334,6 +334,7 @@ class RdfNamespace
 
         if (\is_object($uri) && ($uri instanceof Resource)) {
             $uri = $uri->getUri();
+            // @phpstan-ignore-next-line
         } elseif (false === \is_string($uri)) {
             throw new \InvalidArgumentException('$uri should be a string or EasyRdf\Resource');
         }
