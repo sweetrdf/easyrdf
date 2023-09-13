@@ -1081,6 +1081,24 @@ class ResourceTest extends TestCase
         );
     }
 
+    /**
+     * Test type() together with a prefix that contains a hyphen.
+     *
+     * @see https://github.com/sweetrdf/easyrdf/issues/32#issuecomment-1678073874
+     */
+    public function testTypeWithHyphen()
+    {
+        RdfNamespace::set('foo-bar', 'http://foo/bar#');
+
+        $this->graph = new Graph();
+        $this->type = $this->graph->resource('foo-bar:Person');
+        $this->resource = $this->graph->resource('http://example.com/#me');
+
+        $this->graph->set($this->resource, 'rdf:type', $this->type);
+
+        $this->assertEquals('foo-bar:Person', $this->resource->type());
+    }
+
     public function testIsA()
     {
         $this->setupTestGraph();

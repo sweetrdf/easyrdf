@@ -138,9 +138,7 @@ class RdfNamespaceTest extends TestCase
     public function testGetNonAlphanumeric()
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage(
-            '$prefix should only contain alpha-numeric characters'
-        );
+        $this->expectExceptionMessage('$prefix should match RDFXML-QName specification. got: /K.O/');
         RdfNamespace::get('/K.O/');
     }
 
@@ -236,11 +234,14 @@ class RdfNamespaceTest extends TestCase
 
     public function testDeleteEmptyNamespace()
     {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage(
-            '$prefix should be a string and cannot be null or empty'
-        );
+        $ns = 'http://empty/namespace';
+        RdfNamespace::set('', $ns);
+
+        $this->assertEquals($ns, RdfNamespace::get(''));
+
         RdfNamespace::delete('');
+
+        $this->assertNull(RdfNamespace::get(''));
     }
 
     public function testDeleteNullNamespace()
@@ -662,6 +663,16 @@ class RdfNamespaceTest extends TestCase
     }
 
     /**
+     * @see https://github.com/sweetrdf/easyrdf/issues/32#issuecomment-1678073874
+     */
+    public function testExpandStringContainsHyphen()
+    {
+        RdfNamespace::set('foo-bar', 'http://long/uri/');
+
+        $this->assertEquals('http://long/uri/12', RdfNamespace::expand('foo-bar:12'));
+    }
+
+    /**
      * @see https://github.com/easyrdf/easyrdf/issues/185
      */
     public function testIssue185DashInPrefix()
@@ -682,6 +693,17 @@ class RdfNamespaceTest extends TestCase
             '',
             RdfNamespace::shorten('http://example.org/bar/baz')
         );
+    }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/issues/32
+     */
+    public function testIssue32HyphenInName()
+    {
+        $url = 'http://example.org/dash#';
+
+        RdfNamespace::set('foo-bar', $url);
+        $this->assertSame($url, RdfNamespace::get('foo-bar'));
     }
 
     /**
