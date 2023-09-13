@@ -346,8 +346,8 @@ class RdfNamespace
 
             $local_part = substr($uri, \strlen($long));
 
-            if (str_contains($local_part, '/')) {
-                // we can't have '/' in local part
+            // we can't have '/' or '#' in local part
+            if (str_contains($local_part, '/') || str_contains($local_part, '#')) {
                 continue;
             }
 
@@ -394,7 +394,7 @@ class RdfNamespace
      * @param string $uri             The full URI (eg 'http://xmlns.com/foaf/0.1/name')
      * @param bool   $createNamespace If true, a new namespace will be created
      *
-     * @return string|void The shortened URI (eg 'foaf:name') or null
+     * @return string|void The shortened URI (eg 'foaf:name') or void
      */
     public static function shorten($uri, $createNamespace = false)
     {

@@ -705,4 +705,16 @@ class RdfNamespaceTest extends TestCase
         RdfNamespace::set('foo-bar', $url);
         $this->assertSame($url, RdfNamespace::get('foo-bar'));
     }
+
+    /**
+     * URIs with fragments can only be shortened if the '#' character
+     * is part of the prefix. `prefix:[...]#fragment` is not a valid result
+     */
+    public function testNoShortFragment()
+    {
+        RdfNamespace::set('ex', 'http://example.org/');
+
+        $this->assertNull(RdfNamespace::shorten('http://example.org/foo#bar'));
+        $this->assertNull(RdfNamespace::shorten('http://example.org/#quack'));
+    }
 }
