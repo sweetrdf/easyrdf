@@ -42,7 +42,7 @@
         "phpunit/phpunit": "^9.5.0|^10.0.0",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "semsol/arc2": "^2.4",
+        "semsol/arc2": "^3",
         "zendframework/zend-http": "^2",
         "laminas/laminas-http": "^2"
     },
