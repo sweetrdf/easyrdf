@@ -274,6 +274,28 @@ class ClientTest extends TestCase
     }
 
     /**
+     * This test covers the change from
+     *
+     *      $uri['query'] .= http_build_query($this->paramsGet, null, '&');
+     *
+     * to
+     *
+     *      $uri['query'] .= http_build_query($this->paramsGet, '', '&');
+     *
+     * Without the change a deprecation warning would be thrown.
+     */
+    public function testRequestGetParamsGiven(): void
+    {
+        $this->client->setParameterGet('foo', 'bar');
+
+        $response = $this->client->request();
+
+        // note: no real request was sent
+
+        $this->assertEquals(200, $response->getStatus());
+    }
+
+    /**
      * Test for issue #271
      *
      * Test approach was to first trigger the error with the following code and

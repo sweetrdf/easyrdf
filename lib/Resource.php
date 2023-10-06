@@ -507,7 +507,7 @@ class Resource implements \ArrayAccess
      *
      * This method will return an empty array if the resource has no properties.
      *
-     * @return array Array of full URIs
+     * @return array<string> Array of full URIs
      */
     public function propertyUris()
     {

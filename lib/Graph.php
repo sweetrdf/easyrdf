@@ -1265,7 +1265,7 @@ class Graph
      *
      * @param string $resource
      *
-     * @return array Array of full URIs
+     * @return array<string> Array of full URIs
      */
     public function propertyUris($resource)
     {
