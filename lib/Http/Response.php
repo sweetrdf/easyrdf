@@ -316,7 +316,7 @@ class Response
             }
         }
 
-        return new self($status, $headers, $body, $version, $message);
+        return new self((int) $status, $headers, $body, $version, $message);
     }
 
     /**
