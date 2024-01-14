@@ -1177,6 +1177,28 @@ class Graph
         );
     }
 
+    /** Delete an entire resource
+     *
+     * The resource can either be a resource or the URI of a resource.
+     *
+     * Example:
+     *   $graph->deleteEntireResource("http://example.com/bob");
+     *
+     * @param mixed $resource  The resource to delete data from
+     */
+    public function deleteEntireResource($resource)
+    {
+        $this->checkResourceParam($resource);
+
+        unset($this->index[$resource]);
+        unset($this->revIndex[$resource]);
+        unset($this->resources[$resource]);
+    
+        if ('_:' == substr($resource, 0, 2)) {
+            $this->bNodeCount--;
+        }
+    }
+
     /** Delete a literal value from a property of a resource
      *
      * Example:
