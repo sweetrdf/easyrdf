@@ -1184,7 +1184,7 @@ class Graph
      * Example:
      *   $graph->deleteEntireResource("http://example.com/bob");
      *
-     * @param mixed $resource  The resource to delete data from
+     * @param mixed $resource  The resource to be deleted
      */
     public function deleteEntireResource($resource)
     {
