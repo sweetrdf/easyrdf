@@ -17,10 +17,9 @@ $finder = Finder::create()
 $config = new Config();
 $config
     ->setFinder($finder)
-    ->setRiskyAllowed(true)
+    ->setRiskyAllowed(false)
     ->setRules([
-        '@Symfony' => true,
-        '@Symfony:risky' => true,
+        '@PSR12' => true,
         'phpdoc_summary' => false,
     ])
 ;
