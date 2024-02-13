@@ -1185,7 +1185,7 @@ class Graph
      * Example:
      *   $graph->deleteEntireResource("http://example.com/bob");
      *
-     * @param mixed $resource The resource to be deleted
+     * @param string|\EasyRdf\ParsedUri|\EasyRdf\Resource $resource The resource to be deleted
      */
     public function deleteEntireResource(string|ParsedUri|Resource $resource)
     {
