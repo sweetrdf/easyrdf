@@ -735,7 +735,8 @@ class GraphTest extends TestCase
     {
         $this->graph->addLiteral($this->uri, 'foaf:homepage', 'http://example.com/');
         $this->graph->addLiteral('http://example.com/', 'dc:title', 'My Homepage');
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             $this->graph->get($this->uri, 'foaf:homepage/dc:title')
         );
     }
@@ -782,14 +783,16 @@ class GraphTest extends TestCase
 
     public function testGetNonExistantLiteral()
     {
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             $this->graph->getLiteral($this->uri, 'rdf:type')
         );
     }
 
     public function testGetNonExistantResource()
     {
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             $this->graph->get('foo:bar', 'foo:bar')
         );
     }
@@ -2127,7 +2130,8 @@ class GraphTest extends TestCase
     public function testMagicGetNonExistant()
     {
         RdfNamespace::setDefault('rdf');
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             $this->graph->test
         );
     }

@@ -175,7 +175,8 @@ class ClientTest extends TestCase
     {
         $this->client->setHeaders('Accept-Encoding', 'gzip,deflate');
         $this->client->setHeaders('Accept-Encoding', null);
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             $this->client->getHeader('Accept-encoding'),
             'Returned value of header is expected to be null'
         );

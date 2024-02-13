@@ -320,7 +320,8 @@ class FormatTest extends TestCase
     public function testGetDefaultMimeTypeNoDefault()
     {
         $format2 = Format::register('my2', 'Other Format');
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             $format2->getDefaultMimeType()
         );
     }
@@ -370,7 +371,8 @@ class FormatTest extends TestCase
     public function testGetExtensionNoDefault()
     {
         $format2 = Format::register('my2', 'Other Format');
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             $format2->getDefaultExtension()
         );
     }
@@ -692,7 +694,8 @@ class FormatTest extends TestCase
 
     public function testGuessFormatUnknown()
     {
-        $this->assertStringEquals('',
+        $this->assertStringEquals(
+            '',
             Format::guessFormat('blah blah blah')
         );
     }
