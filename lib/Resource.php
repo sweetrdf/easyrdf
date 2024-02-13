@@ -390,7 +390,7 @@ class Resource implements \ArrayAccess
      * @param string|array $property The name of the property (e.g. foaf:name)
      * @param string       $lang     The language to filter by (e.g. en)
      *
-     * @return \EasyRdf\Literal Literal value associated with the property
+     * @return Literal Literal value associated with the property
      */
     public function getLiteral($property, $lang = null)
     {
@@ -595,7 +595,7 @@ class Resource implements \ArrayAccess
      * may be arbitrary.
      * This method will return null if the resource has no type.
      *
-     * @return \EasyRdf\Resource a type assocated with the resource
+     * @return Resource a type assocated with the resource
      */
     public function typeAsResource()
     {
@@ -663,7 +663,7 @@ class Resource implements \ArrayAccess
      *
      * Returns null if no primary topic is available.
      *
-     * @return \EasyRdf\Resource the primary topic of this resource
+     * @return Resource the primary topic of this resource
      */
     public function primaryTopic()
     {
@@ -681,7 +681,7 @@ class Resource implements \ArrayAccess
      *
      * @param string|null $lang
      *
-     * @return \EasyRdf\Literal|null an instance of Literal which contains the label or null
+     * @return Literal|null an instance of Literal which contains the label or null
      */
     public function label($lang = null)
     {

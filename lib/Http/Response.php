@@ -275,7 +275,7 @@ class Response
      *
      * @return self
      *
-     * @throws \EasyRdf\Exception
+     * @throws Exception
      */
     public static function fromString($responseStr)
     {
@@ -326,7 +326,7 @@ class Response
      *
      * @return string
      *
-     * @throws \EasyRdf\Exception
+     * @throws Exception
      */
     public static function decodeChunkedBody($body)
     {

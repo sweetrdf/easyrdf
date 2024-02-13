@@ -47,7 +47,7 @@ class MockClient extends Client
     /**
      * @return Response
      *
-     * @throws \EasyRdf\Exception
+     * @throws Exception
      */
     public function request($method = null)
     {
