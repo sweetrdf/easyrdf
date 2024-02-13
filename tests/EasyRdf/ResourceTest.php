@@ -52,7 +52,7 @@ class ResourceTest extends TestCase
     /** @var Graph */
     private $graph;
 
-    /** @var \EasyRdf\Resource */
+    /** @var Resource */
     private $resource;
 
     /** @var string|\EasyRdf\Resource */

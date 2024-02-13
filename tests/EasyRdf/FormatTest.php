@@ -44,7 +44,7 @@ use Test\TestCase;
  */
 class FormatTest extends TestCase
 {
-    /** @var \EasyRdf\Format */
+    /** @var Format */
     private $format;
 
     /**

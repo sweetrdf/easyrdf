@@ -300,11 +300,11 @@ class RdfXml extends Parser
         if (isset($a[$this->rdf.'ID'])) {
             $s['type'] = 'uri';
             $s['value'] = $s['x_base']->resolve('#'.$a[$this->rdf.'ID']);
-            /* about */
+        /* about */
         } elseif (isset($a[$this->rdf.'about'])) {
             $s['type'] = 'uri';
             $s['value'] = $s['x_base']->resolve($a[$this->rdf.'about']);
-            /* bnode */
+        /* bnode */
         } else {
             $s['type'] = 'bnode';
             if (isset($a[$this->rdf.'nodeID'])) {
@@ -341,7 +341,7 @@ class RdfXml extends Parser
                 $this->add($supS['value'], $this->rdf.'rest', $coll['value'], $supS['type'], $coll['type']);
                 $this->add($coll['value'], $this->rdf.'first', $s['value'], $coll['type'], $s['type']);
                 $this->pushS($coll);
-                /* normal sub-node */
+            /* normal sub-node */
             } elseif (isset($supS['p']) && $supS['p']) {
                 $this->add($supS['value'], $supS['p'], $s['value'], $supS['type'], $s['type']);
             }
@@ -452,7 +452,7 @@ class RdfXml extends Parser
                     $o['type']
                 );
             }
-            /* parseType */
+        /* parseType */
         } elseif (isset($a[$this->rdf.'parseType'])) {
             if ('Literal' === $a[$this->rdf.'parseType']) {
                 $s['o_xml_level'] = 0;

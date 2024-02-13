@@ -138,7 +138,7 @@ class Graph
      * @param string $uri   The URI of the resource
      * @param mixed  $types RDF type of a new resource (e.g. foaf:Person)
      *
-     * @return \EasyRdf\Resource
+     * @return Resource
      *
      * @throws \InvalidArgumentException
      */
@@ -204,7 +204,7 @@ class Graph
      *
      * @param mixed $types RDF type of a new blank node (e.g. foaf:Person)
      *
-     * @return \EasyRdf\Resource The new blank node
+     * @return Resource The new blank node
      */
     public function newBNode($types = [])
     {
@@ -699,7 +699,7 @@ class Graph
      * @param string|array $property The name of the property (e.g. foaf:name)
      * @param string       $lang     The language to filter by (e.g. en)
      *
-     * @return \EasyRdf\Literal Literal value associated with the property
+     * @return Literal Literal value associated with the property
      */
     public function getLiteral($resource, $property, $lang = null)
     {
@@ -717,7 +717,7 @@ class Graph
      * @param string       $resource The URI of the resource (e.g. http://example.com/joe#me)
      * @param string|array $property The name of the property (e.g. foaf:name)
      *
-     * @return \EasyRdf\Resource Resource associated with the property
+     * @return Resource Resource associated with the property
      */
     public function getResource($resource, $property)
     {
@@ -1537,7 +1537,7 @@ class Graph
      * may be arbitrary.
      * This method will return null if the resource has no type.
      *
-     * @return \EasyRdf\Resource|null A type associated with the resource
+     * @return Resource|null A type associated with the resource
      */
     public function typeAsResource($resource = null)
     {
@@ -1665,7 +1665,7 @@ class Graph
      * @param string|null $resource
      * @param string|null $lang
      *
-     * @return \EasyRdf\Literal|null an instance of Literal which contains the label or null
+     * @return Literal|null an instance of Literal which contains the label or null
      */
     public function label($resource = null, $lang = null)
     {
@@ -1685,7 +1685,7 @@ class Graph
 
     /** Get the primary topic of the graph
      *
-     * @return \EasyRdf\Resource|null the primary topic of the document
+     * @return Resource|null the primary topic of the document
      */
     public function primaryTopic($resource = null)
     {

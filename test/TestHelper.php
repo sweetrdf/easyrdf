@@ -62,7 +62,7 @@ function fixturePath(string $name): string
  *
  * @return string Fixture data
  *
- * @throws \Exception if file does not exist
+ * @throws Exception if file does not exist
  */
 function readFixture(string $name): string
 {
