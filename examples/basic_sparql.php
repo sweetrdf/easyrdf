@@ -37,10 +37,10 @@ $sparql = new EasyRdf\Sparql\Client('http://dbpedia.org/sparql');
 <?php
         $result = $sparql->query(
             'SELECT * WHERE {'.
-                    '  ?country rdf:type dbo:Country .'.
-                    '  ?country rdfs:label ?label .'.
-                    '  FILTER ( lang(?label) = "en" )'.
-                    '} ORDER BY ?label LIMIT 10'
+                            '  ?country rdf:type dbo:Country .'.
+                            '  ?country rdfs:label ?label .'.
+                            '  FILTER ( lang(?label) = "en" )'.
+                            '} ORDER BY ?label LIMIT 10'
         );
 foreach ($result as $row) {
     echo '<li>'.link_to($row->label, $row->country)."</li>\n";
