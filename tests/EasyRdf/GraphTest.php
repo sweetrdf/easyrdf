@@ -2160,4 +2160,122 @@ class GraphTest extends TestCase
             $this->graph->get($this->graph->getUri(), 'rdf:test')
         );
     }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/pull/44
+     */
+    public function testDeleteEntireResourceRessourceIsString()
+    {
+        /*
+         * arrange
+         */
+        $graph = new Graph();
+        $graph->add('http://biz/1', 'http://biz/2', 'literal3');
+
+        // triples with resource http://foo/1
+        $graph->add('http://foo/1', 'http://bar/1', 'http://bar/1');
+        $graph->add('http://example/1', 'http://foo/1', 'http://example/2');
+        $graph->add('http://example/a', 'http://example/b', new Resource('http://foo/1'));
+
+        $this->assertEquals(4, $graph->countTriples());
+
+        /*
+         * act
+         */
+        $graph->deleteEntireResource('http://foo/1');
+
+        /*
+         * assert
+         */
+        $this->assertEquals(1, $graph->countTriples());
+    }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/pull/44
+     */
+    public function testDeleteEntireResourceResourceIsParsedUri()
+    {
+        /*
+         * arrange
+         */
+        $graph = new Graph();
+        $graph->add('http://biz/1', 'http://biz/2', 'literal3');
+
+        // triples with resource http://foo/1
+        $graph->add('http://foo/1', 'http://bar/1', 'http://bar/1');
+        $graph->add('http://example/1', 'http://foo/1', 'http://example/2');
+        $graph->add('http://example/a', 'http://example/b', new Resource('http://foo/1'));
+
+        $this->assertEquals(4, $graph->countTriples());
+
+        /*
+         * act
+         */
+        $graph->deleteEntireResource(new ParsedUri('http://foo/1'));
+
+        /*
+         * assert
+         */
+        $this->assertEquals(1, $graph->countTriples());
+    }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/pull/44
+     */
+    public function testDeleteEntireResourceResourceIsResource()
+    {
+        /*
+         * arrange
+         */
+        $graph = new Graph();
+        $graph->add('http://biz/1', 'http://biz/2', 'literal3');
+
+        // triples with resource http://foo/1
+        $graph->add('http://foo/1', 'http://bar/1', 'http://bar/1');
+        $graph->add('http://example/1', 'http://foo/1', 'http://example/2');
+        $graph->add('http://example/a', 'http://example/b', new Resource('http://foo/1'));
+
+        $this->assertEquals(4, $graph->countTriples());
+
+        /*
+         * act
+         */
+        $graph->deleteEntireResource(new Resource('http://foo/1'));
+
+        /*
+         * assert
+         */
+        $this->assertEquals(1, $graph->countTriples());
+    }
+
+    /**
+     * Tests that a triples is not removed if resource URI was given as literal.
+     *
+     * @see https://github.com/sweetrdf/easyrdf/pull/44
+     */
+    public function testDeleteEntireResourceUriAsLiteral()
+    {
+        /*
+         * arrange
+         */
+        $graph = new Graph();
+        $graph->add('http://biz/1', 'http://biz/2', 'literal3');
+
+        // triples with resource http://foo/1
+        $graph->add('http://foo/1', 'http://bar/1', 'http://bar/1');
+        $graph->add('http://example/1', 'http://foo/1', 'http://example/2');
+        $graph->add('http://example/a', 'http://example/b', 'http://foo/1'); // <=== resource is considered a literal here
+
+        $this->assertEquals(4, $graph->countTriples());
+
+        /*
+         * act
+         */
+        $graph->deleteEntireResource('http://foo/1');
+
+        /*
+         * assert
+         */
+        $this->assertEquals(2, $graph->countTriples());
+    }
 }

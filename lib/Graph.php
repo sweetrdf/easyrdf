@@ -1177,25 +1177,61 @@ class Graph
         );
     }
 
-    /** Delete an entire resource
+    /**
+     * Delete an entire resource from the graph.
      *
-     * The resource can either be a resource or the URI of a resource.
+     * The resource can either be an instance of EasyRdf\Resource or a string containing the URI of a resource.
      *
      * Example:
      *   $graph->deleteEntireResource("http://example.com/bob");
      *
-     * @param mixed $resource  The resource to be deleted
+     * @param mixed $resource The resource to be deleted
      */
-    public function deleteEntireResource($resource)
+    public function deleteEntireResource(string|ParsedUri|Resource $resource)
     {
-        $this->checkResourceParam($resource);
+        $this->checkResourceParam($resource, false);
 
+        // assumption: $resource is of type string now
+
+        // remove first-level entities related to the given resource
         unset($this->index[$resource]);
         unset($this->revIndex[$resource]);
         unset($this->resources[$resource]);
-    
+
         if ('_:' == substr($resource, 0, 2)) {
-            $this->bNodeCount--;
+            --$this->bNodeCount;
+        }
+
+        /*
+         * Remove second and third level entries related to the given source.
+         *
+         * $this->index looks like:
+         *
+         *      array(2) {
+         *        ["http://example/1"]=> array(1) {
+         *            ["http://foo/1"]=> array(1) {
+         *              [0]=> array(2) {
+         *                  ["type"]=> string(7) "literal"
+         *                  ["value"]=> string(16) "http://example/2"
+         *              }
+         *          }
+         *      }
+         */
+        foreach ($this->index as $uri => $properties) {
+            foreach ($properties as $propertyUri => $objects) {
+                // remove second level entries
+                if ($propertyUri == $resource) {
+                    unset($this->index[$uri][$propertyUri]);
+                    continue;
+                }
+
+                foreach ($objects as $key => $object) {
+                    // remove third level entries
+                    if ('uri' == $object['type'] && $resource == $object['value']) {
+                        unset($this->index[$uri][$propertyUri][$key]);
+                    }
+                }
+            }
         }
     }
 
