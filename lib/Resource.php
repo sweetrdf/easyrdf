@@ -595,7 +595,7 @@ class Resource implements \ArrayAccess
      * may be arbitrary.
      * This method will return null if the resource has no type.
      *
-     * @return Resource a type assocated with the resource
+     * @return resource a type assocated with the resource
      */
     public function typeAsResource()
     {
@@ -663,7 +663,7 @@ class Resource implements \ArrayAccess
      *
      * Returns null if no primary topic is available.
      *
-     * @return Resource the primary topic of this resource
+     * @return resource the primary topic of this resource
      */
     public function primaryTopic()
     {
