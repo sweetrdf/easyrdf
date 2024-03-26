@@ -34,7 +34,7 @@
         "ext-pcre": "*",
         "ext-xmlreader" : "*",
         "lib-libxml" : "*",
-        "sweetrdf/rdf-helpers": "^1.0"
+        "sweetrdf/rdf-helpers": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
