@@ -665,6 +665,24 @@ class FormatTest extends TestCase
         $this->assertStringEquals('', $format);
     }
 
+    /**
+     * Case with regex
+     *
+     *      /prefix\s|base\s/i
+     *
+     * was not precise enough and lead to (avoidable) wrong guesses.
+     */
+    public function testGuessFormatTurtleByPrefix()
+    {
+        $data = '<?xml version="1.0"?>
+        <Ontology xmlns="http://www.w3.org/2002/07/owl#"
+             xml:base="http://www.semanticweb.org/hsiehjulien/ontologies/2016/3/untitled-ontology-4"
+             ontologyIRI="http://www.semanticweb.org/hsiehjulien/ontologies/2016/3/untitled-ontology-4">
+            <Prefix name="" IRI="http://www.semanticweb.org/hsiehjulien/ontologies/2016/3/untitled-ontology-4#"/>
+            <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>';
+        $this->assertStringEquals('rdfxml', Format::guessFormat($data));
+    }
+
     public function testGuessFormatByFilenameTtl()
     {
         $format = Format::guessFormat(
