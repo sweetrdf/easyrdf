@@ -1606,20 +1606,23 @@ class Graph
      *
      * @param string|null $resource
      * @param string|null $lang
+     * @param array<non-empty-string> $labelProperties List of shortened label properties (e.g. rdfs:label)
      *
      * @return Literal|null an instance of Literal which contains the label or null
      */
-    public function label($resource = null, $lang = null)
+    public function label($resource = null, $lang = null, array $labelProperties = [])
     {
         $this->checkResourceParam($resource, true);
 
         if ($resource) {
-            return $this->get(
-                $resource,
-                'skos:prefLabel|rdfs:label|foaf:name|rss:title|dc:title|dc11:title',
-                'literal',
-                $lang
-            );
+            // use custom label properties if given
+            if (0 < count($labelProperties)) {
+                $props = implode('|', $labelProperties);
+            } else {
+                $props = 'skos:prefLabel|rdfs:label|foaf:name|rss:title|dc:title|dc11:title';
+            }
+
+            return $this->get($resource, $props, 'literal', $lang);
         } else {
             return null;
         }

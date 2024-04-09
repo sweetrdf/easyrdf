@@ -680,14 +680,15 @@ class Resource implements \ArrayAccess
      * is available then it will return null.
      *
      * @param string|null $lang
+     * @param array<non-empty-string> $labelProperties List of shortened label properties (e.g. rdfs:label
      *
      * @return Literal|null an instance of Literal which contains the label or null
      */
-    public function label($lang = null)
+    public function label($lang = null, array $labelProperties = [])
     {
         $this->checkHasGraph();
 
-        return $this->graph->label($this->uri, $lang);
+        return $this->graph->label($this->uri, $lang, $labelProperties);
     }
 
     /** Return a human readable view of the resource and its properties
