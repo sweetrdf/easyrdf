@@ -680,7 +680,7 @@ class Resource implements \ArrayAccess
      * is available then it will return null.
      *
      * @param string|null $lang
-     * @param array<non-empty-string> $labelProperties List of shortened label properties (e.g. rdfs:label
+     * @param array<non-empty-string> $labelProperties List of shortened label properties (e.g. rdfs:label)
      *
      * @return Literal|null an instance of Literal which contains the label or null
      */
