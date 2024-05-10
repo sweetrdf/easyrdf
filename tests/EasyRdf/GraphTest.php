@@ -274,7 +274,7 @@ class GraphTest extends TestCase
     public function testLoadWithContentType()
     {
         $checkRequest = function ($client) {
-            $this->assertStringContainsString(',application/json,', $client->getHeader('Accept'));
+            $this->assertStringContainsString('application/ld+json,', $client->getHeader('Accept'));
 
             return true;
         };
