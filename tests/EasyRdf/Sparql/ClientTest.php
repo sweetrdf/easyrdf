@@ -613,20 +613,22 @@ class ClientTest extends TestCase
     public function testIssue47CorrectHeaderForConstructQueries(): void
     {
         Http::setDefaultHttpClient(new HttpClient());
+        $query = 'construct { ?s ?q ?r } where { ?s ?p ?o . ?o ?q ?r } limit 1';
 
+        /*
+         * use DBpedia's SPARQL endpoint and check result
+         */
         $endpointUrl = 'https://dbpedia.org/sparql';
-        $dummyConstructQueryString = 'construct { ?s ?q ?r } where { ?s ?p ?o . ?o ?q ?r } limit 1';
         $endPoint = new Client($endpointUrl);
-        $result = $endPoint->query($dummyConstructQueryString);
+        $result = $endPoint->query($query);
+        $this->assertTrue($result instanceof Graph, '$result is an instance of '.get_class($result));
 
-        // its also an instance of Graph without the changes in this PR
-        $this->assertTrue($result instanceof Graph);
-
+        /*
+         * use DBpedia's SPARQL endpoint and check result
+         */
         $endpointUrl = 'https://query.wikidata.org/sparql';
         $endPoint = new Client($endpointUrl);
-        $result = $endPoint->query($dummyConstructQueryString);
-
-        // its an instance of Result without the changes in this PR
-        $this->assertTrue($result instanceof Graph);
+        $result = $endPoint->query($query);
+        $this->assertTrue($result instanceof Graph, '$result is an instance of '.get_class($result));
     }
 }
