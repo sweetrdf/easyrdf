@@ -42,6 +42,7 @@ namespace Tests\EasyRdf;
 use EasyRdf\Format;
 use EasyRdf\Graph;
 use EasyRdf\Http;
+use EasyRdf\Http\Client;
 use EasyRdf\Literal;
 use EasyRdf\ParsedUri;
 use EasyRdf\RdfNamespace;
