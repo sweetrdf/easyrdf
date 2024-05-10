@@ -392,6 +392,20 @@ class GraphTest extends TestCase
         );
     }
 
+    /**
+     * Setup a Graph instance using a real Client to load a CONSTRUCT result.
+     *
+     * @see https://github.com/sweetrdf/easyrdf/pull/48
+     */
+    public function testIssue47GraphLoadRdfFile(): void
+    {
+        Http::setDefaultHttpClient(new Client());
+        $graph = new Graph();
+        $url = 'https://query.wikidata.org/sparql?query=construct+%7B+%3Fs+%3Fq+%3Fr+%7D+where+%7B+%3Fs+%3Fp+%3Fo+.+%3Fo+%3Fq+%3Fr+%7D+limit+1';
+        $tripleCount = $graph->load($url);
+        $this->assertTrue(0 < $tripleCount);
+    }
+
     public function testNewAndLoad()
     {
         $this->client->addMockOnce('GET', 'http://www.example.com/', readFixture('foaf.json'));
