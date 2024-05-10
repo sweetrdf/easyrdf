@@ -621,5 +621,12 @@ class ClientTest extends TestCase
 
         // its also an instance of Graph without the changes in this PR
         $this->assertTrue($result instanceof Graph);
+
+        $endpointUrl = 'https://query.wikidata.org/sparql';
+        $endPoint = new Client($endpointUrl);
+        $result = $endPoint->query($dummyConstructQueryString);
+
+        // its an instance of Result without the changes in this PR
+        $this->assertTrue($result instanceof Graph);
     }
 }
