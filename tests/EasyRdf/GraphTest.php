@@ -394,7 +394,7 @@ class GraphTest extends TestCase
     }
 
     /**
-     * Setup a Graph instance using a real Client to load a CONSTRUCT result.
+     * Set up a Graph instance using a real Client to load a CONSTRUCT result.
      *
      * @see https://github.com/sweetrdf/easyrdf/pull/48
      */
