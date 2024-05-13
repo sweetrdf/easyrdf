@@ -624,7 +624,7 @@ class ClientTest extends TestCase
         $this->assertTrue($result instanceof Graph, '$result is an instance of '.get_class($result));
 
         /*
-         * use DBpedia's SPARQL endpoint and check result
+         * use Wikidata's SPARQL endpoint to check result
          */
         $endpointUrl = 'https://query.wikidata.org/sparql';
         $endPoint = new Client($endpointUrl);
