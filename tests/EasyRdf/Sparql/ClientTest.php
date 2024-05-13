@@ -616,7 +616,7 @@ class ClientTest extends TestCase
         $query = 'construct { ?s ?q ?r } where { ?s ?p ?o . ?o ?q ?r } limit 1';
 
         /*
-         * use DBpedia's SPARQL endpoint and check result
+         * use DBpedia's SPARQL endpoint to check result
          */
         $endpointUrl = 'https://dbpedia.org/sparql';
         $endPoint = new Client($endpointUrl);
