@@ -36,6 +36,10 @@
         "lib-libxml" : "*",
         "sweetrdf/rdf-helpers": "^2.0"
     },
+    "suggest": {
+        "ml/json-ld": "^1.0",
+        "semsol/arc2": "^3"
+    },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "ml/json-ld": "^1.0",
