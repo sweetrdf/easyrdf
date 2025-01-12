@@ -1217,6 +1217,7 @@ class Turtle extends Ntriples
             self::isNameStartChar($c)
             || $o >= 0x30 && $o <= 0x39     // 0-9
             || '-' == $c
+            || '.' == $c                    // dots are allowed in the middle of a name, not as start char
             || 0x00B7 == $o;
     }
 
