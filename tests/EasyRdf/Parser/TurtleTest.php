@@ -434,7 +434,7 @@ class TurtleTest extends TestCase
         // paths are not in turtle
         $this->expectException('EasyRdf\Parser\Exception');
         $this->expectExceptionMessage(
-            'Turtle Parse Error: object for statement missing on line 3, column 5'
+            "Turtle Parse Error: expected an RDF value here, found '^' on line 3, column 3"
         );
         $this->parseTurtle('turtle/bad-07.ttl');
     }
