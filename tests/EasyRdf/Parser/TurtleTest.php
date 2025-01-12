@@ -587,4 +587,14 @@ class TurtleTest extends TestCase
     {
         $this->turtleTestCase('gh51-sweetrdf-dot-in-name');
     }
+
+    public function testIssue51Bad()
+    {
+        // Test long literals with missing end
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
+            'Turtle Parse Error: last character of QName must not be a dot on line 7, column 20'
+        );
+        $this->parseTurtle('turtle/gh51-sweetrdf-dot-in-name-bad.ttl');
+    }
 }
