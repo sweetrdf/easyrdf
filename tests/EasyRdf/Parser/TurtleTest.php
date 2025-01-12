@@ -578,4 +578,16 @@ class TurtleTest extends TestCase
         $this->assertEquals(14, $triple_count);
         */
     }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/issues/58
+     * Notice this is an issue reported in the sweetrdf/easyrdf fork
+     */
+    public function testIssue58()
+    {
+        // Test file should parse without exceptions
+        $this->expectNotToPerformAssertions();
+
+        $this->parseTurtle("turtle/gh58-sweetrdf-bool-parser.ttl");
+    }
 }
