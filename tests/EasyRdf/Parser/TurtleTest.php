@@ -578,4 +578,13 @@ class TurtleTest extends TestCase
         $this->assertEquals(14, $triple_count);
         */
     }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/issues/52
+     * Notice this is an issue reported in the sweetrdf/easyrdf fork
+     */
+    public function testIssue52()
+    {
+        $this->turtleTestCase('gh52-sweetrdf-whitespace-langtag');
+    }
 }
