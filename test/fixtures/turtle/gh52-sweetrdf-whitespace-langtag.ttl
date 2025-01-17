@@ -1,5 +1,9 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs: <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/#> .
 
 # Allow whitespace between literal and language tag
 :a rdfs:label "Test"      @en .
+
+# Allow whitespace between literal and datatype IRI
+:a rdfs:label "Test"      ^^xs:string .
