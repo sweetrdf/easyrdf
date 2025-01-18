@@ -434,7 +434,7 @@ class TurtleTest extends TestCase
         // paths are not in turtle
         $this->expectException('EasyRdf\Parser\Exception');
         $this->expectExceptionMessage(
-            'Turtle Parse Error: object for statement missing on line 3, column 5'
+            "Turtle Parse Error: expected an RDF value here, found '^' on line 3, column 3"
         );
         $this->parseTurtle('turtle/bad-07.ttl');
     }
@@ -577,5 +577,24 @@ class TurtleTest extends TestCase
 
         $this->assertEquals(14, $triple_count);
         */
+    }
+
+    /**
+     * @see https://github.com/sweetrdf/easyrdf/issues/51
+     * Notice this is an issue reported in the sweetrdf/easyrdf fork
+     */
+    public function testIssue51()
+    {
+        $this->turtleTestCase('gh51-sweetrdf-dot-in-name');
+    }
+
+    public function testIssue51Bad()
+    {
+        // Test long literals with missing end
+        $this->expectException('EasyRdf\Parser\Exception');
+        $this->expectExceptionMessage(
+            'Turtle Parse Error: last character of QName must not be a dot on line 7, column 20'
+        );
+        $this->parseTurtle('turtle/gh51-sweetrdf-dot-in-name-bad.ttl');
     }
 }
