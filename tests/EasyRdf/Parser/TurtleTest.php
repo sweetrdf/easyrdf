@@ -580,8 +580,9 @@ class TurtleTest extends TestCase
     }
 
     /**
+     * Allow usage of dot in middle of name
+     *
      * @see https://github.com/sweetrdf/easyrdf/issues/51
-     * Notice this is an issue reported in the sweetrdf/easyrdf fork
      */
     public function testIssue51()
     {
@@ -596,5 +597,15 @@ class TurtleTest extends TestCase
             'Turtle Parse Error: last character of QName must not be a dot on line 7, column 20'
         );
         $this->parseTurtle('turtle/gh51-sweetrdf-dot-in-name-bad.ttl');
+    }
+
+    /**
+     * Allow whitespace(s) between quoted string literal and langtag or datatype
+     *
+     * @see https://github.com/sweetrdf/easyrdf/issues/52
+     */
+    public function testIssue52()
+    {
+        $this->turtleTestCase('gh52-sweetrdf-whitespace-langtag');
     }
 }

@@ -554,6 +554,8 @@ class Turtle extends Ntriples
     {
         $label = $this->parseQuotedString();
 
+        $this->skipWSC();
+
         // Check for presence of a language tag or datatype
         $c = $this->peek();
 
