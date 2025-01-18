@@ -948,7 +948,10 @@ class Turtle extends Ntriples
 
             // Last char of name must not be a dot
             if (mb_substr($localName, -1) === '.') {
-                throw new Exception("Turtle Parse Error: last character of QName must not be a dot", $this->line, $this->column - 1);
+                $localName = substr_replace($localName, '', -1);
+                $this->unread($c); // step back
+                $this->unread('.'); // return dot to input buffer
+                $c = $this->read(); // read, because below the unread($c) is done for all cases
             }
         }
 
