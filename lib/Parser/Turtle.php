@@ -906,6 +906,9 @@ class Turtle extends Ntriples
                 $value = $prefix;
 
                 if ('true' == $value || 'false' == $value) {
+                    // Unread last character
+                    $this->unread($c);
+
                     return [
                         'type' => 'literal',
                         'value' => $value,

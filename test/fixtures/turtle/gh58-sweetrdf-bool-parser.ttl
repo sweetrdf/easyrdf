@@ -1,0 +1,11 @@
+@prefix : <http://example.org/#> .
+
+# Allow reserved chars directly after boolean values (no whitespace)
+# See https://github.com/sweetrdf/easyrdf/issues/58
+:foo :bar true.
+
+:foo :bar false;
+  :bar :baz ;
+.
+
+:foo :bar true,false.

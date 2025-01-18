@@ -608,4 +608,17 @@ class TurtleTest extends TestCase
     {
         $this->turtleTestCase('gh52-sweetrdf-whitespace-langtag');
     }
+
+    /**
+     * Bug in Turtle parser for boolean value that is directly followed by a semicolon
+     *
+     * @see https://github.com/sweetrdf/easyrdf/issues/58
+     */
+    public function testIssue58()
+    {
+        // Test file should parse without exceptions
+        $this->expectNotToPerformAssertions();
+
+        $this->parseTurtle('turtle/gh58-sweetrdf-bool-parser.ttl');
+    }
 }
