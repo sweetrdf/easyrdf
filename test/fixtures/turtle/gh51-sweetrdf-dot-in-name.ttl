@@ -1,0 +1,7 @@
+@prefix : <http://example.org/#> .
+
+# A dot can't be the first nor the last character of the "after the semicolon part of a prefixed name" but is allowed in the middle
+# See https://www.w3.org/TR/turtle/#grammar-production-PN_LOCAL
+# See https://github.com/sweetrdf/easyrdf/issues/51
+:Subject.WithADot :predicate.withADot :Object.WithADot .
+:Subject.With.Dots :predicate.with.dots :Object.With.Dots .
