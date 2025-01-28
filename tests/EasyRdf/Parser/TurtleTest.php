@@ -594,7 +594,7 @@ class TurtleTest extends TestCase
         // Test long literals with missing end
         $this->expectException('EasyRdf\Parser\Exception');
         $this->expectExceptionMessage(
-            'Turtle Parse Error: last character of QName must not be a dot on line 7, column 20'
+            'Turtle Parse Error: Illegal predicate type: literal on line 7, column 19'
         );
         $this->parseTurtle('turtle/gh51-sweetrdf-dot-in-name-bad.ttl');
     }

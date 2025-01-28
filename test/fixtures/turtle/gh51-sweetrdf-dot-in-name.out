@@ -1,2 +1,3 @@
 <http://example.org/#Subject.WithADot> <http://example.org/#predicate.withADot> <http://example.org/#Object.WithADot> .
 <http://example.org/#Subject.With.Dots> <http://example.org/#predicate.with.dots> <http://example.org/#Object.With.Dots> .
+<http://example.org/#sub> <http://example.org/#pred> <http://example.org/#Object.WithADot> .
