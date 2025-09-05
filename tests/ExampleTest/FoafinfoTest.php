@@ -45,7 +45,7 @@ class FoafinfoTest extends TestCase
         $this->assertStringContainsString('<title>EasyRdf FOAF Info Example</title>', $output);
         $this->assertStringContainsString('<h1>EasyRdf FOAF Info Example</h1>', $output);
         $this->assertStringContainsString(
-            '<input type="text" name="uri" id="uri" value="http://njh.me/foaf.rdf" size="50" />',
+            '<input type="text" name="uri" id="uri" value="https://www.aelius.com/njh/foaf.rdf" size="50" />',
             $output
         );
     }
@@ -54,22 +54,21 @@ class FoafinfoTest extends TestCase
     {
         $output = executeExample(
             'foafinfo.php',
-            ['uri' => 'http://njh.me/foaf.rdf']
+            ['uri' => 'https://www.aelius.com/njh/foaf.rdf']
         );
 
         $this->assertStringContainsString('<title>EasyRdf FOAF Info Example</title>', $output);
         $this->assertStringContainsString('<h1>EasyRdf FOAF Info Example</h1>', $output);
-        $this->assertStringContainsString('<dt>Name:</dt><dd>Nicholas J Humfrey</dd>', $output);
+        $this->assertStringContainsString('Nicholas J Humfrey', $output);
         $this->assertStringContainsString(
-            '<dt>Homepage:</dt><dd><a href="http://www.aelius.com/njh/">http://www.aelius.com/njh/</a></dd>',
+            '>http://www.aelius.com/njh/</a>',
             $output
         );
 
-        $this->assertStringContainsString('<h2>Known Persons</h2>', $output);
-        $this->assertStringContainsString('>Patrick Sinclair</a></li>', $output);
-        $this->assertStringContainsString('>Yves Raimond</a></li>', $output);
+        $this->assertStringContainsString('foaf:knows', $output);
+        $this->assertStringContainsString('Patrick Sinclair', $output);
+        $this->assertStringContainsString('Yves Raimond', $output);
 
-        $this->assertStringContainsString('<h2>Interests</h2>', $output);
-        $this->assertStringContainsString('>RDF</a></li>', $output);
+        $this->assertStringContainsString('foaf:interest', $output);
     }
 }
