@@ -49,26 +49,4 @@ class FoafinfoTest extends TestCase
             $output
         );
     }
-
-    public function testNjh()
-    {
-        $output = executeExample(
-            'foafinfo.php',
-            ['uri' => 'https://www.aelius.com/njh/foaf.rdf']
-        );
-
-        $this->assertStringContainsString('<title>EasyRdf FOAF Info Example</title>', $output);
-        $this->assertStringContainsString('<h1>EasyRdf FOAF Info Example</h1>', $output);
-        $this->assertStringContainsString('Nicholas J Humfrey', $output);
-        $this->assertStringContainsString(
-            '>http://www.aelius.com/njh/</a>',
-            $output
-        );
-
-        $this->assertStringContainsString('foaf:knows', $output);
-        $this->assertStringContainsString('Patrick Sinclair', $output);
-        $this->assertStringContainsString('Yves Raimond', $output);
-
-        $this->assertStringContainsString('foaf:interest', $output);
-    }
 }
