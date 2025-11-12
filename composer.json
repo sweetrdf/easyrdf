@@ -36,13 +36,9 @@
         "lib-libxml" : "*",
         "sweetrdf/rdf-helpers": "^2.0"
     },
-    "suggest": {
-        "ml/json-ld": "^1.0",
-        "semsol/arc2": "^3"
-    },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
-        "ml/json-ld": "^1.0",
+        "ml/json-ld": "dev-feature/php8-support",
         "phpunit/phpunit": "^9.5.0|^10.0.0",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
@@ -50,6 +46,12 @@
         "zendframework/zend-http": "^2",
         "laminas/laminas-http": "^2"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/sweetrdf/json-ld"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "EasyRdf\\": "lib"
