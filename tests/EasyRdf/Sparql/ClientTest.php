@@ -631,4 +631,18 @@ class ClientTest extends TestCase
         $result = $endPoint->query($query);
         $this->assertTrue($result instanceof Graph, '$result is an instance of '.get_class($result));
     }
+
+    /**
+     * @todo remove/change it; test place for Fuseki integration
+     */
+    public function testFusekiTests(): void
+    {
+        Http::setDefaultHttpClient(new HttpClient());
+        $query = 'SELECT * WHERE {?s ?p ?o}';
+
+        $endpointUrl = 'http://localhost:3030';
+        $endPoint = new Client($endpointUrl);
+        $result = $endPoint->query($query);
+        $this->assertTrue($result instanceof Graph, '$result is an instance of '.get_class($result));
+    }
 }

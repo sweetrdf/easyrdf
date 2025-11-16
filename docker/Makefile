@@ -5,8 +5,7 @@ default:
 			   -v $(PWD)/../:/var/www/html \
 			   --name easyrdf \
 			   --user easyrdf \
-			   easyrdf \
-			   /bin/bash
+			   easyrdf
 
 clean:
 	-@docker ps -a -q | xargs docker stop

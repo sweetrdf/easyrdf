@@ -1,7 +1,7 @@
-FROM php:8.2-cli
+FROM php:8.4-cli
 
 RUN apt-get update && \
-    apt-get install -y git graphviz libicu-dev libzip-dev make nano net-tools raptor2-utils wget zip zlib1g-dev
+    apt-get install -y git graphviz libicu-dev libzip-dev make nano netcat-openbsd net-tools raptor2-utils unzip wget zip zlib1g-dev
 
 RUN apt-get install -y openjdk-17-jre
 
@@ -25,4 +25,21 @@ RUN usermod -a -G www-data easyrdf
 RUN mkdir /home/easyrdf
 RUN chown easyrdf:www-data /home/easyrdf
 
-CMD ["tail -f /dev/null"]
+# Download and set up Apache Jena Fuseki (triple store) inside home folder
+ARG FUSEKI_VER="5.6.0"
+RUN cd /home/easyrdf && \
+    wget https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-${FUSEKI_VER}.zip && \
+    unzip apache-jena-fuseki-${FUSEKI_VER}.zip && \
+    rm apache-jena-fuseki-${FUSEKI_VER}.zip && \
+    mkdir fuseki && \
+    mv apache-jena-fuseki-${FUSEKI_VER}/* fuseki && \
+    rm -rf apache-jena-fuseki-${FUSEKI_VER}
+RUN mkdir -p /home/easyrdf/fuseki/databases/DB
+# Change ownership to easyrdf user instead of root
+RUN chown -R easyrdf:www-data /home/easyrdf
+
+COPY run.sh /run.sh
+
+RUN chmod +x /run.sh
+
+CMD ["/run.sh"]
