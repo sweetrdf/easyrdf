@@ -315,7 +315,7 @@ class GraphTest extends TestCase
     public function testLoadWithMimeType()
     {
         $checkRequest = function ($client) {
-            $this->assertSame('application/x-turtle', $client->getHeader('Accept'));
+            $this->assertSame('application/turtle', $client->getHeader('Accept'));
 
             return true;
         };
@@ -326,7 +326,7 @@ class GraphTest extends TestCase
             ['callback' => $checkRequest]
         );
         $graph = new Graph();
-        $this->assertSame(14, $graph->load('http://www.example.com/', 'application/x-turtle'));
+        $this->assertSame(14, $graph->load('http://www.example.com/', 'application/turtle'));
     }
 
     public function testLoadWithContentTypeAndCharset()

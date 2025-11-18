@@ -550,7 +550,6 @@ class Format
 
 /*
    Register default set of supported formats
-   NOTE: they are ordered by preference
 */
 
 Format::register(
@@ -558,7 +557,7 @@ Format::register(
     'RDF/PHP',
     'https://www.easyrdf.org/docs/rdf-formats-php',
     [
-        'application/x-httpd-php-source' => 1.0,
+        'application/x-httpd-php-source' => 0.5,
     ],
     ['phps']
 );
@@ -568,9 +567,7 @@ Format::register(
     'RDF/JSON Resource-Centric',
     'https://www.easyrdf.org/docs/rdf-formats-json',
     [
-        'application/json' => 1.0,
-        'text/json' => 0.9,
-        'application/rdf+json' => 0.9,
+        'application/json' => 0.5,
     ],
     ['json']
 );
@@ -580,7 +577,7 @@ Format::register(
     'JSON-LD',
     'http://www.w3.org/TR/json-ld/',
     [
-        'application/ld+json' => 1.0,
+        'application/ld+json' => 0.8,
     ],
     ['jsonld']
 );
@@ -590,11 +587,8 @@ Format::register(
     'N-Triples',
     'http://www.w3.org/TR/n-triples/',
     [
-        'application/n-triples' => 1.0,
-        'text/plain' => 0.9,
-        'text/ntriples' => 0.9,
-        'application/ntriples' => 0.9,
-        'application/x-ntriples' => 0.9,
+        'application/n-triples' => 0.9,
+        'text/plain' => 0.1,
     ],
     ['nt']
 );
@@ -604,9 +598,8 @@ Format::register(
     'Turtle Terse RDF Triple Language',
     'https://www.w3.org/TR/turtle/',
     [
-        'text/turtle' => 0.8,
-        'application/turtle' => 0.7,
-        'application/x-turtle' => 0.7,
+        'text/turtle' => 1.0,
+        'application/turtle' => 0.5,
     ],
     ['ttl']
 );
@@ -617,8 +610,8 @@ Format::register(
     'http://www.w3.org/TR/rdf-syntax-grammar/',
     [
         'application/rdf+xml' => 0.8,
-        'text/xml' => 0.5,
-        'application/xml' => 0.5,
+        'text/xml' => 0.2,
+        'application/xml' => 0.2,
     ],
     ['rdf', 'xrdf']
 );
