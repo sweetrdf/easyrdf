@@ -47,7 +47,6 @@
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
         "semsol/arc2": "^3",
-        "zendframework/zend-http": "^2",
         "laminas/laminas-http": "^2"
     },
     "autoload": {
