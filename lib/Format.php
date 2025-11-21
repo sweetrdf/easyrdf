@@ -554,7 +554,7 @@ class Format
 /*
    Register default set of supported formats
    NOTE: q=null is used for media types that should not be included in Accept headers
-   but will still be recognised as Content-type values when parsing data
+   because they are non-standard or obscure but will still be recognised as Content-type
 */
 
 Format::register(
