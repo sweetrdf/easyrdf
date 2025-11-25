@@ -183,6 +183,11 @@ class RdfXml extends Parser
     /** @ignore */
     protected function add($s, $p, $o, $sType, $oType, $oDatatype = null, $oLang = null)
     {
+        if ($oDatatype !== null) {
+            // Typed literals are not affected by language tags.
+            // See: https://github.com/sweetrdf/easyrdf/issues/76
+            $oLang = null;
+        }
         $this->addTriple(
             $s,
             $p,
