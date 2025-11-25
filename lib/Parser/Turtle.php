@@ -142,10 +142,10 @@ class Turtle extends Ntriples
             $this->parseDirective($directive);
 
             /**
-             * If we already reached the end of the data, it means the Turtle data only contains
-             * PREFIX-directives and/or a base directive, nothing else.
+             * If we have already reached the end of the data, this means that the turtle data only contains
+             * PREFIX directives and/or a base directive, nothing else.
              *
-             * FYI: https://github.com/sweetrdf/easyrdf/issues/74
+             * For your information: https://github.com/sweetrdf/easyrdf/issues/74
              */
             if (-1 === $this->peek()) {
                 return;
@@ -178,21 +178,21 @@ class Turtle extends Ntriples
             $this->parsePrefixID();
 
             /**
-             * We stop processing if the next character is the last character and also a line break.
-             * This if-clauses was added to fix https://github.com/sweetrdf/easyrdf/issues/74
+             * We terminate processing when the next character is the last character and also a line break.
+             * This if clause was added to fix https://github.com/sweetrdf/easyrdf/issues/74.
              *
-             * Note: EasyRdf runs on Linux and Windows. Because both use different line endings, the following
-             *       check was extended using PHP_EOL, which represents the line ending of the operating system.
+             * Note: EasyRdf runs on Linux and Windows. Since both use different line endings, the following
+             *       check has been extended with PHP_EOL, which represents the operating system's line ending.
              */
             if ("\n" === $this->peek() || PHP_EOL === $this->peek()) {
                 // Read the line ending and move the pointer 1 character forward.
                 $this->read();
 
-                if (-1 === $this->peek()) {
+                if (-1 == $this->peek()) {
                     /*
-                     * We reached the end of the data. Calling read() again moves the pointer at that position
-                     * and we can later leave the parsing. Otherwise it will expect further data and runs into
-                     * an error.
+                     * We have reached the end of the data. Calling read() again moves the pointer to this position
+                     * and we can stop parsing later. Otherwise, it would expect more data and cause an
+                     * error.
                      */
                     $this->read();
                 }
