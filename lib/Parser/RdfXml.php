@@ -185,7 +185,7 @@ class RdfXml extends Parser
     {
         /**
          * In case $oLang and $oDatatype are given, we ignore $oLang.
-         * 
+         *
          * FYI: https://github.com/sweetrdf/easyrdf/issues/76
          */
         if (null !== $oLang && null !== $oDatatype) {
