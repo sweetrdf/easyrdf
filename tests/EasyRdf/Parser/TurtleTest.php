@@ -629,6 +629,8 @@ class TurtleTest extends TestCase
      */
     public function testIssue74()
     {
+        $this->expectNotToPerformAssertions();
+
         /**
          * Triggered:
          *
@@ -652,7 +654,7 @@ class TurtleTest extends TestCase
          */
         $this->turtleParser->parse(
             new Graph(),
-            "PREFIX ex: <http://example.org/>\n",
+            "PREFIX ex: <http://example.org/>",
             'turtle',
             $this->baseUri.'issue/74'
         );
