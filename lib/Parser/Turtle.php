@@ -140,6 +140,17 @@ class Turtle extends Ntriples
 
         if (preg_match('/^(@|prefix$|base$)/i', $directive)) {
             $this->parseDirective($directive);
+
+            /**
+             * If we already reached the end of the data, it means the Turtle data only contains
+             * PREFIX-directives and/or a base directive, nothing else.
+             *
+             * FYI: https://github.com/sweetrdf/easyrdf/issues/74
+             */
+            if (-1 === $this->peek()) {
+                return;
+            }
+
             $this->skipWSC();
             // SPARQL BASE and PREFIX lines do not end in .
             if ('@' == $directive[0]) {
@@ -154,7 +165,9 @@ class Turtle extends Ntriples
     }
 
     /**
-     * Parse a directive [3]
+     * Parse a directive such as PREFIX or BASE [3]
+     *
+     * @param string $directive
      *
      * @ignore
      */
@@ -163,6 +176,27 @@ class Turtle extends Ntriples
         $directive = strtolower($directive);
         if ('prefix' == $directive || '@prefix' == $directive) {
             $this->parsePrefixID();
+
+            /**
+             * We stop processing if the next character is the last character and also a line break.
+             * This if-clauses was added to fix https://github.com/sweetrdf/easyrdf/issues/74
+             *
+             * Note: EasyRdf runs on Linux and Windows. Because both use different line endings, the following
+             *       check was extended using PHP_EOL, which represents the line ending of the operating system.
+             */
+            if ("\n" === $this->peek() || PHP_EOL === $this->peek()) {
+                // Read the line ending and move the pointer 1 character forward.
+                $this->read();
+
+                if (-1 === $this->peek()) {
+                    /*
+                     * We reached the end of the data. Calling read() again moves the pointer at that position
+                     * and we can later leave the parsing. Otherwise it will expect further data and runs into
+                     * an error.
+                     */
+                    $this->read();
+                }
+            }
         } elseif ('base' == $directive || '@base' == $directive) {
             $this->parseBase();
         } elseif (0 == mb_strlen($directive, 'UTF-8')) {
