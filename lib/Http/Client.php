@@ -58,7 +58,7 @@ class Client
     private $config = [
         'maxredirects' => 5,
         'useragent' => 'EasyRdf HTTP Client',
-        'timeout' => 10,
+        'timeout' => 30,
     ];
 
     /**
