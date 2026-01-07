@@ -13,7 +13,7 @@ if %errorlevel% equ 0 (
             set "line=%%a"
             echo !line! | findstr /i /c:"\"sweetrdf/json-ld\"" >nul
             if !errorlevel! equ 0 (
-                echo     "ml/json-ld": "^1.2",
+                echo     "ml/json-ld": "^1.2"
             ) else (
                 echo !line!
             )
