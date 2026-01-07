@@ -1,28 +1,13 @@
 @echo off
 setlocal enabledelayedexpansion
 
-for /f "delims=" %%v in ('php -r "echo PHP_VERSION;"') do set "php_version=%%v"
+for /f "delims=" %%v in ('php -r "echo PHP_VERSION;"') do set "PHP_VERSION=%%v"
 
-echo %php_version% | findstr /b "8.0" >nul
-if %errorlevel% equ 0 (
-    echo PHP 8.0 found - adjusting composer.json...
+if "%PHP_VERSION:~0,3%"=="8.0" (
+    echo PHP 8.0 found adapt composer.json ...
 
-    set "temp_file=%temp%\composer_temp.json"
-    (
-        for /f "tokens=*" %%a in (composer.json) do (
-            set "line=%%a"
-            echo !line! | findstr /i /c:"\"sweetrdf/json-ld\"" >nul
-            if !errorlevel! equ 0 (
-                echo     "ml/json-ld": "^1.2"
-            ) else (
-                echo !line!
-            )
-        )
-    ) > %temp_file%
+    powershell -NoProfile -Command ^
+      "(Get-Content composer.json) -replace '\"sweetrdf/json-ld\":.*', '\"ml/json-ld\": \"^1.2\"' | Set-Content composer.json"
 
-    move /Y %temp_file% composer.json >nul
-
-    echo composer.json adjusted: ml/json-ld is now used.
-) else (
-    echo PHP version is not 8.0 - no adjustment needed.
+    echo composer.json adapted
 )
