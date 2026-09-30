@@ -1,0 +1,2 @@
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+<#owner> acl:mode acl:Control.

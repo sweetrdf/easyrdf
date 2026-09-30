@@ -978,14 +978,14 @@ class Turtle extends Ntriples
                     $localName .= $c;
                 }
                 $c = $this->read();
-            }
 
-            // Last char of name must not be a dot
-            if (mb_substr($localName, -1) === '.') {
-                $localName = substr_replace($localName, '', -1);
-                $this->unread($c); // step back
-                $this->unread('.'); // return dot to input buffer
-                $c = $this->read(); // read, because below the unread($c) is done for all cases
+                // Last char of name must not be a dot, so we peek the next
+                // character to make sure the next one is a name character,
+                // and if not, break the loop early.
+                $nextChar = $this->peek();
+                if ($c === '.' && !self::isNameChar($nextChar)) {
+                    break;
+                }
             }
         }
 
@@ -1236,6 +1236,9 @@ class Turtle extends Ntriples
      */
     public static function isPrefixStartChar($c)
     {
+        if ($c == -1) {
+            return false;
+        }
         // ord - Convert the first byte of a string to a value between 0 and 255
         $o = \ord($c[0]);
 
@@ -1249,6 +1252,9 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isNameStartChar($c)
     {
+        if ($c == -1) {
+            return false;
+        }
         return
             '\\' == $c
             || '_' == $c
@@ -1265,6 +1271,9 @@ class Turtle extends Ntriples
      */
     public static function isNameChar($c)
     {
+        if ($c == -1) {
+            return false;
+        }
         // ord - Convert the first byte of a string to a value between 0 and 255
         $o = \ord($c[0]);
 
@@ -1291,6 +1300,9 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isPrefixChar($c)
     {
+        if ($c == -1) {
+            return false;
+        }
         $o = \ord($c);
 
         return
@@ -1306,6 +1318,9 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isLanguageStartChar($c)
     {
+        if ($c == -1) {
+            return false;
+        }
         $o = \ord($c);
 
         return
@@ -1316,6 +1331,9 @@ class Turtle extends Ntriples
     /** @ignore */
     public static function isLanguageChar($c)
     {
+        if ($c == -1) {
+            return false;
+        }
         $o = \ord($c);
 
         return

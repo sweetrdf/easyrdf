@@ -669,4 +669,14 @@ class TurtleTest extends TestCase
     {
         $this->turtleTestCase('gh42-sweetrdf-geosparql');
     }
+
+    /**
+     * Error parsing Turtle when the file does not end with a newline
+     *
+     * @see https://github.com/sweetrdf/easyrdf/issues/80
+     */
+    public function testIssue80()
+    {
+        $this->turtleTestCase('gh80-sweetrdf-without-ending-whitespace');
+    }
 }
